@@ -2,17 +2,14 @@ using System;
 
 namespace Teamcollab
 {
-    /// <summary>
-    /// Tests GitHub commit in a pro manner
-    /// </summary>
-    class TestCommit
+  /// <summary>
+  /// Tests GitHub commit in a pro manner
+  /// </summary>
+  class TestCommit
+  {
+    public TestCommit(char någotbättreänc)
     {
-		public TestCommit(char någotbättreänc)
-		{
-			någotbättreänc = '3';
-		}
-
-
+      någotbättreänc = '3';
     }
+  }
 }
-
