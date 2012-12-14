@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Teamcollab.GameStates
 {
-  class PlayState
+  class PlayState : GameState
   {
   }
 }
