@@ -9,14 +9,21 @@ namespace Teamcollab.GameStates
   /// <summary>
   /// 
   /// </summary>
-  /*abstract*/ class GameState
+  abstract class GameState
   {
+    #region Properties
+    public Game Game { get; protected set; }
 
-    //public abstract void Update(GameTime gameTime)
-    //{
+    #endregion
 
-    //}
+    public GameState(Game game)
+    {
+      Game = game;
+    }
 
+    public abstract void Update(GameTime gameTime);
+
+    public abstract void Draw();
 
   }
 }
