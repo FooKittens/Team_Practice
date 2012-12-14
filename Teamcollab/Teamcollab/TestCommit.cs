@@ -7,7 +7,12 @@ namespace Teamcollab
     /// </summary>
     class TestCommit
     {
-        // Test test
+		public TestCommit(char någotbättreänc)
+		{
+			någotbättreänc = '3';
+		}
+
+
     }
 }
 
