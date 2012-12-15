@@ -37,7 +37,8 @@ namespace Teamcollab.Engine
 
     public static bool GP_NewPress(PlayerIndex index, Buttons button)
     {
-      if (gamePadStates[(int)index].IsButtonDown(button) && prevGamePadStates[(int)index].IsButtonUp(button))
+      if (gamePadStates[(int)index].IsButtonDown(button) &&
+        prevGamePadStates[(int)index].IsButtonUp(button))
         return true;
       return false;
     }
