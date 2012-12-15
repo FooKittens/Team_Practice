@@ -76,7 +76,6 @@
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\MenuState.cs" />
     <Compile Include="GameStates\PlayState.cs" />
-    <Compile Include="GUI\Camera.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Managers\StateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

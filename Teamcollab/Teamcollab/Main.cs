@@ -8,8 +8,6 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Teamcollab.Managers;
-using Teamcollab.Engine;
 
 namespace Teamcollab
 {
@@ -17,7 +15,6 @@ namespace Teamcollab
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-    StateManager stateManager;
 
 		public Main()
 		{
@@ -27,7 +24,7 @@ namespace Teamcollab
 
 		protected override void Initialize()
 		{
-      stateManager = new StateManager(this);
+
 			base.Initialize();
 		}
 
@@ -35,12 +32,17 @@ namespace Teamcollab
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+
+		}
+
+		protected override void UnloadContent()
+		{
+
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
-      InputManager.Update();
-      stateManager.Update(gameTime);
+
 
 			base.Update(gameTime);
 		}
@@ -48,8 +50,6 @@ namespace Teamcollab
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
-
-      stateManager.Draw();
 
 			base.Draw(gameTime);
 		}
