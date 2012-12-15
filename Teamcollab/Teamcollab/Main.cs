@@ -16,7 +16,6 @@ namespace Teamcollab
 	public class Main : Microsoft.Xna.Framework.Game
 	{
 		GraphicsDeviceManager graphics;
-		SpriteBatch spriteBatch;
     StateManager stateManager;
 
 		public Main()
@@ -33,8 +32,6 @@ namespace Teamcollab
 
 		protected override void LoadContent()
 		{
-			// Create a new SpriteBatch, which can be used to draw textures.
-			spriteBatch = new SpriteBatch(GraphicsDevice);
 		}
 
 		protected override void Update(GameTime gameTime)
