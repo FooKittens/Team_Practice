@@ -18,7 +18,7 @@ namespace Teamcollab.DataSerialization
     /// Serializes an object of type T to the file path.
     /// Filepath should include file endings.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Any serializable object</typeparam>
     /// <param name="data">The object to serialize.</param>
     /// <param name="filePath"></param>
     /// <param name="fileMode"></param>
