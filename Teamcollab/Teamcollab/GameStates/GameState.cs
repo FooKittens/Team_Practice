@@ -9,7 +9,7 @@ namespace Teamcollab.GameStates
   /// <summary>
   /// All variations of GameStates must be added.
   /// </summary>
-  public enum EApplicationState
+  public enum ApplicationState
   {
     Undefined = 0,
 
@@ -28,7 +28,7 @@ namespace Teamcollab.GameStates
     /// <summary>
     /// An enum representing the type of state.
     /// </summary>
-    public EApplicationState State { get; protected set; }
+    public ApplicationState State { get; protected set; }
 
     /// <summary>
     /// A reference to the game object that uses the state.
@@ -38,14 +38,14 @@ namespace Teamcollab.GameStates
     #endregion
 
     #region Delegates
-    public delegate void StateChangeRequestHandler(EApplicationState nextState);
+    public delegate void StateChangeRequestHandler(ApplicationState nextState);
     #endregion
 
     #region Events
     public virtual event StateChangeRequestHandler StateChangeRequested;
     #endregion
 
-    public GameState(Game game, EApplicationState thisState)
+    public GameState(Game game, ApplicationState thisState)
     {
       Game = game;
     }
