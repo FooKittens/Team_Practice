@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Teamcollab.World
+namespace Teamcollab.Engine.World
 {
   /// <summary>
   /// Holds all tile types
@@ -28,12 +28,12 @@ namespace Teamcollab.World
     #endregion
 
     #region Members
-    public TileType type;
+    public TileType Type;
     #endregion
 
     public Tile(TileType type)
     {
-      this.type = type;
+      Type = type;
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ namespace Teamcollab.World
 
     public Texture2D GetTexture()
     {
-      if (type == TileType.Undefined)
+      if (Type == TileType.Undefined)
         return null;
       return null; // Library.textures[type.ToString()];
     }
