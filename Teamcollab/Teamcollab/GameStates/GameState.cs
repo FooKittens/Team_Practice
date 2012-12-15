@@ -16,7 +16,6 @@ namespace Teamcollab.GameStates
 
   }
 
-
   /// <summary>
   /// 
   /// </summary>
