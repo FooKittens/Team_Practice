@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Teamcollab.GameStates
 {
@@ -20,7 +16,7 @@ namespace Teamcollab.GameStates
 
   /// <summary>
   /// Base class for all gamestates. Keeps a reference to the game object which is
-  /// accesible from derived classes.
+  /// accessible from derived classes.
   /// </summary>
   abstract class GameState
   {
