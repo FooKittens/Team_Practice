@@ -60,7 +60,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the given key began being pressed this frame
     /// </summary>
-    public static bool Key_NewDown(Keys key)
+    public static bool KeyNewDown(Keys key)
     {
       if (keys.IsKeyDown(key) && prevKeys.IsKeyUp(key))
       {
@@ -72,7 +72,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the given key is pressed
     /// </summary>
-    public static bool Key_Down(Keys key)
+    public static bool KeyDown(Keys key)
     {
       if (keys.IsKeyDown(key))
       {
@@ -84,7 +84,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the given key began being released this frame
     /// </summary>
-    public static bool Key_Release(Keys key)
+    public static bool KeyRelease(Keys key)
     {
       if (keys.IsKeyUp(key) && prevKeys.IsKeyDown(key))
       {
@@ -98,7 +98,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the left mouse button is pressed
     /// </summary>
-    public static bool Mouse_LeftDown()
+    public static bool MouseLeftDown()
     {
       return mouse.LeftButton == ButtonState.Pressed;
     }
@@ -106,7 +106,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the left mouse button began being pressed this frame
     /// </summary>
-    public static bool Mouse_LeftNewDown()
+    public static bool MouseLeftNewDown()
     {
       return mouse.LeftButton == ButtonState.Pressed &&
              prevMouse.LeftButton == ButtonState.Released;
@@ -115,7 +115,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the left mouse button began being released this frame
     /// </summary>
-    public static bool Mouse_LeftNewUp()
+    public static bool MouseLeftNewUp()
     {
       return mouse.LeftButton == ButtonState.Released &&
              prevMouse.LeftButton == ButtonState.Pressed;
@@ -124,7 +124,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the right mouse button is pressed
     /// </summary>
-    public static bool Mouse_RightDown()
+    public static bool MouseRightDown()
     {
       return mouse.RightButton == ButtonState.Pressed;
     }
@@ -132,7 +132,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the right mouse button began being pressed this frame
     /// </summary>
-    public static bool Mouse_RightNewDown()
+    public static bool MouseRightNewDown()
     {
       return mouse.RightButton == ButtonState.Pressed &&
              prevMouse.RightButton == ButtonState.Released;
@@ -141,7 +141,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns true if the right mouse button began being released this frame
     /// </summary>
-    public static bool Mouse_RightNewUp()
+    public static bool MouseRightNewUp()
     {
       return mouse.RightButton == ButtonState.Released &&
              prevMouse.RightButton == ButtonState.Pressed;
@@ -150,7 +150,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns the mouse position in screen coordinates
     /// </summary>
-    public static Vector2 Mouse_Position()
+    public static Vector2 MousePosition()
     {
       return new Vector2(mouse.X, mouse.Y);
     }
@@ -158,7 +158,7 @@ namespace Teamcollab.Engine
     /// <summary>
     /// Returns the previous mouse position in screen coordinates
     /// </summary>
-    public static Vector2 Mouse_PreviousPosition()
+    public static Vector2 MousePreviousPosition()
     {
       return new Vector2(prevMouse.X, prevMouse.Y);
     }
