@@ -20,8 +20,8 @@ namespace Teamcollab.DataSerialization
     /// </summary>
     /// <typeparam name="T">Any serializable object</typeparam>
     /// <param name="data">The object to serialize.</param>
-    /// <param name="filePath"></param>
-    /// <param name="fileMode"></param>
+    /// <param name="filePath">Relative path to write to</param>
+    /// <param name="fileMode">How to open the file</param>
     public static void SerializeXml<T>(T data, string filePath, FileMode fileMode)
     {
       // Creates a global namespace to serialize to.
@@ -39,7 +39,7 @@ namespace Teamcollab.DataSerialization
     /// Deserializes the file at the filepath and returns an object
     /// of type T if possible. Otherwise an exception will be thrown.
     /// </summary>
-    /// <param name="filePath">The filepath to look for.</param>
+    /// <param name="filePath">Relative path to read from</param>
     /// <returns></returns>
     public static T DeSerializeXml<T>(string filePath)
     {

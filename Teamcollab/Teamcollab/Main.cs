@@ -59,7 +59,6 @@ namespace Teamcollab
 			base.Draw(gameTime);
 		}
 
-
     /// <summary>
     /// Initializes the static Settings class,
     /// should be called in constructor of Main.
@@ -71,9 +70,10 @@ namespace Teamcollab
       SettingsData data;
       try
       {
-        data = DataSerializer.DeSerializeXml<SettingsData>(Constants.SettingsPath);
+        data = DataSerializer.DeSerializeXml<SettingsData>(
+          Constants.SettingsPath);
       }
-      catch (FileNotFoundException e)
+      catch (FileNotFoundException)
       {
       #if DEBUG
         // Obtain a default object to initialize settings with.
