@@ -36,7 +36,14 @@ namespace Teamcollab.GameStates
       {
         if (StateChangeRequested != null)
         {
-
+          StateChangeRequested(EApplicationState.Exit);
+        }
+      }
+      else if (InputManager.Key_Release(Keys.P))
+      {
+        if (StateChangeRequested != null)
+        {
+          StateChangeRequested(EApplicationState.Play);
         }
       }
     }

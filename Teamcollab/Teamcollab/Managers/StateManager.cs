@@ -19,23 +19,34 @@ namespace Teamcollab.Managers
     #region Members
     private Game game;
     private GameState currentState;
+    private MenuState menuState;
+    private PlayState playState;
     #endregion
 
     public StateManager(Game game)
     {
       this.game = game;
+      Initialize();
+      StateChangeRequestHandler(EApplicationState.Menu);
     }
 
     public void Update(GameTime gameTime)
     {
       currentState.Update(gameTime);
-
-
     }
 
     public void Draw()
     {
       currentState.Draw();
+    }
+
+    /// <summary>
+    /// Initalizes the statemanager.
+    /// </summary>
+    private void Initialize()
+    {
+      menuState = new MenuState(game);
+      menuState.StateChangeRequested += StateChangeRequestHandler;
     }
 
     /// <summary>
@@ -50,8 +61,14 @@ namespace Teamcollab.Managers
           // Should only happen when an uninitialized enum has been passed.
           throw new ArgumentException("Undefined gamestate requested");
         case EApplicationState.Menu:
+          currentState = menuState;
           break;
         case EApplicationState.Play:
+          if (playState == null)
+          {
+            CreatePlayState();
+          }
+          currentState = playState;
           break;
         case EApplicationState.Exit:
           // Exit the game.
@@ -60,6 +77,12 @@ namespace Teamcollab.Managers
         default:
           throw new ArgumentException("Unhandled gamestate change request");
       }
+    }
+
+    private void CreatePlayState()
+    {
+      playState = new PlayState(game);
+      playState.StateChangeRequested += StateChangeRequestHandler;
     }
 
   }

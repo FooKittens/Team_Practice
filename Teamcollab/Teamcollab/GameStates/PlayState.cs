@@ -43,6 +43,7 @@ namespace Teamcollab.GameStates
           StateChangeRequested(EApplicationState.Menu);
         }
       }
+
     }
 
     public override void Draw()
