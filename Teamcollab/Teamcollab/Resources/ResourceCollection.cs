@@ -11,7 +11,7 @@ namespace Teamcollab.Resources
   /// <typeparam name="T">The resource type to manage.</typeparam>
   class ResourceCollection<T>
   {
-    List<Data<T>> resources;
+    List<Resource<T>> resources;
 
     public ResourceCollection()
     {
@@ -25,7 +25,9 @@ namespace Teamcollab.Resources
     /// <param name="resourceKey">The key to identify the resource with</param>
     public void Add(T data, string resourceKey)
     {
-      Resource<T> res = new Resource<T>();
+      Resource<T> res = new Resource<T>(data, resourceKey);
+      res.ResourceDone += ResourceDoneHandler;
+      resources.Add(res);
     }
 
     /// <summary>
@@ -51,6 +53,13 @@ namespace Teamcollab.Resources
       return res;
     }
 
+
+    private void ResourceDoneHandler(Resource<T> done)
+    {
+      // TODO(Zerkish): Reference counting?
+
+      // Do nothing since it wouldn't make sense anyway.
+    }
 
   }
 }

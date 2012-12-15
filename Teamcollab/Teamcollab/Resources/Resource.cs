@@ -14,9 +14,9 @@ namespace Teamcollab.Resources
     public T Data { get; private set; }
     public string Key { get; private set; }
 
-    public delegate void ResourceDoneManager();
+    public delegate void ResourceDoneManager(Resource<T> self);
 
-    public event ResourceDoneManager resourceDone;
+    public event ResourceDoneManager ResourceDone;
 
     public Resource(T resource, string key)
     {
@@ -27,6 +27,14 @@ namespace Teamcollab.Resources
     public bool HasValue()
     {
       return Data != null;
+    }
+
+    public void Done()
+    {
+      if (ResourceDone != null)
+      {
+        ResourceDone(this);
+      }
     }
   }
 }
