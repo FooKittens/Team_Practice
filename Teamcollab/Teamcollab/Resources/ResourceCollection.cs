@@ -7,7 +7,7 @@ namespace Teamcollab.Resources
 {
   class ResourceCollection<T>
   {
-    List<Resource<T>> resources;
+    List<Data<T>> resources;
 
     public ResourceCollection()
     {
