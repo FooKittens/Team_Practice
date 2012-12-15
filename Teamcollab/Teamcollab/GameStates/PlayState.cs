@@ -11,8 +11,8 @@ namespace Teamcollab.GameStates
     #region Properties
     #endregion
 
-    public PlayState()
-      :base()
+    public PlayState(Game game)
+      :base(game)
     {
     }
 

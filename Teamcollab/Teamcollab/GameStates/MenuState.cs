@@ -8,7 +8,11 @@ namespace Teamcollab.GameStates
 {
   class MenuState : GameState
   {
+    public MenuState(Game game)
+      :base(game)
+    {
 
+    }
 
     public override void Update(GameTime gameTime)
     {
