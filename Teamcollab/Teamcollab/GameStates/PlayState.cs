@@ -36,7 +36,7 @@ namespace Teamcollab.GameStates
 
     public override void Update(GameTime gameTime)
     {
-      if (InputManager.Key_Release(Keys.Escape))
+      if (InputManager.KeyRelease(Keys.Escape))
       {
         if (StateChangeRequested != null)
         {
