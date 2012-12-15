@@ -6,6 +6,17 @@ using Microsoft.Xna.Framework;
 
 namespace Teamcollab.GameStates
 {
+  public enum EApplicationState
+  {
+    Undefined = 0,
+
+    Menu,
+    Play,
+    Exit,
+
+  }
+
+
   /// <summary>
   /// 
   /// </summary>
@@ -19,6 +30,7 @@ namespace Teamcollab.GameStates
     public GameState(Game game)
     {
       Game = game;
+
     }
 
     public abstract void Update(GameTime gameTime);
