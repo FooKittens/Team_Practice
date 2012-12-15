@@ -58,7 +58,7 @@ namespace Teamcollab.World
     {
       if (type == TileType.Undefined)
         return null;
-      return Library.textures[type.ToString()];
+      return null; // Library.textures[type.ToString()];
     }
   }
 }
