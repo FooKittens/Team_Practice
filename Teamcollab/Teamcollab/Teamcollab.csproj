@@ -84,6 +84,8 @@
     <Compile Include="Managers\StateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Resources\Resource.cs" />
+    <Compile Include="Resources\ResourceCollection.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
