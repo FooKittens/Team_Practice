@@ -71,7 +71,8 @@ namespace Teamcollab
       try
       {
         data = DataSerializer.DeSerializeXml<SettingsData>(
-          Constants.SettingsPath);
+          Constants.SettingsPath
+        );
       }
       catch (FileNotFoundException)
       {
