@@ -11,7 +11,7 @@ namespace Teamcollab.Resources
   /// <typeparam name="T">The resource type to manage.</typeparam>
   class ResourceCollection<T>
   {
-    List<Resource<T>> resources;
+    List<Data<T>> resources;
 
     public ResourceCollection()
     {
