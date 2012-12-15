@@ -15,7 +15,6 @@ namespace Teamcollab.DataSerialization
     /// <summary>
     /// Obtain a default initialized ApplicationSettings object.
     /// </summary>
-    /// <returns></returns>
     public static ApplicationSettings GetDefault()
     {
       ApplicationSettings appSettings;

@@ -72,6 +72,8 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSerialization\ApplicationSettings.cs" />
+    <Compile Include="DataSerialization\DataSerializer.cs" />
     <Compile Include="Engine\InputManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\MenuState.cs" />
