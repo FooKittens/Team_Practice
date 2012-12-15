@@ -6,18 +6,18 @@ using System.Text;
 namespace Teamcollab.DataSerialization
 {
   [Serializable]
-  public struct ApplicationSettings
+  public struct SettingsData
   {
-    public int ScreenHeight { get; private set; }
-    public int ScreenWidth { get; private set; }
+    public int ScreenHeight;
+    public int ScreenWidth;
 
 
     /// <summary>
     /// Obtain a default initialized ApplicationSettings object.
     /// </summary>
-    public static ApplicationSettings GetDefault()
+    public static SettingsData GetDefault()
     {
-      ApplicationSettings appSettings;
+      SettingsData appSettings = new SettingsData();
       appSettings.ScreenWidth = 1280;
       appSettings.ScreenHeight = 720;
 
