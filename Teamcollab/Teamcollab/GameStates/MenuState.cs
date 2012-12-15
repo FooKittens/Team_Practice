@@ -24,7 +24,7 @@ namespace Teamcollab.GameStates
     #endregion
 
     public MenuState(Game game)
-      :base(game, EApplicationState.Menu)
+      :base(game, ApplicationState.Menu)
     {
 
     }
@@ -36,14 +36,14 @@ namespace Teamcollab.GameStates
       {
         if (StateChangeRequested != null)
         {
-          StateChangeRequested(EApplicationState.Exit);
+          StateChangeRequested(ApplicationState.Exit);
         }
       }
       else if (InputManager.Key_Release(Keys.P))
       {
         if (StateChangeRequested != null)
         {
-          StateChangeRequested(EApplicationState.Play);
+          StateChangeRequested(ApplicationState.Play);
         }
       }
     }

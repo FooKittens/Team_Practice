@@ -27,7 +27,7 @@ namespace Teamcollab.Managers
     {
       this.game = game;
       Initialize();
-      StateChangeRequestHandler(EApplicationState.Menu);
+      StateChangeRequestHandler(ApplicationState.Menu);
     }
 
     public void Update(GameTime gameTime)
@@ -53,24 +53,24 @@ namespace Teamcollab.Managers
     /// Changes the active state of the statemanager.
     /// </summary>
     /// <param name="nextState">The next active state.</param>
-    private void StateChangeRequestHandler(EApplicationState nextState)
+    private void StateChangeRequestHandler(ApplicationState nextState)
     {
       switch (nextState)
       {
-        case EApplicationState.Undefined:
+        case ApplicationState.Undefined:
           // Should only happen when an uninitialized enum has been passed.
           throw new ArgumentException("Undefined gamestate requested");
-        case EApplicationState.Menu:
+        case ApplicationState.Menu:
           currentState = menuState;
           break;
-        case EApplicationState.Play:
+        case ApplicationState.Play:
           if (playState == null)
           {
             CreatePlayState();
           }
           currentState = playState;
           break;
-        case EApplicationState.Exit:
+        case ApplicationState.Exit:
           // Exit the game.
           game.Exit();
           break;

@@ -23,7 +23,7 @@ namespace Teamcollab.GameStates
     #endregion
 
     public PlayState(Game game)
-      :base(game, EApplicationState.Play)
+      :base(game, ApplicationState.Play)
     {
       // Initialize the gamestate.
       Initialize();
@@ -40,7 +40,7 @@ namespace Teamcollab.GameStates
       {
         if (StateChangeRequested != null)
         {
-          StateChangeRequested(EApplicationState.Menu);
+          StateChangeRequested(ApplicationState.Menu);
         }
       }
 
