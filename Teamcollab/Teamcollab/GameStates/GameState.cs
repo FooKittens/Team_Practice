@@ -30,7 +30,6 @@ namespace Teamcollab.GameStates
     public GameState(Game game)
     {
       Game = game;
-
     }
 
     public abstract void Update(GameTime gameTime);

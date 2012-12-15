@@ -19,7 +19,6 @@ namespace Teamcollab.Managers
 
     public StateManager()
     {
-
     }
 
     public void Update(GameTime gameTime)
