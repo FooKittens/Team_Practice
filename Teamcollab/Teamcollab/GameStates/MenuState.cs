@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Engine;
 using Microsoft.Xna.Framework.Input;
+using Teamcollab.Resources;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Teamcollab.GameStates
 {
@@ -23,10 +25,12 @@ namespace Teamcollab.GameStates
     SpriteBatch spriteBatch;
     #endregion
 
+    ResourceCollection<Texture2D> textures;
+
     public MenuState(Game game)
       :base(game, ApplicationState.Menu)
     {
-
+      Initialize();
     }
 
     public override void Update(GameTime gameTime)
@@ -51,11 +55,25 @@ namespace Teamcollab.GameStates
     public override void Draw()
     {
       Game.GraphicsDevice.Clear(Color.DarkGreen);
+      UglyHackTestOfDoomPleaseKillMe();
     }
 
     protected override void Initialize()
     {
+      textures = new ResourceCollection<Texture2D>();
       spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+      textures.Add("Sun", Game.Content.Load<Texture2D>("sunbg"));
+    }
+
+
+    // TODO(Zerkish): Remove 
+    private void UglyHackTestOfDoomPleaseKillMe()
+    {
+      spriteBatch.Begin();
+
+      spriteBatch.Draw(textures.Query("Sun"), Vector2.Zero, Color.White);
+
+      spriteBatch.End();
     }
   }
 }

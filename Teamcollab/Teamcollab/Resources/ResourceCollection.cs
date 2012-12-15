@@ -23,9 +23,9 @@ namespace Teamcollab.Resources
     /// </summary>
     /// <param name="data">Resource of type T</param>
     /// <param name="resourceKey">The key to identify the resource with</param>
-    public void Add(T data, string resourceKey)
+    public void Add(string resourceKey, T data)
     {
-      Resource<T> res = new Resource<T>(data, resourceKey);
+      Resource<T> res = new Resource<T>(resourceKey, data);
       res.ResourceDone += ResourceDoneHandler;
       resources.Add(res);
     }
