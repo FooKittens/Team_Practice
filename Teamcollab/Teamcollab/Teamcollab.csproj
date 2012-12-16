@@ -82,6 +82,8 @@
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />
     <Compile Include="GameObjects\EntityType.cs" />
+    <Compile Include="Engine\WorldManagement\World.cs" />
+    <Compile Include="Engine\WorldManagement\WorldManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\MenuState.cs" />
     <Compile Include="GameStates\PlayState.cs" />
@@ -93,8 +95,8 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Engine\World\Cluster.cs" />
-    <Compile Include="Engine\World\Tile.cs" />
+    <Compile Include="Engine\WorldManagement\Cluster.cs" />
+    <Compile Include="Engine\WorldManagement\Tile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

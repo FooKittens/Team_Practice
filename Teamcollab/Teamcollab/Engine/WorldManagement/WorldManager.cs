@@ -9,7 +9,7 @@ using Teamcollab.Resources;
 using Microsoft.Xna.Framework.Input;
 using Teamcollab.GUI;
 
-namespace Teamcollab.Engine.World
+namespace Teamcollab.Engine.WorldManagement
 {
   sealed class WorldManager
   {
@@ -23,17 +23,14 @@ namespace Teamcollab.Engine.World
     #endregion
 
     #region Constants
-    const int XClusterStart = -Constants.ClusterWidth / 2;
-    const int YClusterStart = -Constants.ClusterHeight / 2;
-    const int XClusterEnd = Constants.ClusterWidth / 2;
-    const int YClusterEnd = Constants.ClusterHeight / 2;
-
     static readonly Matrix ClusterTileTransform;
     static readonly Matrix TileScreenTransform;
     static readonly Matrix TileClusterTransform;
     
-    static readonly Matrix ScreenTileTransfrom;
+    static readonly Matrix ScreenTileTransform;
     static readonly Matrix ScreenClusterTransform;
+
+    static readonly Matrix TilePositionTransform;
 
     static Matrix View;
     #endregion
@@ -58,18 +55,21 @@ namespace Teamcollab.Engine.World
         1
       );
 
-      ScreenTileTransfrom = Matrix.CreateScale(
+      ScreenTileTransform = Matrix.CreateScale(
         1f / Constants.TileWidth,
         1f / Constants.TileHeight,
         1
-      ) * Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0));
+      );
 
+      TilePositionTransform =
+      Matrix.CreateTranslation(new Vector3(0.5f, 0.5f, 0));
 
-      ScreenClusterTransform =
-        /*Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0)) **/
-        Matrix.CreateScale(1f / Constants.ClusterWidth, 1f / Constants.ClusterHeight, 1) * 
-        Matrix.CreateScale(1f / Constants.TileWidth, 1f / Constants.TileWidth, 1);
+      ScreenClusterTransform = 
+        ScreenTileTransform * 
+        TilePositionTransform *
+        TileClusterTransform;
 
+    
       
       View = Matrix.CreateTranslation(
         new Vector3(
@@ -84,7 +84,7 @@ namespace Teamcollab.Engine.World
     public WorldManager(Game game)
     {
       tileTextures = new ResourceCollection<Texture2D>();
-      tileTextures.Add("Grass", game.Content.Load<Texture2D>("grass32x32"));
+      tileTextures.Add("Grass", game.Content.Load<Texture2D>("square"));
 
       Initialize();
     }
@@ -125,19 +125,19 @@ namespace Teamcollab.Engine.World
       if (IsInView(clusters[0]) == false)
         return;
 
-      for (int y = YClusterStart; y < YClusterEnd; ++y)
+      for (int y = 0; y < Constants.ClusterHeight; ++y)
       {
-        for (int x = XClusterStart; x < XClusterEnd; ++x)
+        for (int x = 0; x < Constants.ClusterWidth; ++x)
         {
           if (HasMouse(GetTileAt(clusters[0], x, y))) continue;
 
-          Vector2 v = new Vector2(x, y);
-          v = Vector2.Transform(v, GetTileSpaceMatrix(clusters[0]));
-          v = Vector2.Transform(v, TileScreenTransform);
+          //Vector2 v = new Vector2(x, y);
+          //v = Vector2.Transform(v, GetTileSpaceMatrix(clusters[0]));
+          //v = Vector2.Transform(v, TileScreenTransform);
           //v = Vector2.Transform(v, View);
+          Vector2 origin = new Vector2(16, 16);
 
-          spriteBatch.Draw(tileTextures.Query("Grass"), v, Color.White);
-
+          spriteBatch.Draw(tileTextures.Query("Grass"), GetTileAt(clusters[0], x, y).Position, null, Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
         }
       }
     }
@@ -148,15 +148,14 @@ namespace Teamcollab.Engine.World
       
       //mPos.X -= 32 * Math.Sign(mPos.X);
       mPos = Camera2D.TranslatePositionByCamera(mPos);
-      //mPos -= new Vector2(16, 16);
-      //mPos = Vector2.Transform(mPos, Camera2D.Transform);
-      mPos = Vector2.Transform(mPos, ScreenTileTransfrom);
-      //mPos /= 2
+      mPos /= 32;
+      //mPos = Vector2.Transform(mPos, ScreenTileTransfrom);
 
-      mPos.X = Convert.ToInt32(mPos.X);
-      mPos.Y = Convert.ToInt32(mPos.Y);
+      mPos.X = Convert.ToInt32(mPos.X - 0.5f);
+      mPos.Y = Convert.ToInt32(mPos.Y - 0.5f);
 
-      if (mPos.X == t.Coordinates.X && mPos.Y == t.Coordinates.Y)
+
+      if (mPos.X == t.Position.X && mPos.Y == t.Position.Y)
       {
         return true;
       }
@@ -175,31 +174,19 @@ namespace Teamcollab.Engine.World
       Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
       Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
 
-      Matrix trans = TileClusterTransform * ScreenTileTransfrom;
-
       topLeft = Vector2.Transform(topLeft, ScreenClusterTransform);
       bottomRight = Vector2.Transform(bottomRight, ScreenClusterTransform);
 
-      //topLeft = Vector2.Transform(topLeft, ScreenTileTransfrom);
-      //bottomRight = Vector2.Transform(bottomRight, ScreenTileTransfrom);
-      //topLeft = Vector2.Transform(topLeft, TileClusterTransform);
-      //bottomRight = Vector2.Transform(bottomRight, TileClusterTransform);
-
-      Vector2 v = Vector2.Transform(cluster.Coordinates, ClusterTileTransform);
-      v = cluster.Coordinates;
-      
-      if (v.X >= topLeft.X &&
-          v.X <= bottomRight.X &&
-          v.Y <= bottomRight.Y &&
-          v.Y >= topLeft.Y)
+      if (cluster.Coordinates.X + 0.5f >= topLeft.X &&
+          cluster.Coordinates.X - 0.5f <= bottomRight.X &&
+          cluster.Coordinates.Y - 0.5f <= bottomRight.Y &&
+          cluster.Coordinates.Y + 0.5f >= topLeft.Y)
       {
         return true;
       }
 
       return false;
     }
-
-
 
 
     /// <summary>
@@ -209,14 +196,21 @@ namespace Teamcollab.Engine.World
     private void AddCluster(Coordinates clusterCoordinates)
     {
       Cluster cluster = new Cluster(ClusterType.Evergreen, clusterCoordinates);
-      for (int y = YClusterStart; y < YClusterEnd; ++y)
+
+      Matrix clusterOffset = Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0));
+
+      Matrix tileTranslate = TileClusterTransform * clusterOffset * ClusterTileTransform * TileScreenTransform;
+
+      for (int y = 0; y < Constants.ClusterHeight; ++y)
       {
-        for (int x = XClusterStart; x < XClusterEnd; ++x)
+        for (int x = 0; x < Constants.ClusterWidth; ++x)
         {
+          Vector2 tilePos = Vector2.Transform(new Vector2(x, y), tileTranslate);          
+
           Tile t = GetTileAt(cluster, x, y);
-          t.Coordinates = new Coordinates(x, y);
+          t.Position = tilePos;
           t.Type = TileType.Grass;
-          cluster.Tiles[(y + 4) * Constants.ClusterWidth + (x + 4)] = t;
+          cluster.Tiles[y * Constants.ClusterWidth + x] = t;
         }
       }
 
@@ -245,7 +239,7 @@ namespace Teamcollab.Engine.World
     {
       int xOffset = (x + Constants.ClusterWidth / 2);
       int yOffset = (y + Constants.ClusterHeight / 2);
-      return cluster.Tiles[yOffset * Constants.ClusterWidth + xOffset];
+      return cluster.Tiles[y * Constants.ClusterWidth + x];
     }
   }
 }

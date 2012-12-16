@@ -1,6 +1,7 @@
 ﻿using Teamcollab.Engine.Helpers;
+using System;
 
-namespace Teamcollab.Engine.World
+namespace Teamcollab.Engine.WorldManagement
 {
 
   public enum ClusterType : byte
@@ -13,6 +14,7 @@ namespace Teamcollab.Engine.World
   /// <summary>
   /// Handles a collection of Tiles
   /// </summary>
+  [Serializable]
   struct Cluster
   {
     public ClusterType Type;

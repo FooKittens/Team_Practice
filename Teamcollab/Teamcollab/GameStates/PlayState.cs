@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Engine;
 using Microsoft.Xna.Framework.Input;
 using Teamcollab.Engine.Helpers;
-using Teamcollab.Engine.World;
+using Teamcollab.Engine.WorldManagement;
 using Teamcollab.GUI;
 
 namespace Teamcollab.GameStates
@@ -51,7 +51,16 @@ namespace Teamcollab.GameStates
       }
       else if (InputManager.KeyDown(Keys.S))
       {
-        Camera2D.SetTargetPosition(new Vector2(-1280, 0));
+        Camera2D.SetTargetPosition(new Vector2(-4096, 0));
+      }
+
+      if (InputManager.KeyDown(Keys.E))
+      {
+        Camera2D.SetTargetScale(1f);
+      }
+      else if (InputManager.KeyDown(Keys.R))
+      {
+        Camera2D.SetTargetScale(2.5f);
       }
 
       if (InputManager.KeyRelease(Keys.Escape))
@@ -66,7 +75,7 @@ namespace Teamcollab.GameStates
 
     public override void Draw()
     {
-      Game.GraphicsDevice.Clear(Color.DarkRed);
+      Game.GraphicsDevice.Clear(Color.Black);
       spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera2D.Transform);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
