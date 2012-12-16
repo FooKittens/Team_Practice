@@ -24,7 +24,6 @@ namespace Teamcollab.GameStates
     #region Members
     SpriteBatch spriteBatch;
     WorldManager worldManager;
-    Camera2D camera;
     #endregion
 
     public PlayState(Game game)

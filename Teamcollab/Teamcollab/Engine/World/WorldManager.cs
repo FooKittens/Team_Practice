@@ -70,7 +70,13 @@ namespace Teamcollab.Engine.World
         1
       );
 
-      View = Matrix.CreateTranslation(new Vector3(Settings.ScreenWidth / 2, Settings.ScreenHeight / 2, 0));
+      View = Matrix.CreateTranslation(
+        new Vector3(
+          Settings.ScreenWidth / 2,
+          Settings.ScreenHeight / 2,
+          0
+          )
+        );
 
     }
 
@@ -122,9 +128,9 @@ namespace Teamcollab.Engine.World
           Vector2 v = new Vector2(x, y);
           v = Vector2.Transform(v, GetTileSpaceMatrix(clusters[0]));
           v = Vector2.Transform(v, TileScreenTransform);
-          //v = Vector2.Transform(v, View);
+          v = Vector2.Transform(v, View);
 
-          //spriteBatch.Draw(tileTextures.Query("Grass"), v, Color.White);
+          spriteBatch.Draw(tileTextures.Query("Grass"), v, Color.White);
 
         }
       }
@@ -134,6 +140,13 @@ namespace Teamcollab.Engine.World
     {
       return Matrix.CreateTranslation(Vector3.Transform(new Vector3(cluster.Coordinates, 0), ClusterTileTransform));
     }
+
+    private bool IsInView(Cluster cluster)
+    {
+      return true;
+    }
+
+
 
 
     /// <summary>
