@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Teamcollab.Engine.Helpers;
 
 namespace Teamcollab.Engine.World
 {
@@ -25,14 +26,13 @@ namespace Teamcollab.Engine.World
   {
     #region Members
     public TileType Type;
-    public Point Coordinates;
+    public Coordinates Coordinates;
     #endregion
 
-    public Tile(TileType type, Point coordinates)
+    public Tile(TileType type, Coordinates coordinates)
     {
       Type = type;
       Coordinates = coordinates;
     }
-
   }
 }
