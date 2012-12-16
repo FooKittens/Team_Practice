@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Engine.Helpers;
 
-namespace Teamcollab.Engine.World
+namespace Teamcollab.Engine.WorldManagement
 {
   /// <summary>
   /// Holds all tile types
@@ -22,17 +22,18 @@ namespace Teamcollab.Engine.World
   /// <summary>
   /// One tiny square of the world.
   /// </summary>
+  [Serializable]
   public struct Tile
   {
     #region Members
     public TileType Type;
-    public Coordinates Coordinates;
+    public Vector2 Position;
     #endregion
 
-    public Tile(TileType type, Coordinates coordinates)
+    public Tile(TileType type, Vector2 position)
     {
       Type = type;
-      Coordinates = coordinates;
+      Position = position;
     }
   }
 }
