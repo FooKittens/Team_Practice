@@ -4,7 +4,7 @@ namespace Teamcollab.Engine.Helpers
   /// <summary>
   /// Two integers x,y representing coordinates
   /// </summary>
-  struct Coordinates
+  public struct Coordinates
   {
 
     #region Static Caching
