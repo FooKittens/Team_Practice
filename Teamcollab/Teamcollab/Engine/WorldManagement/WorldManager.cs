@@ -148,7 +148,7 @@ namespace Teamcollab.Engine.WorldManagement
       {
         for (int x = 0; x < Constants.ClusterWidth; ++x)
         {
-          Vector2 origin = new Vector2(16, 16);
+          Vector2 origin = new Vector2(16f, 16f);
 
           spriteBatch.Draw(tileTextures.Query("Grass"), GetTileAt(clusters[0], x, y).Position, null, Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
         }
@@ -230,7 +230,13 @@ namespace Teamcollab.Engine.WorldManagement
 
       Matrix clusterOffset = Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0));
 
-      Matrix tileTranslate = TileClusterTransform * clusterOffset * ClusterTileTransform;
+      Matrix tileTranslate = 
+        TilePositionTransform *
+        TileClusterTransform *
+        clusterOffset *
+        ClusterTileTransform *
+        TileScreenTransform
+        ;
 
       for (int y = 0; y < Constants.ClusterHeight; ++y)
       {

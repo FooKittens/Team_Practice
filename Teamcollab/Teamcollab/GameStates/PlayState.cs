@@ -26,11 +26,15 @@ namespace Teamcollab.GameStates
     WorldManager worldManager;
     #endregion
 
+    Effect testShader;
+
     public PlayState(Game game)
       :base(game, ApplicationState.Play)
     {
       // Initialize the gamestate.
       Initialize();
+
+      testShader = game.Content.Load<Effect>("BasicShader");
     }
 
     protected override void Initialize()
@@ -39,10 +43,16 @@ namespace Teamcollab.GameStates
       worldManager = WorldManager.GetInstance(Game);
     }
 
+    float inten = 0f;
+    float t;
+
     public override void Update(GameTime gameTime)
     {
       Camera2D.Update();
       worldManager.Update(gameTime);
+
+      t = (float)gameTime.TotalGameTime.TotalSeconds;
+      inten = (float)Math.Sin(t) / 2 + 0.75f;
 
       if (InputManager.KeyDown(Keys.W))
       {
@@ -75,8 +85,27 @@ namespace Teamcollab.GameStates
 
     public override void Draw()
     {
-      Game.GraphicsDevice.Clear(Color.Black);
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, WorldManager.WorldPixelTransform * Camera2D.Transform);
+      Game.GraphicsDevice.Clear(Color.DimGray);
+
+      testShader.Parameters["AmbientIntensity"].SetValue(inten);
+      testShader.Parameters["World"].SetValue(Matrix.Identity);
+
+      testShader.Parameters["View"].SetValue(
+        Matrix.CreateLookAt(new Vector3(0, 0, -1), new Vector3(0, 0, 0), new Vector3(0, -1, 0))
+      );
+
+      testShader.Parameters["Projection"].SetValue(
+         Matrix.CreateOrthographicOffCenter(
+         -Settings.ScreenWidth / 2,
+         Settings.ScreenWidth / 2,
+         -Settings.ScreenHeight / 2,
+         Settings.ScreenHeight / 2,
+         0,
+         1
+         )
+       );
+
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }
