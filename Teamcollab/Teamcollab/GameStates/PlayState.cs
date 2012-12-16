@@ -36,7 +36,7 @@ namespace Teamcollab.GameStates
     protected override void Initialize()
     {
       spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-      worldManager = new WorldManager(Game);
+      worldManager = WorldManager.GetInstance(Game);
     }
 
     public override void Update(GameTime gameTime)
@@ -49,8 +49,9 @@ namespace Teamcollab.GameStates
         Camera2D.SetTargetPosition(new Vector2(640, 0));
       }
       else if (InputManager.KeyDown(Keys.S))
-      {
-        Camera2D.SetTargetPosition(Vector2.Transform(new Vector2 (-640, 0), ));
+      {      
+
+        //Camera2D.SetTargetPosition(Vector2.Transform(new Vector2 (-640, 0), WorldManager.TilePositionTransform));
       }
 
       if (InputManager.KeyDown(Keys.E))
@@ -75,7 +76,7 @@ namespace Teamcollab.GameStates
     public override void Draw()
     {
       Game.GraphicsDevice.Clear(Color.Black);
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera2D.Transform);
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, WorldManager.WorldPixelTransform * Camera2D.Transform);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }
