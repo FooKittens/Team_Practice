@@ -48,7 +48,7 @@ namespace Teamcollab.GameStates
 
     public override void Update(GameTime gameTime)
     {
-      Camera2D.Update();
+      Camera2D.Update(gameTime);
       worldManager.Update(gameTime);
 
       t = (float)gameTime.TotalGameTime.TotalSeconds;
@@ -56,12 +56,48 @@ namespace Teamcollab.GameStates
 
       if (InputManager.KeyDown(Keys.W))
       {
-        Camera2D.SetTargetPosition(new Vector2(640, 0));
+        Camera2D.SetTargetPosition(
+          Vector2.Transform(
+            new Vector2(0, 0),
+            Matrix.CreateScale(
+              Constants.TileWidth,
+              Constants.TileHeight,
+              1
+            ) *
+            Matrix.CreateScale(
+              Constants.ClusterWidth,
+              Constants.ClusterHeight,
+              1
+            )
+          )
+        );
       }
       else if (InputManager.KeyDown(Keys.S))
-      {      
+      {
+        Camera2D.SetTargetPosition(
+          Vector2.Transform(
+            new Vector2(10, 0),
+            Matrix.CreateScale(
+              Constants.TileWidth,
+              Constants.TileHeight,
+              1
+            ) *
+            Matrix.CreateScale(
+              Constants.ClusterWidth,
+              Constants.ClusterHeight,
+              1
+            )
+          )
+        ); // TODO Get WorldManager transform method
+      }
 
-        //Camera2D.SetTargetPosition(Vector2.Transform(new Vector2 (-640, 0), WorldManager.TilePositionTransform));
+      if (InputManager.KeyDown(Keys.A))
+      {
+        Camera2D.SetTargetScale(20);
+      }
+      if (InputManager.KeyDown(Keys.D))
+      {
+        Camera2D.SetTargetScale(1);
       }
 
       if (InputManager.KeyDown(Keys.E))
