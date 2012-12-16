@@ -88,6 +88,8 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Engine\World\Cluster.cs" />
+    <Compile Include="Engine\World\Tile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
