@@ -8,6 +8,12 @@
     public int X;
     public int Y;
 
+    public Coordinates(int x, int y)
+    {
+      X = x;
+      Y = y;
+    }
+
     public static Coordinates operator +(Coordinates lhs, Coordinates rhs)
     {
       lhs.X += rhs.X;
