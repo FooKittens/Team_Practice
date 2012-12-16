@@ -79,17 +79,17 @@ namespace Teamcollab.GUI
     /// <summary>
     /// Needs to be called for the camera to update
     /// </summary>
-    static public void Update()
+    static public void Update(GameTime gameTime)
     {
-      AutoPan();
-      AutoZoom();
+      AutoPan(gameTime);
+      AutoZoom(gameTime);
       UpdateTransformMatrix();
     }
 
     /// <summary>
     /// Scales the camera towards the target scale
     /// </summary>
-    static private void AutoZoom()
+    static private void AutoZoom(GameTime gameTime)
     {
       float diff = targetScale - Scale;
       if (Math.Abs(diff) < 0.01f)
@@ -98,9 +98,10 @@ namespace Teamcollab.GUI
       }
       else
       {
-        Scale += Math.Sign(diff) * 0.05f;
+        float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        float acc = diff * 320; // TODO (Martin): 320? Random working value... Probably because of pixel size?
+        Scale = (acc * (float)Math.Pow(time, 2) + (acc * (float)Math.Pow(time, 2)) / 2 + Scale);
       }
-      Scale = MathHelper.Clamp(Scale, 0.1f, 2.5f);
 
       Origin = halfScreenSize / Scale;
     }
@@ -108,7 +109,7 @@ namespace Teamcollab.GUI
     /// <summary>
     /// Moves the camera towards the target position
     /// </summary>
-    static private void AutoPan()
+    static private void AutoPan(GameTime gameTime)
     {
       Vector2 diff = targetPosition - position;
       if (diff.LengthSquared() < 1)
@@ -117,7 +118,9 @@ namespace Teamcollab.GUI
       }
       else
       {
-        position += diff / 20 + Vector2.Normalize(diff);
+        float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        Vector2 acc = diff * 320; // TODO (Martin): 320? Random working value... Probably because of pixel size?
+        position = (acc * (float)Math.Pow(time, 2) + (acc * (float)Math.Pow(time, 2)) / 2 + position);
       }
     }
 
