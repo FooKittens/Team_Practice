@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.GUI
 {
@@ -126,7 +127,6 @@ namespace Teamcollab.GUI
     static private void UpdateTransformMatrix()
     {
       Transform =
-        Matrix.Identity *
         Matrix.CreateTranslation(
           Origin.X - position.X,
           Origin.Y - position.Y,

@@ -14,6 +14,7 @@ namespace Teamcollab
     public const int TileHeight = 32;
 
     public const int TileMod = 5;
+    public const float WorldPixelRatio = 32;
 
     public const int ClusterWidth = 16;
     public const int ClusterHeight = 16;

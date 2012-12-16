@@ -19,7 +19,7 @@ namespace Teamcollab.DataSerialization
     {
       SettingsData appSettings = new SettingsData();
       appSettings.ScreenWidth = 1280;
-      appSettings.ScreenHeight = 720;
+      appSettings.ScreenHeight = 768;
 
       return appSettings;
     }
