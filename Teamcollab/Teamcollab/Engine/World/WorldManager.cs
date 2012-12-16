@@ -31,7 +31,9 @@ namespace Teamcollab.Engine.World
     static readonly Matrix ClusterTileTransform;
     static readonly Matrix TileScreenTransform;
     static readonly Matrix TileClusterTransform;
+    
     static readonly Matrix ScreenTileTransfrom;
+    static readonly Matrix ScreenClusterTransform;
 
     static Matrix View;
     #endregion
@@ -60,17 +62,15 @@ namespace Teamcollab.Engine.World
         1f / Constants.TileWidth,
         1f / Constants.TileHeight,
         1
-      );
+      ) * Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0));
 
-      View = Matrix.CreateOrthographicOffCenter(
-        -Settings.ScreenWidth / 2,
-        Settings.ScreenWidth / 2,
-        Settings.ScreenHeight / 2,
-        -Settings.ScreenHeight / 2,
-        0,
-        1
-      );
 
+      ScreenClusterTransform =
+        /*Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0)) **/
+        Matrix.CreateScale(1f / Constants.ClusterWidth, 1f / Constants.ClusterHeight, 1) * 
+        Matrix.CreateScale(1f / Constants.TileWidth, 1f / Constants.TileWidth, 1);
+
+      
       View = Matrix.CreateTranslation(
         new Vector3(
           Settings.ScreenWidth / 2,
@@ -131,7 +131,7 @@ namespace Teamcollab.Engine.World
         {
           if (HasMouse(GetTileAt(clusters[0], x, y))) continue;
 
-          Vector2 v = new Vector2(x - 0.5f, y - 0.5f);
+          Vector2 v = new Vector2(x, y);
           v = Vector2.Transform(v, GetTileSpaceMatrix(clusters[0]));
           v = Vector2.Transform(v, TileScreenTransform);
           //v = Vector2.Transform(v, View);
@@ -153,8 +153,6 @@ namespace Teamcollab.Engine.World
       mPos = Vector2.Transform(mPos, ScreenTileTransfrom);
       //mPos /= 2
 
-      //mPos.X = (int)(mPos.X + 0.5f);
-      //mPos.Y = (int)(mPos.Y + 0.5f);
       mPos.X = Convert.ToInt32(mPos.X);
       mPos.Y = Convert.ToInt32(mPos.Y);
 
@@ -177,18 +175,23 @@ namespace Teamcollab.Engine.World
       Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
       Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
 
-      topLeft = Vector2.Transform(topLeft, ScreenTileTransfrom);
-      bottomRight = Vector2.Transform(bottomRight, ScreenTileTransfrom);
-      topLeft = Vector2.Transform(topLeft, TileClusterTransform);
-      bottomRight = Vector2.Transform(bottomRight, TileClusterTransform);
+      Matrix trans = TileClusterTransform * ScreenTileTransfrom;
+
+      topLeft = Vector2.Transform(topLeft, ScreenClusterTransform);
+      bottomRight = Vector2.Transform(bottomRight, ScreenClusterTransform);
+
+      //topLeft = Vector2.Transform(topLeft, ScreenTileTransfrom);
+      //bottomRight = Vector2.Transform(bottomRight, ScreenTileTransfrom);
+      //topLeft = Vector2.Transform(topLeft, TileClusterTransform);
+      //bottomRight = Vector2.Transform(bottomRight, TileClusterTransform);
 
       Vector2 v = Vector2.Transform(cluster.Coordinates, ClusterTileTransform);
       v = cluster.Coordinates;
       
-      if (v.X + 16 >= topLeft.X &&
-          v.X - 16 <= bottomRight.X &&
-          v.Y - 16 <= bottomRight.Y &&
-          v.Y + 16 >= topLeft.Y)
+      if (v.X >= topLeft.X &&
+          v.X <= bottomRight.X &&
+          v.Y <= bottomRight.Y &&
+          v.Y >= topLeft.Y)
       {
         return true;
       }
