@@ -19,46 +19,20 @@ namespace Teamcollab.Engine.World
   }
 
   /// <summary>
-  /// One tiny square of the world
+  /// One tiny square of the world.
   /// </summary>
   public struct Tile
   {
-    #region Constants
-    static readonly Point size = new Point(32, 32);
-    #endregion
-
     #region Members
     public TileType Type;
+    public Point Coordinates;
     #endregion
 
-    public Tile(TileType type)
+    public Tile(TileType type, Point coordinates)
     {
       Type = type;
+      Coordinates = coordinates;
     }
 
-    /// <summary>
-    /// Returns the cluster-based bounds of this tile,
-    /// as opposed to world bounds
-    /// </summary>
-    /// <param name="x">X index</param>
-    /// <param name="y">Y index</param>
-    /// <returns>Tell me if you see this anywhere</returns>
-    public static Rectangle TileBounds(int x, int y)
-    {
-      Rectangle result = new Rectangle(
-        x * size.X,
-        y * size.Y,
-        size.X,
-        size.Y
-      );
-      return result;
-    }
-
-    public Texture2D GetTexture()
-    {
-      if (Type == TileType.Undefined)
-        return null;
-      return null; // Library.textures[type.ToString()];
-    }
   }
 }
