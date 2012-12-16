@@ -11,193 +11,31 @@ using Teamcollab.GUI;
 
 namespace Teamcollab.Engine.WorldManagement
 {
-  public sealed class WorldManager
+  sealed class WorldManager
   {
     #region Properties
-    
-    #endregion
 
-    #region Matrices
-
-
-    /// <summary>
-    /// Transforms cluster coordinates into tile coordinates.
-    /// Example: Cluster(-1, 0) becomes (-1 * ClusterWidth, 0 * ClusterHeight).
-    /// </summary>
-    private static Matrix ClusterTileTransform { get; set; }
-
-    /// <summary>
-    /// Transforms TileCoordinates to ScreenCoordinates.
-    /// TileCoordinates should be cluster relative.
-    /// Example: Tile(-10, 0) becomes (-10 * TileWidth, 0 * TileHeight).
-    /// </summary>
-    private static Matrix TileScreenTransform { get; set; }
-
-    /// <summary>
-    /// Transforms TileCoordinates into ClusterCoordinates.
-    /// TileCoordinates should be world relative.
-    /// Example: Tile(-512, 0) becomes (-512 / ClusterWidth, 0 / ClusterHeight)
-    /// </summary>
-    private static Matrix TileClusterTransform { get; set; }
-
-    /// <summary>
-    /// Transforms ScreenCoordinates into TileSpace.
-    /// ScreenCoordinates should be transformed by a view matrix(camera).
-    /// Example: Screen(-100, 0) becomes (-100 / TileWidth, 0)
-    /// </summary>
-    private static Matrix ScreenTileTransform { get; set; }
-
-    /// <summary>
-    /// Transforms ScreenCordinates into ClusterSpace.
-    /// ScreenCoordinates should be transformed by a view matrix(camera).
-    /// Example: Screen(-100, 0) becomes((-100 / TileWidth) / ClusterWidth, 0). 
-    /// </summary>
-    private static Matrix ScreenClusterTransform { get; set; }
-
-    /// <summary>
-    /// Offsets a TilePosition in TileCoordinates by half a tile.
-    /// Example: Tile(0, 0) becomes (0.5, 0.5)
-    /// </summary>
-    private static Matrix TilePositionTransform { get; set; }
-    
-    
-    public static Matrix WorldPixelTransform { get; set;}
-
-    public static Matrix PixelWorldTransform { get; set; }
     #endregion
 
     #region Members
-    // Singleton instance
-    private static WorldManager singleton;
-
     List<Cluster> clusters;
     ResourceCollection<Texture2D> tileTextures;
     #endregion
 
-    #region Static Methods
-    public static Vector2 GetTileScreenPosition(Vector2 tilePosition)
-    {
-      return Vector2.Transform(
-        tilePosition,
-        TilePositionTransform * TileScreenTransform
-      );
-    }
+    #region Constants
+    static readonly Matrix ClusterTileTransform;
+    static readonly Matrix TileScreenTransform;
+    static readonly Matrix TileClusterTransform;
+    
+    static readonly Matrix ScreenTileTransform;
+    static readonly Matrix ScreenClusterTransform;
 
-    public static Vector2 TransformByCluster(Vector2 tilePosition,
-      Vector2 clusterPosition)
-    {
-      Vector2 cTranslate = Vector2.Transform(
-        clusterPosition,
-        ClusterTileTransform
-      );
+    static readonly Matrix TilePositionTransform;
 
-      Vector2 res =  Vector2.Transform(
-        tilePosition + cTranslate,
-        TilePositionTransform *
-        TileScreenTransform
-      );
-
-      return res;
-    }
-
-    public static Vector2 GetClusterScreenCenter(Vector2 clusterCoordinates)
-    {
-      return Vector2.Transform(
-        clusterCoordinates,
-        ClusterTileTransform * TileScreenTransform
-      );
-    }
-
+    static Matrix View;
     #endregion
 
     static WorldManager()
-    {
-      CreateMatrices();
-    }
-
-    private WorldManager(Game game)
-    {
-      tileTextures = new ResourceCollection<Texture2D>();
-      tileTextures.Add("Grass", game.Content.Load<Texture2D>("grass32x32"));
-
-      Initialize();
-    }
-
-    /// <summary>
-    /// Returns the single WorldManager instance that exists.
-    /// </summary>
-    /// <param name="game">Necessary for instancing the singleton.</param>
-    /// <returns>The singleton instance.</returns>
-    public static WorldManager GetInstance(Game game)
-    {
-      if (singleton == null)
-      {
-        singleton = new WorldManager(game);
-      }
-
-      return singleton;
-    }
-
-    /// <summary>
-    /// Initializes the worldmanager instance.
-    /// </summary>
-    private void Initialize()
-    {
-      clusters = new List<Cluster>();
-
-      //AddCluster(new Coordinates(0, 0));
-      const int clustersWidth = 5;
-      const int clustersHeight = 5;
-
-      for (int y = -5; y < clustersHeight; ++y)
-      {
-        for (int x = -5; x < clustersWidth; ++x)
-        {
-          AddCluster(new Coordinates(x, y));
-        }
-      }
-
-      grassText = tileTextures.Query("Grass");
-    }
-
-    public void Update(GameTime gameTime)
-    {
-
-    }
-
-
-    Resource<Texture2D> grassText;
-    public void Draw(SpriteBatch spriteBatch)
-    {
-
-      foreach (Cluster cluster in clusters)
-      {
-        // Test with cluster bounds
-        if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
-        {
-          continue;
-        }
-
-        for (int y = 0; y < Constants.ClusterHeight; ++y)
-        {
-          for (int x = 0; x < Constants.ClusterWidth; ++x)
-          {
-            Vector2 origin = new Vector2(16, 16);
-
-            Vector2 tPos = GetTileAt(clusters[0], x, y).Position;
-
-            Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
-
-            spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
-          }
-        }
-      }
-    }
-
-    /// <summary>
-    /// Creates a set of default matrices for the world manager.
-    /// </summary>
-    private static void CreateMatrices()
     {
       ClusterTileTransform = Matrix.CreateScale(
         Constants.ClusterWidth,
@@ -226,19 +64,111 @@ namespace Teamcollab.Engine.WorldManagement
       TilePositionTransform =
       Matrix.CreateTranslation(new Vector3(0.5f, 0.5f, 0));
 
-      ScreenClusterTransform =
-        ScreenTileTransform *
+      ScreenClusterTransform = 
+        ScreenTileTransform * 
         TilePositionTransform *
         TileClusterTransform;
 
-      PixelWorldTransform = Matrix.CreateScale(1f / Constants.WorldPixelRatio);
-      WorldPixelTransform = Matrix.CreateScale(Constants.WorldPixelRatio);
+    
+      
+      View = Matrix.CreateTranslation(
+        new Vector3(
+          Settings.ScreenWidth / 2,
+          Settings.ScreenHeight / 2,
+          0
+          )
+        );
+
     }
 
-    /// <summary>
-    /// Determines if a given cluster is in view.
-    /// </summary>
-    /// <param name="cluster">The cluster to investigate.</param>
+    public WorldManager(Game game)
+    {
+      tileTextures = new ResourceCollection<Texture2D>();
+      tileTextures.Add("Grass", game.Content.Load<Texture2D>("square"));
+
+      Initialize();
+    }
+
+    public void Initialize()
+    {
+      clusters = new List<Cluster>();
+      AddCluster(new Coordinates(0, 0));
+    }
+
+    public void Update(GameTime gameTime)
+    {
+      // TODO(Zerkish): Remove useless input.
+
+      if (InputManager.KeyDown(Keys.Left))
+      {
+        View *= Matrix.CreateTranslation(new Vector3(-1, 0, 0));
+      }
+
+      if (InputManager.KeyDown(Keys.Right))
+      {
+        View *= Matrix.CreateTranslation(new Vector3(1, 0, 0));
+      }
+
+      if (InputManager.KeyDown(Keys.Up))
+      {
+        View *= Matrix.CreateTranslation(new Vector3(0, -1, 0));
+      }
+
+      if (InputManager.KeyDown(Keys.Down))
+      {
+        View *= Matrix.CreateTranslation(new Vector3(0, 1, 0));
+      }
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+      if (IsInView(clusters[0]) == false)
+        return;
+
+      for (int y = 0; y < Constants.ClusterHeight; ++y)
+      {
+        for (int x = 0; x < Constants.ClusterWidth; ++x)
+        {
+          if (HasMouse(GetTileAt(clusters[0], x, y))) continue;
+
+          //Vector2 v = new Vector2(x, y);
+          //v = Vector2.Transform(v, GetTileSpaceMatrix(clusters[0]));
+          //v = Vector2.Transform(v, TileScreenTransform);
+          //v = Vector2.Transform(v, View);
+          Vector2 origin = new Vector2(16, 16);
+
+          spriteBatch.Draw(tileTextures.Query("Grass"), GetTileAt(clusters[0], x, y).Position, null, Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
+        }
+      }
+    }
+
+    private bool HasMouse(Tile t)
+    {
+      Vector2 mPos = InputManager.MousePosition();
+      
+      //mPos.X -= 32 * Math.Sign(mPos.X);
+      mPos = Camera2D.TranslatePositionByCamera(mPos);
+      mPos /= 32;
+      //mPos = Vector2.Transform(mPos, ScreenTileTransfrom);
+
+      mPos.X = Convert.ToInt32(mPos.X - 0.5f);
+      mPos.Y = Convert.ToInt32(mPos.Y - 0.5f);
+
+
+      if (mPos.X == t.Position.X && mPos.Y == t.Position.Y)
+      {
+        return true;
+      }
+      
+      return false;
+
+    }
+
+    private Matrix GetTileSpaceMatrix(Cluster cluster)
+    {
+      return Matrix.CreateTranslation(Vector3.Transform(new Vector3(cluster.Coordinates, 0), ClusterTileTransform));
+    }
+
     private bool IsInView(Cluster cluster)
     {
       Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
@@ -247,7 +177,6 @@ namespace Teamcollab.Engine.WorldManagement
       topLeft = Vector2.Transform(topLeft, ScreenClusterTransform);
       bottomRight = Vector2.Transform(bottomRight, ScreenClusterTransform);
 
-      // Offsets are in cluster coordinates.
       if (cluster.Coordinates.X + 0.5f >= topLeft.X &&
           cluster.Coordinates.X - 0.5f <= bottomRight.X &&
           cluster.Coordinates.Y - 0.5f <= bottomRight.Y &&
@@ -259,41 +188,6 @@ namespace Teamcollab.Engine.WorldManagement
       return false;
     }
 
-    /// <summary>
-    /// Retrieves the bounding rectangle for a cluster in pixels.
-    /// </summary>
-    /// <param name="cluster">Cluster to get bounds from.</param>
-    private static Rectangle GetClusterBounds(Cluster cluster)
-    {
-      // Creates cluster edges with clockwise winding.
-      Vector2[] vertices = new[] {
-        new Vector2(-0.5f, -0.5f), // Top Left
-        new Vector2(0.5f, -0.5f), // Top Right
-        new Vector2(0.5f, 0.5f), // Bottom Right
-        new Vector2(-0.5f, 0.5f) // Bottom Left
-      };
-
-      // Matrix for translating into tilespace and then scaling to screen.
-      Matrix mat = ClusterTileTransform * TileScreenTransform;
-
-      /* Translate all vertices to the correct cluster and transform
-       * into pixel coordinates. */
-      for (int i = 0; i < vertices.Length; ++i)
-      {
-        vertices[i] += cluster.Coordinates;
-        vertices[i] = Vector2.Transform(vertices[i], mat);
-      }
-
-      // Bounding Rectangle.
-      Rectangle rect = new Rectangle(
-        (int)vertices[0].X,
-        (int)vertices[0].Y,
-        (int)(vertices[1].X - vertices[0].X),
-        (int)(vertices[2].Y - vertices[1].Y)        
-      );
-
-      return rect;
-    }
 
     /// <summary>
     /// Insert a cluster at the given coordinates in cluster space.
@@ -305,12 +199,7 @@ namespace Teamcollab.Engine.WorldManagement
 
       Matrix clusterOffset = Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0));
 
-      Matrix tileTranslate = 
-        /*TilePositionTransform **/
-        TileClusterTransform *
-        clusterOffset *
-        ClusterTileTransform
-        ;
+      Matrix tileTranslate = TileClusterTransform * clusterOffset * ClusterTileTransform * TileScreenTransform;
 
       for (int y = 0; y < Constants.ClusterHeight; ++y)
       {
@@ -325,11 +214,8 @@ namespace Teamcollab.Engine.WorldManagement
         }
       }
 
-      
-
       clusters.Add(cluster);
     }
-
 
     /// <summary>
     /// Gets the tile at the given coordinates in the cluster
@@ -351,6 +237,8 @@ namespace Teamcollab.Engine.WorldManagement
     /// <returns></returns>
     private Tile GetTileAt(Cluster cluster, int x, int y)
     {
+      int xOffset = (x + Constants.ClusterWidth / 2);
+      int yOffset = (y + Constants.ClusterHeight / 2);
       return cluster.Tiles[y * Constants.ClusterWidth + x];
     }
   }
