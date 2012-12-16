@@ -5,14 +5,14 @@ namespace Teamcollab.GUI
   /// <summary>
   /// A automatically moving camera, holding a Transform Matrix used for drawing.
   /// </summary>
-  class Camera2D
+  static class Camera2D
   {
     #region Properties
-    public Vector2 Position { get { return position; } }
-    public Vector2 Origin { get; private set; }
-    public Matrix Transform { get; private set; }
-    public float Scale { get; private set; }
-    public Rectangle Bounds
+    static public Vector2 Position { get { return position; } }
+    static public Vector2 Origin { get; private set; }
+    static public Matrix Transform { get; private set; }
+    static public float Scale { get; private set; }
+    static public Rectangle Bounds
     {
       get
       {
@@ -31,17 +31,17 @@ namespace Teamcollab.GUI
     #endregion
 
     #region Members
-    private Vector2 halfScreenSize; // Half is used more than whole
-    private Vector2 position;
-    private Vector2 targetPosition;
-    private float targetScale;
+    static Vector2 halfScreenSize; // Half is used more than whole
+    static private Vector2 position;
+    static private Vector2 targetPosition;
+    static private float targetScale;
     #endregion
-    
-    public Camera2D(Vector2 screenSize)
+
+    static public Camera2D()
     {
       Scale = 1f;
-      halfScreenSize = screenSize / 2;
-      position = halfScreenSize / Scale;
+      halfScreenSize = new Vector2(Settings.ScreenWidth, Settings.ScreenHeight);
+      position = Vector2.Zero;
       Origin = halfScreenSize / Scale;
 
       UpdateTransformMatrix();
@@ -51,7 +51,7 @@ namespace Teamcollab.GUI
     /// Sets the target zoom factor
     /// </summary>
     /// <param name="scale">Target zoom factor</param>
-    public void SetTargetScale(float scale)
+    static public void SetTargetScale(float scale)
     {
       targetScale = scale;
     }
@@ -60,7 +60,7 @@ namespace Teamcollab.GUI
     /// Sets the world coordinate to focus on
     /// </summary>
     /// <param name="worldCoordinate">World coordinate</param>
-    public void SetTargetPosition(Vector2 worldCoordinate)
+    static public void SetTargetPosition(Vector2 worldCoordinate)
     {
       targetPosition = worldCoordinate;
     }
@@ -68,7 +68,7 @@ namespace Teamcollab.GUI
     /// <summary>
     /// Needs to be called for the camera to update
     /// </summary>
-    public void Update()
+    static public void Update()
     {
       AutoPan();
       AutoZoom();
@@ -78,7 +78,7 @@ namespace Teamcollab.GUI
     /// <summary>
     /// Scales the camera towards the target scale
     /// </summary>
-    private void AutoZoom()
+    static private void AutoZoom()
     {
       float diff = Scale - targetScale;
       if (diff < 0.01f)
@@ -97,7 +97,7 @@ namespace Teamcollab.GUI
     /// <summary>
     /// Moves the camera towards the target position
     /// </summary>
-    private void AutoPan()
+    static private void AutoPan()
     {
       Vector2 diff = position - targetPosition;
       if (diff.Length() < 1)
@@ -113,14 +113,14 @@ namespace Teamcollab.GUI
     /// <summary>
     /// Updates the matrix used for drawing
     /// </summary>
-    private void UpdateTransformMatrix()
+    static private void UpdateTransformMatrix()
     {
       Transform =
         Matrix.Identity *
         Matrix.CreateTranslation(
           Origin.X - position.X,
           Origin.Y - position.Y,
-          -0.1f) *
+          0) *
         Matrix.CreateScale(Scale);
     }
 
@@ -129,7 +129,7 @@ namespace Teamcollab.GUI
     /// </summary>
     /// <param name="camCoord">Camera coordinate</param>
     /// <returns>World coordinate</returns>
-    public Vector2 TranslatePositionByCamera(Vector2 camCoord)
+    static public Vector2 TranslatePositionByCamera(Vector2 camCoord)
     {
       return (camCoord / Scale) - (Origin - Position);
     }

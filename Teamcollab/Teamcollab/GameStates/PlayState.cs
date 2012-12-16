@@ -24,6 +24,7 @@ namespace Teamcollab.GameStates
     #region Members
     SpriteBatch spriteBatch;
     WorldManager worldManager;
+    Camera2D camera;
     #endregion
 
     public PlayState(Game game)
@@ -41,6 +42,7 @@ namespace Teamcollab.GameStates
 
     public override void Update(GameTime gameTime)
     {
+      Camera2D.Update();
       worldManager.Update(gameTime);
 
       if (InputManager.KeyRelease(Keys.Escape))
@@ -56,7 +58,7 @@ namespace Teamcollab.GameStates
     public override void Draw()
     {
       Game.GraphicsDevice.Clear(Color.DarkRed);
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, new Camera2D(new Vector2(1280, 720)).Transform);
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera2D.Transform);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }
