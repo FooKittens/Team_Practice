@@ -141,6 +141,13 @@ namespace Teamcollab.Engine.World
       return Matrix.CreateTranslation(Vector3.Transform(new Vector3(cluster.Coordinates, 0), ClusterTileTransform));
     }
 
+    private bool IsInView(Cluster cluster)
+    {
+      return true;
+    }
+
+
+
 
     /// <summary>
     /// Insert a cluster at the given coordinates in cluster space.
