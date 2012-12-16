@@ -56,9 +56,9 @@ namespace Teamcollab.GameStates
     public override void Draw()
     {
       Game.GraphicsDevice.Clear(Color.DarkRed);
-      //spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, new Camera2D(new Vector2(1280, 720)).Transform);
+      spriteBatch.Begin();
       worldManager.Draw(spriteBatch);
-      //spriteBatch.End();
+      spriteBatch.End();
     }
   }
 }
