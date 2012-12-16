@@ -234,7 +234,7 @@ namespace Teamcollab.Engine.WorldManagement
         TilePositionTransform *
         TileClusterTransform *
         clusterOffset *
-        ClusterTileTransform *
+        ClusterTileTransform  *
         TileScreenTransform
         ;
 
