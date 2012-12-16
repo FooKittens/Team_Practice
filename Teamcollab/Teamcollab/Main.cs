@@ -31,6 +31,7 @@ namespace Teamcollab
 
       graphics.PreferredBackBufferWidth = Settings.ScreenWidth;
       graphics.PreferredBackBufferHeight = Settings.ScreenHeight;
+      IsMouseVisible = true;
 		}
 
 		protected override void Initialize()

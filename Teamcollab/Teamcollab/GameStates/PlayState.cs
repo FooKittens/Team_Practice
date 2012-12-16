@@ -44,6 +44,15 @@ namespace Teamcollab.GameStates
       Camera2D.Update();
       worldManager.Update(gameTime);
 
+      if (InputManager.KeyDown(Keys.W))
+      {
+        Camera2D.SetTargetPosition(new Vector2(640, 0));
+      }
+      else if (InputManager.KeyDown(Keys.S))
+      {
+        Camera2D.SetTargetPosition(new Vector2(-1280, 0));
+      }
+
       if (InputManager.KeyRelease(Keys.Escape))
       {
         if (StateChangeRequested != null)
