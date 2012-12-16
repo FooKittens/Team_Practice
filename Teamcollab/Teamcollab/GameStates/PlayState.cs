@@ -124,13 +124,16 @@ namespace Teamcollab.GameStates
       Game.GraphicsDevice.Clear(Color.DimGray);
 
       testShader.Parameters["AmbientIntensity"].SetValue(inten);
-      testShader.Parameters["World"].SetValue(Matrix.Identity);
+      testShader.Parameters["World"].SetValue(Matrix.CreateTranslation(new Vector3(50, 50, 0)));
 
       testShader.Parameters["View"].SetValue(
         Matrix.CreateLookAt(new Vector3(0, 0, -1), new Vector3(0, 0, 0), new Vector3(0, -1, 0))
       );
 
+      
+
       testShader.Parameters["Projection"].SetValue(
+        Matrix.CreateTranslation(new Vector3(32, 32, 0)) * 
          Matrix.CreateOrthographicOffCenter(
          -Settings.ScreenWidth / 2,
          Settings.ScreenWidth / 2,
