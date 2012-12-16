@@ -78,6 +78,8 @@
     <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
     <Compile Include="Engine\World\WorldManager.cs" />
+    <Compile Include="GameObjects\DrawableEntity.cs" />
+    <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\MenuState.cs" />
     <Compile Include="GameStates\PlayState.cs" />
