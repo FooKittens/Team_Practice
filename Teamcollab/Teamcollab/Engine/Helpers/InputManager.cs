@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Teamcollab.Engine
+namespace Teamcollab.Engine.Helpers
 {
   /// <summary>
   /// Handles input.
