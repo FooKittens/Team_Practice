@@ -27,29 +27,5 @@ namespace Teamcollab.Engine.World
       Active = false;
       Coordinates = coordinates;
     }
-
-    public Tile this[int index]
-    {
-      get
-      {
-        return Tiles[index];
-      }
-      set
-      {
-        Tiles[index] = value;
-      }
-    }
-
-    public Tile this[Coordinates coord]
-    {
-      get
-      {
-        return Tiles[coord.X * coord.Y + coord.X];
-      }
-      set
-      {
-        Tiles[coord.X * coord.Y + coord.X] = value;
-      }
-    }
   }
 }

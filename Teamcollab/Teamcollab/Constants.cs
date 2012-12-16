@@ -13,6 +13,8 @@ namespace Teamcollab
     public const int TileWidth = 32;
     public const int TileHeight = 32;
 
+    public const int TileMod = 5;
+
     public const int ClusterWidth = 128;
     public const int ClusterHeight = 128;
     #endregion
