@@ -75,6 +75,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataSerialization\ApplicationSettings.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
+    <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\InputManager.cs" />
     <Compile Include="Engine\World\WorldManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
