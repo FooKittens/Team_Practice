@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Engine.Helpers;
 using Teamcollab.Resources;
 using Microsoft.Xna.Framework.Input;
+using Teamcollab.GUI;
 
 namespace Teamcollab.Engine.World
 {
@@ -56,8 +57,8 @@ namespace Teamcollab.Engine.World
       );
 
       ScreenTileTransfrom = Matrix.CreateScale(
-        1f / Constants.ClusterWidth,
-        1f / Constants.ClusterHeight,
+        1f / Constants.TileWidth,
+        1f / Constants.TileHeight,
         1
       );
 
@@ -121,19 +122,49 @@ namespace Teamcollab.Engine.World
 
     public void Draw(SpriteBatch spriteBatch)
     {
+      if (IsInView(clusters[0]) == false)
+        return;
+
       for (int y = YClusterStart; y < YClusterEnd; ++y)
       {
         for (int x = XClusterStart; x < XClusterEnd; ++x)
         {
-          Vector2 v = new Vector2(x, y);
+          if (HasMouse(GetTileAt(clusters[0], x, y))) continue;
+
+          Vector2 v = new Vector2(x - 0.5f, y - 0.5f);
           v = Vector2.Transform(v, GetTileSpaceMatrix(clusters[0]));
           v = Vector2.Transform(v, TileScreenTransform);
-          v = Vector2.Transform(v, View);
+          //v = Vector2.Transform(v, View);
 
           spriteBatch.Draw(tileTextures.Query("Grass"), v, Color.White);
 
         }
       }
+    }
+
+    private bool HasMouse(Tile t)
+    {
+      Vector2 mPos = InputManager.MousePosition();
+      
+      //mPos.X -= 32 * Math.Sign(mPos.X);
+      mPos = Camera2D.TranslatePositionByCamera(mPos);
+      //mPos -= new Vector2(16, 16);
+      //mPos = Vector2.Transform(mPos, Camera2D.Transform);
+      mPos = Vector2.Transform(mPos, ScreenTileTransfrom);
+      //mPos /= 2
+
+      //mPos.X = (int)(mPos.X + 0.5f);
+      //mPos.Y = (int)(mPos.Y + 0.5f);
+      mPos.X = Convert.ToInt32(mPos.X);
+      mPos.Y = Convert.ToInt32(mPos.Y);
+
+      if (mPos.X == t.Coordinates.X && mPos.Y == t.Coordinates.Y)
+      {
+        return true;
+      }
+      
+      return false;
+
     }
 
     private Matrix GetTileSpaceMatrix(Cluster cluster)
@@ -143,7 +174,26 @@ namespace Teamcollab.Engine.World
 
     private bool IsInView(Cluster cluster)
     {
-      return true;
+      Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
+      Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
+
+      topLeft = Vector2.Transform(topLeft, ScreenTileTransfrom);
+      bottomRight = Vector2.Transform(bottomRight, ScreenTileTransfrom);
+      topLeft = Vector2.Transform(topLeft, TileClusterTransform);
+      bottomRight = Vector2.Transform(bottomRight, TileClusterTransform);
+
+      Vector2 v = Vector2.Transform(cluster.Coordinates, ClusterTileTransform);
+      v = cluster.Coordinates;
+      
+      if (v.X + 16 >= topLeft.X &&
+          v.X - 16 <= bottomRight.X &&
+          v.Y - 16 <= bottomRight.Y &&
+          v.Y + 16 >= topLeft.Y)
+      {
+        return true;
+      }
+
+      return false;
     }
 
 
@@ -161,9 +211,9 @@ namespace Teamcollab.Engine.World
         for (int x = XClusterStart; x < XClusterEnd; ++x)
         {
           Tile t = GetTileAt(cluster, x, y);
-          t.Coordinates.X = x << Constants.TileMod;
-          t.Coordinates.Y = y << Constants.TileMod;
+          t.Coordinates = new Coordinates(x, y);
           t.Type = TileType.Grass;
+          cluster.Tiles[(y + 4) * Constants.ClusterWidth + (x + 4)] = t;
         }
       }
 

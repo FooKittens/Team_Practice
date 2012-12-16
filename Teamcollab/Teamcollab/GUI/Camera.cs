@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Teamcollab.GUI
 {
@@ -40,10 +41,10 @@ namespace Teamcollab.GUI
     static Camera2D()
     {
       Scale = 1f;
-      halfScreenSize = new Vector2(Settings.ScreenWidth, Settings.ScreenHeight);
+      halfScreenSize = new Vector2(Settings.ScreenWidth / 2, Settings.ScreenHeight / 2);
       position = Vector2.Zero;
       Origin = halfScreenSize / Scale;
-
+      targetScale = 1f;
       UpdateTransformMatrix();
     }
 
@@ -89,14 +90,14 @@ namespace Teamcollab.GUI
     /// </summary>
     static private void AutoZoom()
     {
-      float diff = Scale - targetScale;
-      if (diff < 0.01f)
+      float diff = targetScale - Scale;
+      if (Math.Abs(diff) < 0.01f)
       {
         Scale = targetScale;
       }
       else
       {
-        Scale += (diff / 2);
+        Scale += Math.Sign(diff) * 0.05f;
       }
       Scale = MathHelper.Clamp(Scale, 0.1f, 2.5f);
 
@@ -108,14 +109,14 @@ namespace Teamcollab.GUI
     /// </summary>
     static private void AutoPan()
     {
-      Vector2 diff = position - targetPosition;
-      if (diff.Length() < 1)
+      Vector2 diff = targetPosition - position;
+      if (diff.LengthSquared() < 1)
       {
         position = targetPosition;
       }
       else
       {
-        position += (diff / 2) / Scale;
+        position += Vector2.Normalize(diff) * 1.25f;
       }
     }
 
