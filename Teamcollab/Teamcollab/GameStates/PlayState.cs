@@ -50,7 +50,7 @@ namespace Teamcollab.GameStates
       }
       else if (InputManager.KeyDown(Keys.S))
       {
-        Camera2D.SetTargetPosition(new Vector2(-4096, 0));
+        Camera2D.SetTargetPosition(Vector2.Transform(new Vector2 (-640, 0), ));
       }
 
       if (InputManager.KeyDown(Keys.E))

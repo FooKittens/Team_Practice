@@ -116,7 +116,7 @@ namespace Teamcollab.GUI
       }
       else
       {
-        position += Vector2.Normalize(diff) * 1.25f;
+        position += diff / 20 + Vector2.Normalize(diff);
       }
     }
 
