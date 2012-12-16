@@ -37,7 +37,7 @@ namespace Teamcollab.GUI
     static private float targetScale;
     #endregion
 
-    static public Camera2D()
+    static Camera2D()
     {
       Scale = 1f;
       halfScreenSize = new Vector2(Settings.ScreenWidth, Settings.ScreenHeight);
@@ -57,12 +57,21 @@ namespace Teamcollab.GUI
     }
 
     /// <summary>
-    /// Sets the world coordinate to focus on
+    /// Sets the world coordinate to move to
     /// </summary>
     /// <param name="worldCoordinate">World coordinate</param>
     static public void SetTargetPosition(Vector2 worldCoordinate)
     {
       targetPosition = worldCoordinate;
+    }
+
+    /// <summary>
+    /// Sets the world coordinate to focus on
+    /// </summary>
+    /// <param name="worldCoordinate">World coordinate</param>
+    static public void SetPosition(Vector2 worldCoordinate)
+    {
+      position = worldCoordinate;
     }
 
     /// <summary>
