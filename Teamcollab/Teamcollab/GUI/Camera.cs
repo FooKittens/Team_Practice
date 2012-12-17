@@ -132,7 +132,7 @@ namespace Teamcollab.GUI
     {
       View =
         Matrix.CreateLookAt(
-          new Vector3(position.X, position.Y, -1),
+          new Vector3(position.X, position.Y, -8),
           new Vector3(position.X, position.Y, 0),
           -Vector3.UnitY
         );
@@ -144,7 +144,7 @@ namespace Teamcollab.GUI
           -Settings.ScreenHeight / (2 * Scale),
           Settings.ScreenHeight / (2 * Scale),
           0,
-          1
+          10
         );
     }
 
