@@ -16,7 +16,7 @@ namespace Teamcollab
     public const int TileMod = 5;
     public const float WorldPixelRatio = 32;
 
-    public const int ClusterWidth = 16;
+    public const int ClusterWidth = 8;
     public const int ClusterHeight = 16;
     #endregion
   }
