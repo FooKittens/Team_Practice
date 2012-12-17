@@ -101,7 +101,7 @@ namespace Teamcollab.GUI
       {
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
         float acc = diff * 320; // TODO (Martin): 320? Random working value... Probably because of pixel size?
-        Scale = (acc * (float)Math.Pow(time, 2) + (acc * (float)Math.Pow(time, 2)) / 2 + Scale);
+        Scale = (acc * (float)Math.Pow(time, 2)) / 2 + Scale;
       }
 
       Origin = halfScreenSize / Scale;
