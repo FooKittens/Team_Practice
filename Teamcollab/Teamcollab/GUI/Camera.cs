@@ -11,7 +11,8 @@ namespace Teamcollab.GUI
     #region Properties
     static public Vector2 Position { get { return position; } }
     static public Vector2 Origin { get; private set; }
-    static public Matrix Transform { get; private set; }
+    static public Matrix View { get; private set; }
+    static public Matrix Projection { get; private set; }
     static public float Scale { get; private set; }
     static public Rectangle Bounds
     {
@@ -45,7 +46,7 @@ namespace Teamcollab.GUI
       position = Vector2.Zero;
       Origin = halfScreenSize / Scale;
       targetScale = 1f;
-      UpdateTransformMatrix();
+      UpdateMatrices();
     }
 
     /// <summary>
@@ -82,7 +83,7 @@ namespace Teamcollab.GUI
     {
       AutoPan(gameTime);
       AutoZoom(gameTime);
-      UpdateTransformMatrix();
+      UpdateMatrices();
     }
 
     /// <summary>
@@ -126,15 +127,24 @@ namespace Teamcollab.GUI
     /// <summary>
     /// Updates the matrix used for drawing
     /// </summary>
-    static private void UpdateTransformMatrix()
+    static private void UpdateMatrices()
     {
-      Transform =
-        Matrix.Identity *
-        Matrix.CreateTranslation(
-          Origin.X - position.X,
-          Origin.Y - position.Y,
-          0) *
-        Matrix.CreateScale(Scale);
+      View =
+        Matrix.CreateLookAt(
+          new Vector3(Origin.X - position.X, Origin.Y - position.Y, -1),
+          new Vector3(Origin.X - position.X, Origin.Y - position.Y, 0),
+          -Vector3.UnitY
+        );
+
+      Projection =
+        Matrix.CreateOrthographicOffCenter(
+          -Settings.ScreenWidth / 2 * Scale,
+          Settings.ScreenWidth / 2 * Scale,
+          -Settings.ScreenHeight / 2 * Scale,
+          Settings.ScreenHeight / 2 * Scale,
+          0,
+          1
+        );
     }
 
     /// <summary>

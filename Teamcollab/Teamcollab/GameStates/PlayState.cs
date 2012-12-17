@@ -111,8 +111,16 @@ namespace Teamcollab.GameStates
 
     public override void Draw()
     {
+      SamplerState samplerState = new SamplerState();
+      samplerState.Filter = TextureFilter.LinearMipPoint;
+      samplerState.AddressU = TextureAddressMode.Wrap;
+
+      RasterizerState testState = new RasterizerState();
+      //testState.DepthBias = 0;
+      //testState.MultiSampleAntiAlias = false;
+      //testState.ScissorTestEnable = true;
       Game.GraphicsDevice.Clear(Color.Black);
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera2D.Transform);
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, samplerState, null, testState, null, Camera2D.View);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }
