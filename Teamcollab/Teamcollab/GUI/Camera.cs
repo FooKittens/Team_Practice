@@ -74,6 +74,7 @@ namespace Teamcollab.GUI
     static public void SetPosition(Vector2 worldCoordinate)
     {
       position = worldCoordinate;
+      targetPosition = position;
     }
 
     /// <summary>
@@ -131,17 +132,17 @@ namespace Teamcollab.GUI
     {
       View =
         Matrix.CreateLookAt(
-          new Vector3(Origin.X - position.X, Origin.Y - position.Y, -1),
-          new Vector3(Origin.X - position.X, Origin.Y - position.Y, 0),
+          new Vector3(position.X, position.Y, -1),
+          new Vector3(position.X, position.Y, 0),
           -Vector3.UnitY
         );
 
       Projection =
         Matrix.CreateOrthographicOffCenter(
-          -Settings.ScreenWidth / 2 * Scale,
-          Settings.ScreenWidth / 2 * Scale,
-          -Settings.ScreenHeight / 2 * Scale,
-          Settings.ScreenHeight / 2 * Scale,
+          -Settings.ScreenWidth / (2 * Scale),
+          Settings.ScreenWidth / (2 * Scale),
+          -Settings.ScreenHeight / (2 * Scale),
+          Settings.ScreenHeight / (2 * Scale),
           0,
           1
         );

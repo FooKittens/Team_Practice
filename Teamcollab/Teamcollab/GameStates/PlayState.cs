@@ -56,39 +56,28 @@ namespace Teamcollab.GameStates
 
       if (InputManager.KeyDown(Keys.W))
       {
-        Camera2D.SetTargetPosition(
-          Vector2.Transform(
-            new Vector2(0, 0),
-            Matrix.CreateScale(
-              Constants.TileWidth,
-              Constants.TileHeight,
-              1
-            ) *
-            Matrix.CreateScale(
-              Constants.ClusterWidth,
-              Constants.ClusterHeight,
-              1
-            )
-          )
-        );
+        Camera2D.SetTargetPosition(WorldManager.TransformByCluster(new Vector2(-4, -4), Vector2.Zero));
       }
       else if (InputManager.KeyDown(Keys.S))
       {
-        Camera2D.SetTargetPosition(
-          Vector2.Transform(
-            new Vector2(10, 0),
-            Matrix.CreateScale(
-              Constants.TileWidth,
-              Constants.TileHeight,
-              1
-            ) *
-            Matrix.CreateScale(
-              Constants.ClusterWidth,
-              Constants.ClusterHeight,
-              1
-            )
-          )
-        ); // TODO Get WorldManager transform method
+        
+        Camera2D.SetTargetPosition(WorldManager.GetTileScreenPosition(new Vector2(-12, -12)));
+
+        //Camera2D.SetTargetPosition(
+        //  Vector2.Transform(
+        //    new Vector2(1, 0),
+        //    Matrix.CreateScale(
+        //      Constants.TileWidth,
+        //      Constants.TileHeight,
+        //      1
+        //    ) *
+        //    Matrix.CreateScale(
+        //      Constants.ClusterWidth,
+        //      Constants.ClusterHeight,
+        //      1
+        //    )
+        //  )
+        //); // TODO Get WorldManager transform method
       }
 
       if (InputManager.KeyDown(Keys.A))
@@ -127,20 +116,9 @@ namespace Teamcollab.GameStates
 
       testShader.Parameters["World"].SetValue(Matrix.Identity);
 
-      testShader.Parameters["View"].SetValue(
-        Matrix.CreateLookAt(new Vector3(0, 100, -1), new Vector3(0, 100, 0), new Vector3(0, -1, 0))
-      );
+      testShader.Parameters["View"].SetValue(Camera2D.View);
 
-      testShader.Parameters["Projection"].SetValue(
-         Matrix.CreateOrthographicOffCenter(
-         -Settings.ScreenWidth / 2 / 32,
-         Settings.ScreenWidth / 2 / 32,
-         -Settings.ScreenHeight / 2 / 32,
-         Settings.ScreenHeight / 2 / 32,
-         0,
-         1
-         )
-       );
+      testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
       spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
       worldManager.Draw(spriteBatch);

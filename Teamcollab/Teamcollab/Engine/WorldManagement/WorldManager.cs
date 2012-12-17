@@ -77,22 +77,27 @@ namespace Teamcollab.Engine.WorldManagement
     #region Static Methods
     public static Vector2 GetTileScreenPosition(Vector2 tilePosition)
     {
-      return Vector2.Transform(tilePosition, TileScreenTransform);
-    }
-
-    public static Vector2 TransformByCluster(Vector2 tilePosition, Vector2 clusterPosition)
-    {
       return Vector2.Transform(
         tilePosition,
-        Matrix.CreateTranslation(new Vector3(clusterPosition, 0)) *
-        ClusterTileTransform
+        TilePositionTransform * TileScreenTransform
       );
     }
 
-    public static Vector2 GetTileCenterWorld(Vector2 tilePosition, Vector2 clusterPosition)
+    public static Vector2 TransformByCluster(Vector2 tilePosition,
+      Vector2 clusterPosition)
     {
-      return GetTileScreenPosition(tilePosition) +
-        TransformByCluster(tilePosition, clusterPosition);
+      Vector2 cTranslate = Vector2.Transform(
+        clusterPosition,
+        ClusterTileTransform
+      );
+
+      Vector2 res =  Vector2.Transform(
+        tilePosition + cTranslate,
+        TilePositionTransform *
+        TileScreenTransform
+      );
+
+      return res;
     }
 
     #endregion

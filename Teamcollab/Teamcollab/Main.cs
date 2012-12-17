@@ -69,10 +69,10 @@ namespace Teamcollab
     /// </summary>
     private void LoadSettings()
     {
-    #if DEBUG
+      #if DEBUG
       Settings.Initialize(SettingsData.GetDefault());
       return;
-    #endif
+      #endif
 
 
       SettingsData data;
