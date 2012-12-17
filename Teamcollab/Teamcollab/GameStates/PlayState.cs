@@ -51,7 +51,7 @@ namespace Teamcollab.GameStates
       Camera2D.Update(gameTime);
       worldManager.Update(gameTime);
 
-      t = (float)gameTime.TotalGameTime.TotalSeconds;
+      //t = (float)gameTime.TotalGameTime.TotalSeconds;
       inten = (float)Math.Sin(t) / 2 + 0.75f;
 
       if (InputManager.KeyDown(Keys.W))
