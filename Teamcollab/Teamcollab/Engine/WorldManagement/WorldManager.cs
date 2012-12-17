@@ -118,7 +118,7 @@ namespace Teamcollab.Engine.WorldManagement
     private WorldManager(Game game)
     {
       tileTextures = new ResourceCollection<Texture2D>();
-      tileTextures.Add("Grass", game.Content.Load<Texture2D>("square"));
+      tileTextures.Add("Grass", game.Content.Load<Texture2D>("grass32x32"));
 
       Initialize();
     }

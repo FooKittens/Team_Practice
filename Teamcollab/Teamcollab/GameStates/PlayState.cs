@@ -56,7 +56,7 @@ namespace Teamcollab.GameStates
 
       if (InputManager.KeyDown(Keys.W))
       {
-        Camera2D.SetTargetPosition(WorldManager.TransformByCluster(new Vector2(-4, -4), Vector2.Zero));
+        Camera2D.SetTargetPosition(WorldManager.TransformByCluster(new Vector2(-64, -64), new Vector2(-25, -25)));
       }
       else if (InputManager.KeyDown(Keys.S))
       {
@@ -100,7 +100,10 @@ namespace Teamcollab.GameStates
 
       testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
+      RasterizerState rs = new RasterizerState();
+      rs.FillMode = FillMode.WireFrame;
+
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, testShader);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }
