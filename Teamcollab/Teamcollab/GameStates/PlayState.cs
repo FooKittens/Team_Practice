@@ -60,34 +60,14 @@ namespace Teamcollab.GameStates
       }
       else if (InputManager.KeyDown(Keys.S))
       {
-        
-        Camera2D.SetTargetPosition(WorldManager.GetTileScreenPosition(new Vector2(-12, -12)));
-
-        //Camera2D.SetTargetPosition(
-        //  Vector2.Transform(
-        //    new Vector2(1, 0),
-        //    Matrix.CreateScale(
-        //      Constants.TileWidth,
-        //      Constants.TileHeight,
-        //      1
-        //    ) *
-        //    Matrix.CreateScale(
-        //      Constants.ClusterWidth,
-        //      Constants.ClusterHeight,
-        //      1
-        //    )
-        //  )
-        //); // TODO Get WorldManager transform method
+        Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(Vector2.Zero));
       }
 
-      if (InputManager.KeyDown(Keys.A))
-      {
-        Camera2D.SetTargetScale(20);
-      }
-      if (InputManager.KeyDown(Keys.D))
-      {
-        Camera2D.SetTargetScale(1);
-      }
+      float deltaScroll = InputManager.MouseWheelChange();
+
+      deltaScroll = Math.Sign(InputManager.MouseWheelChange()) * 2.5f;
+      Camera2D.SetTargetScale(Camera2D.Scale + deltaScroll);
+
 
       if (InputManager.KeyDown(Keys.E))
       {
