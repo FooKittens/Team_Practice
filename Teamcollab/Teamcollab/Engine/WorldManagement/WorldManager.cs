@@ -144,7 +144,20 @@ namespace Teamcollab.Engine.WorldManagement
     private void Initialize()
     {
       clusters = new List<Cluster>();
-      AddCluster(new Coordinates(0, 0));
+
+      //AddCluster(new Coordinates(0, 0));
+      const int clustersWidth = 25;
+      const int clustersHeight = 25;
+
+      for (int y = -25; y < clustersHeight; ++y)
+      {
+        for (int x = -25; x < clustersWidth; ++x)
+        {
+          AddCluster(new Coordinates(x, y));
+        }
+      }
+
+      grassText = tileTextures.Query("Grass");
     }
 
     public void Update(GameTime gameTime)
@@ -152,20 +165,27 @@ namespace Teamcollab.Engine.WorldManagement
 
     }
 
+
+    Resource<Texture2D> grassText;
     public void Draw(SpriteBatch spriteBatch)
     {
-      if (IsInView(clusters[0]) == false)
-        return;
-
-      for (int y = 0; y < Constants.ClusterHeight; ++y)
+      foreach (Cluster cluster in clusters)
       {
-        for (int x = 0; x < Constants.ClusterWidth; ++x)
+        if (IsInView(cluster) == false)
+          continue;
+
+        for (int y = 0; y < Constants.ClusterHeight; ++y)
         {
-          Vector2 origin = new Vector2(16, 16);
+          for (int x = 0; x < Constants.ClusterWidth; ++x)
+          {
+            Vector2 origin = new Vector2(16, 16);
 
-          Vector2 tPos = GetTileAt(clusters[0], x, y).Position;
+            Vector2 tPos = GetTileAt(clusters[0], x, y).Position;
 
-          spriteBatch.Draw(tileTextures.Query("Grass"), Vector2.Transform(tPos, WorldPixelTransform), null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
+            Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
+
+            spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
+          }
         }
       }
     }
@@ -246,7 +266,7 @@ namespace Teamcollab.Engine.WorldManagement
       Matrix clusterOffset = Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0));
 
       Matrix tileTranslate = 
-        TilePositionTransform *
+        /*TilePositionTransform **/
         TileClusterTransform *
         clusterOffset *
         ClusterTileTransform
