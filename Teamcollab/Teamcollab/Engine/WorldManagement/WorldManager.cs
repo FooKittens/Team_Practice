@@ -136,7 +136,7 @@ namespace Teamcollab.Engine.WorldManagement
 
     public void Update(GameTime gameTime)
     {
-     
+
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -148,9 +148,11 @@ namespace Teamcollab.Engine.WorldManagement
       {
         for (int x = 0; x < Constants.ClusterWidth; ++x)
         {
-          Vector2 origin = new Vector2(16f, 16f);
+          Vector2 origin = new Vector2(16, 16);
 
-          spriteBatch.Draw(tileTextures.Query("Grass"), GetTileAt(clusters[0], x, y).Position, null, Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
+          Vector2 tPos = GetTileAt(clusters[0], x, y).Position;
+
+          spriteBatch.Draw(tileTextures.Query("Grass"), Vector2.Transform(tPos, WorldPixelTransform), null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
         }
       }
     }
@@ -234,8 +236,7 @@ namespace Teamcollab.Engine.WorldManagement
         TilePositionTransform *
         TileClusterTransform *
         clusterOffset *
-        ClusterTileTransform  *
-        TileScreenTransform
+        ClusterTileTransform
         ;
 
       for (int y = 0; y < Constants.ClusterHeight; ++y)
