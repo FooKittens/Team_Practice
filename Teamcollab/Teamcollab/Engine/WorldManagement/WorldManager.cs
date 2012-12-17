@@ -146,12 +146,12 @@ namespace Teamcollab.Engine.WorldManagement
       clusters = new List<Cluster>();
 
       //AddCluster(new Coordinates(0, 0));
-      const int clustersWidth = 25;
-      const int clustersHeight = 25;
+      const int clustersWidth = 5;
+      const int clustersHeight = 5;
 
-      for (int y = -25; y < clustersHeight; ++y)
+      for (int y = -5; y < clustersHeight; ++y)
       {
-        for (int x = -25; x < clustersWidth; ++x)
+        for (int x = -5; x < clustersWidth; ++x)
         {
           AddCluster(new Coordinates(x, y));
         }
@@ -169,10 +169,14 @@ namespace Teamcollab.Engine.WorldManagement
     Resource<Texture2D> grassText;
     public void Draw(SpriteBatch spriteBatch)
     {
+
       foreach (Cluster cluster in clusters)
       {
-        if (IsInView(cluster) == false)
+        // Test with cluster bounds
+        if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
+        {
           continue;
+        }
 
         for (int y = 0; y < Constants.ClusterHeight; ++y)
         {
@@ -256,6 +260,42 @@ namespace Teamcollab.Engine.WorldManagement
     }
 
     /// <summary>
+    /// Retrieves the bounding rectangle for a cluster in pixels.
+    /// </summary>
+    /// <param name="cluster">Cluster to get bounds from.</param>
+    private static Rectangle GetClusterBounds(Cluster cluster)
+    {
+      // Creates cluster edges with clockwise winding.
+      Vector2[] vertices = new[] {
+        new Vector2(-0.5f, -0.5f), // Top Left
+        new Vector2(0.5f, -0.5f), // Top Right
+        new Vector2(0.5f, 0.5f), // Bottom Right
+        new Vector2(-0.5f, 0.5f) // Bottom Left
+      };
+
+      // Matrix for translating into tilespace and then scaling to screen.
+      Matrix mat = ClusterTileTransform * TileScreenTransform;
+
+      /* Translate all vertices to the correct cluster and transform
+       * into pixel coordinates. */
+      for (int i = 0; i < vertices.Length; ++i)
+      {
+        vertices[i] += cluster.Coordinates;
+        vertices[i] = Vector2.Transform(vertices[i], mat);
+      }
+
+      // Bounding Rectangle.
+      Rectangle rect = new Rectangle(
+        (int)vertices[0].X,
+        (int)vertices[0].Y,
+        (int)(vertices[1].X - vertices[0].X),
+        (int)(vertices[2].Y - vertices[1].Y)        
+      );
+
+      return rect;
+    }
+
+    /// <summary>
     /// Insert a cluster at the given coordinates in cluster space.
     /// </summary>
     /// <param name="clusterCoordinates"></param>
@@ -289,6 +329,7 @@ namespace Teamcollab.Engine.WorldManagement
 
       clusters.Add(cluster);
     }
+
 
     /// <summary>
     /// Gets the tile at the given coordinates in the cluster
