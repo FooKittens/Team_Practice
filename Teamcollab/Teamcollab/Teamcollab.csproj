@@ -77,6 +77,7 @@
     <Compile Include="DataSerialization\ApplicationSettings.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
     <Compile Include="GameObjects\DrawableEntity.cs" />
+    <Compile Include="Engine\Helpers\BSPTree.cs" />
     <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
     <Compile Include="Engine\WorldManagement\World.cs" />
