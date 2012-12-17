@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Teamcollab.Engine.Helpers
 {
@@ -101,6 +102,22 @@ namespace Teamcollab.Engine.Helpers
     public static bool MouseLeftDown()
     {
       return mouse.LeftButton == ButtonState.Pressed;
+    }
+
+    /// <summary>
+    /// Returns the cumulative mouse wheel value since the game was started
+    /// </summary>
+    public static int MouseWheelTotal()
+    {
+      return mouse.ScrollWheelValue;
+    }
+
+    /// <summary>
+    /// Returns the wheel change since previous frame
+    /// </summary>
+    public static int MouseWheelChange()
+    {
+      return mouse.ScrollWheelValue - prevMouse.ScrollWheelValue;
     }
 
     /// <summary>
