@@ -60,7 +60,6 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     private static Matrix TilePositionTransform { get; set; }
     
-    
     public static Matrix WorldPixelTransform { get; set;}
 
     public static Matrix PixelWorldTransform { get; set; }
@@ -118,7 +117,7 @@ namespace Teamcollab.Engine.WorldManagement
     private WorldManager(Game game)
     {
       tileTextures = new ResourceCollection<Texture2D>();
-      tileTextures.Add("Grass", game.Content.Load<Texture2D>("grass32x32"));
+      tileTextures.Add("Grass", game.Content.Load<Texture2D>("square"));
 
       Initialize();
     }
@@ -146,12 +145,12 @@ namespace Teamcollab.Engine.WorldManagement
       clusters = new List<Cluster>();
 
       //AddCluster(new Coordinates(0, 0));
-      const int clustersWidth = 5;
-      const int clustersHeight = 5;
+      const int clustersWidth = 25;
+      const int clustersHeight = 25;
 
-      for (int y = -5; y < clustersHeight; ++y)
+      for (int y = -25; y < clustersHeight; ++y)
       {
-        for (int x = -5; x < clustersWidth; ++x)
+        for (int x = -25; x < clustersWidth; ++x)
         {
           AddCluster(new Coordinates(x, y));
         }
