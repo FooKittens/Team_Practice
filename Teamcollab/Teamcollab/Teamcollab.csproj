@@ -76,6 +76,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataSerialization\ApplicationSettings.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
+    <Compile Include="Engine\Helpers\BSPTree.cs" />
     <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
     <Compile Include="Engine\World\WorldManager.cs" />
