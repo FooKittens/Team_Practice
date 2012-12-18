@@ -9,7 +9,7 @@ namespace Teamcollab.Engine.Helpers
   public class BSPTree<T>
   {
     public delegate bool NodeComparison(T data);
-    public delegate int TraverseComparison();
+    public delegate int TraverseComparison(T data);
 
     #region Properties
 
@@ -59,34 +59,23 @@ namespace Teamcollab.Engine.Helpers
       TraverseComparison comparison)
     {
       data.Back = node;
-      int dir = comparison();
+      int dir = comparison(node.Data);
 
       if (dir == 0)
       {
-        //node = data;
+        throw new ArgumentException("Missed insertion point in RecurseInsert");
       }
 
       if (dir < 0)
       {
         if (node.Left == null)
         {
-          //Debug.WriteLine(string.Format(
-          //    "Setting node({0}) left of node({1})",
-          //    data.Data.ToString(), node.Data.ToString()
-          //  )
-          //);
-          
-          //node.Left = data;
-
-          if (node.Back != null && node.Back.Left == node)
-          {
-            node.Back.Left = data;
-            data.Left = node;
-          }
-          else
-          {
-            node.Left = data;
-          }
+          Debug.WriteLine(string.Format(
+              "Setting node({0}) left of node({1})",
+              data.Data.ToString(), node.Data.ToString()
+            )
+          );
+          node.Left = data;
         }
         else
         {
@@ -98,22 +87,12 @@ namespace Teamcollab.Engine.Helpers
       {
         if (node.Right == null)
         {
-          //Debug.WriteLine(string.Format(
-          //    "Setting node({0}) right of node({1})",
-          //    data.Data.ToString(), node.Data.ToString()
-          //  )
-          //);
-
-          //node.Right = data;
-          if (node.Back != null && node.Back.Right == node)
-          {
-            node.Back.Right = data;
-            data.Right = node;
-          }
-          else
-          {
-            node.Right = data;
-          }
+          Debug.WriteLine(string.Format(
+              "Setting node({0}) right of node({1})",
+              data.Data.ToString(), node.Data.ToString()
+            )
+          );
+          node.Right = data;
         }
         else
         {
@@ -155,12 +134,12 @@ namespace Teamcollab.Engine.Helpers
 
     private static Node<T> Traverse(Node<T> me, TraverseComparison comparison, ref int searches)
     {
-      //if (me.Data == null)
-      //{
-      //  return me;
-      //}
+      if (me.Data == null)
+      {
+        return me;
+      }
 
-      int dir = comparison();
+      int dir = comparison(me.Data);
 
       searches++;
 
@@ -170,19 +149,10 @@ namespace Teamcollab.Engine.Helpers
       }
       else if (dir < 0)
       {
-        if (me.Left == null)
-        {
-          return me;
-        }
-
         return Traverse(me.Left, comparison, ref searches);
       }
       else
       {
-        if (me.Right == null)
-        {
-          return me;
-        }
         return Traverse(me.Right, comparison, ref searches);
       }
     }
