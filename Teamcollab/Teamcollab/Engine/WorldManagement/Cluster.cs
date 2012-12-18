@@ -15,7 +15,7 @@ namespace Teamcollab.Engine.WorldManagement
   /// Handles a collection of Tiles
   /// </summary>
   [Serializable]
-  class Cluster
+  public class Cluster
   {
     public ClusterType Type;
     public Tile[] Tiles;
@@ -32,7 +32,18 @@ namespace Teamcollab.Engine.WorldManagement
 
     public override string ToString()
     {
-      return Coordinates.ToString();
+      return string.Format("({0}, {1})", Coordinates.X, Coordinates.Y);
+    }
+
+    public override int GetHashCode()
+    {
+      return GetHashFromXY(Coordinates.X, Coordinates.Y);
+    }
+
+    public static int GetHashFromXY(int x, int y)
+    {
+      long hash = ((long)x << 32) + y;
+      return (int)(hash >> 32);
     }
   }
 }
