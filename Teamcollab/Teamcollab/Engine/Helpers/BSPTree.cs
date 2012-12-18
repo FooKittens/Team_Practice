@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Teamcollab.Engine.Helpers
 {
   public class BSPTree<T>
   {
     public delegate bool NodeComparison(T data);
-    public delegate int TraverseComparison(T data);
+    public delegate int TraverseComparison();
 
     #region Properties
 
@@ -28,20 +29,162 @@ namespace Teamcollab.Engine.Helpers
       start.Data = origin;
     }
 
-    public T Find(NodeComparison comparison)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="comparison"></param>
+    /// <returns></returns>
+    public T Find(TraverseComparison comparison)
     {
-
-      if (comparison(start.Data))
-      {
-        return start.Data;
-      }
-
-      return start.Data;
+      int searches;
+      return Find(comparison, out searches);
     }
 
-    private static Node<T> Traverse(Node<T> me, T t)
+    public T Find(TraverseComparison comparison, out int searches)
     {
-      return null;
+      searches = 0;
+      Node<T> node = Traverse(start, comparison, ref searches);
+
+      return node.Data;
+    }
+
+    public void Insert(T data, TraverseComparison comparison)
+    {
+      Node<T> node = new Node<T>();
+      node.Data = data;
+      RecurseInsert(node, start, comparison);
+    }
+
+    private static void RecurseInsert(Node<T> data, Node<T> node,
+      TraverseComparison comparison)
+    {
+      data.Back = node;
+      int dir = comparison();
+
+      if (dir == 0)
+      {
+        //node = data;
+      }
+
+      if (dir < 0)
+      {
+        if (node.Left == null)
+        {
+          //Debug.WriteLine(string.Format(
+          //    "Setting node({0}) left of node({1})",
+          //    data.Data.ToString(), node.Data.ToString()
+          //  )
+          //);
+          
+          //node.Left = data;
+
+          if (node.Back != null && node.Back.Left == node)
+          {
+            node.Back.Left = data;
+            data.Left = node;
+          }
+          else
+          {
+            node.Left = data;
+          }
+        }
+        else
+        {
+          //node.Left.Back = node;
+          RecurseInsert(data, node.Left, comparison);
+        }
+      }
+      else if (dir > 0)
+      {
+        if (node.Right == null)
+        {
+          //Debug.WriteLine(string.Format(
+          //    "Setting node({0}) right of node({1})",
+          //    data.Data.ToString(), node.Data.ToString()
+          //  )
+          //);
+
+          //node.Right = data;
+          if (node.Back != null && node.Back.Right == node)
+          {
+            node.Back.Right = data;
+            data.Right = node;
+          }
+          else
+          {
+            node.Right = data;
+          }
+        }
+        else
+        {
+          //node.Right.Back = node;
+          RecurseInsert(data, node.Right, comparison);
+        }
+      }
+    }
+
+    //public void Insert(T data, TraverseComparison comparison)
+    //{
+    //  Node<T> previous = start;
+    //  Node<T> node = Traverse(previous, comparison);
+
+    //  node.Back = previous;
+
+    //  if (node == previous)
+    //  {
+    //    Node<T> addition = new Node<T>();
+    //    addition.Back = node;
+    //    addition.Data = data;
+
+    //    int dir = comparison(node.Data.Value);
+
+    //    if (dir == -1)
+    //    {
+    //      node.Left = addition;
+    //    }
+    //    else if (dir == 1)
+    //    {
+    //      node.Right = addition;
+    //    }
+    //  }
+    //  else
+    //  {
+
+    //  }
+    //}
+
+    private static Node<T> Traverse(Node<T> me, TraverseComparison comparison, ref int searches)
+    {
+      //if (me.Data == null)
+      //{
+      //  return me;
+      //}
+
+      int dir = comparison();
+
+      searches++;
+
+      if (dir == 0)
+      {
+        return me;
+      }
+      else if (dir < 0)
+      {
+        if (me.Left == null)
+        {
+          return me;
+        }
+
+        return Traverse(me.Left, comparison, ref searches);
+      }
+      else
+      {
+        if (me.Right == null)
+        {
+          return me;
+        }
+        return Traverse(me.Right, comparison, ref searches);
+      }
     }
 
     private class Node<T>
