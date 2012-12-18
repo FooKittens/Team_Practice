@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 namespace Teamcollab.Engine.Helpers
 {
   /// <summary>
   /// Two integers x,y representing coordinates
   /// </summary>
-  [Serializable]
   public struct Coordinates
   {
 
