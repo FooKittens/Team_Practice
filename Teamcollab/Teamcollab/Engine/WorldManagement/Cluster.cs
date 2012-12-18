@@ -15,7 +15,7 @@ namespace Teamcollab.Engine.WorldManagement
   /// Handles a collection of Tiles
   /// </summary>
   [Serializable]
-  struct Cluster
+  class Cluster
   {
     public ClusterType Type;
     public Tile[] Tiles;
@@ -28,6 +28,11 @@ namespace Teamcollab.Engine.WorldManagement
       Tiles = new Tile[Constants.ClusterWidth * Constants.ClusterHeight];
       Active = false;
       Coordinates = coordinates;
+    }
+
+    public override string ToString()
+    {
+      return Coordinates.ToString();
     }
   }
 }

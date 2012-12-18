@@ -136,12 +136,30 @@ namespace Teamcollab.Engine.WorldManagement
       return singleton;
     }
 
+    const int clustersX = 8;
+    const int clustersY = 8;
+
     /// <summary>
     /// Initializes the worldmanager instance.
     /// </summary>
     private void Initialize()
     {
       AddCluster(new Coordinates(0, 0));
+
+      for (int y = -clustersY / 2; y < clustersY / 2; ++y)
+      {
+        for (int x = -clustersX / 2; x < clustersX / 2; ++x)
+        {
+          if (x == 0 && y == 0)
+          {
+            continue;
+          }
+          AddCluster(new Coordinates(x, y));
+        }
+      }
+
+      int searches;
+      clusters.Find(CreateNodeComparison(-2, -2), out searches);
 
       grassText = tileTextures.Query("Grass");
     }
@@ -155,6 +173,18 @@ namespace Teamcollab.Engine.WorldManagement
     Resource<Texture2D> grassText;
     public void Draw(SpriteBatch spriteBatch)
     {
+      DrawCluster(0, 0, spriteBatch);
+      DrawCluster(1, 1, spriteBatch);
+      
+
+      return;
+      for (int y = -clustersY / 2; y < clustersY / 2; ++y)
+      {
+        for (int x = -clustersX / 2; x < clustersX / 2; ++x)
+        {
+          DrawCluster(x, y, spriteBatch);
+        }
+      }
 
       #region Old Code
       //foreach (Cluster cluster in clusters)
@@ -180,6 +210,31 @@ namespace Teamcollab.Engine.WorldManagement
       //  }
       //}
       #endregion
+    }
+
+    private void DrawCluster(int clusterX, int clusterY, SpriteBatch spriteBatch)
+    {
+      Cluster cluster = clusters.Find(CreateNodeComparison(clusterX, clusterY));
+
+      if (cluster == null)
+      {
+        return;
+      }
+
+
+      for (int y = 0; y < Constants.ClusterHeight; ++y)
+      {
+        for (int x = 0; x < Constants.ClusterWidth; ++x)
+        {
+          Vector2 origin = new Vector2(16, 16);
+
+          Vector2 tPos = GetTileAt(cluster, x, y).Position;
+
+          Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
+
+          spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
+        }
+      }
     }
 
     /// <summary>
@@ -317,18 +372,97 @@ namespace Teamcollab.Engine.WorldManagement
       {
         clusters = new BSPTree<Cluster>(cluster);
       }
-
-      Cluster hittamig = FindCluster(0, 0);
-      
-
-      //clusters.Add(cluster);
+      else
+      {
+        clusters.Insert(
+          cluster,
+          CreateNodeComparison(clusterCoordinates.X, clusterCoordinates.Y)
+        );
+      }
     }
 
     private Cluster FindCluster(int x, int y)
     {
-      return clusters.Find(delegate(Cluster c1)
+      return clusters.Find(CreateNodeComparison(x, y));
+    }
+
+    // TODO(Peter): Create a generic solution for Tiles and Clusters.
+    private BSPTree<Cluster>.TraverseComparison CreateNodeComparison(int x, int y)
+    {
+      Coordinates find = new Coordinates(x, y);
+
+      int n = 0;
+
+      float xMin = -clustersX / 2,
+          xMax = clustersX / 2,
+          yMin = -clustersY / 2,
+          yMax = clustersY / 2;
+
+      return new BSPTree<Cluster>.TraverseComparison(delegate()
         {
-          return c1.Coordinates.X == x && c1.Coordinates.Y == y;
+          int dir;
+
+          //if (c1.Coordinates == find)
+          //{
+          //  dir = 0;
+          //}
+          //else if (c1.Coordinates.X < find.X || c1.Coordinates.Y < find.Y)
+          //{
+          //  dir = -1;
+          //}
+          //else
+          //{
+          //  dir = 1;
+          //}
+
+          float xCheck = (xMax - 1 + xMin) / 2;
+          float yCheck = (yMax - 1 + yMin) / 2;
+
+          if (n % 2 == 0)
+          {
+            if (x < 1)
+            {
+              dir = 0;
+            }
+            else if (x < xCheck)
+            {
+              xMax = xCheck;
+              dir = -1;
+            }
+            else if (x > xCheck)
+            {
+              xMin = xCheck;
+              dir = 1;
+            }
+            else
+            {
+              dir = 0;
+            }
+          }
+          else
+          {
+            if (y < 1)
+            {
+              dir = 0;
+            }
+            else if (y < yCheck)
+            {
+              yMax = yCheck;
+              dir =  -1;
+            }
+            else if (y > yCheck)
+            {
+              yMin = yCheck;
+              dir = 1;
+            }
+            else
+            {
+              dir = 0;
+            }
+          }
+
+          n++;
+          return dir;
         }
       );
     }
