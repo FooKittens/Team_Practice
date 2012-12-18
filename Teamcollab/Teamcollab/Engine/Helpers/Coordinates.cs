@@ -52,6 +52,46 @@ namespace Teamcollab.Engine.Helpers
       return lhs;
     }
 
+    public static bool operator ==(Coordinates lhs, Coordinates rhs)
+    {
+      return Equals(lhs, rhs);
+    }
+
+    public static bool operator !=(Coordinates lhs, Coordinates rhs)
+    {
+      return !Equals(lhs, rhs);
+    }
+
+    public override bool Equals(object obj)
+    {
+      if (obj is Coordinates)
+      {
+        Equals(this, (Coordinates)obj);
+      }
+
+      return false;
+    }
+
+    private static bool Equals(Coordinates lhs, Coordinates rhs)
+    {
+      if (lhs.X == rhs.X && lhs.Y == rhs.Y)
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+      return string.Format("X: {0}, Y: {1}", X, Y);
+    }
+
     public static implicit operator Vector2(Coordinates c)
     {
       return new Vector2(c.X, c.Y);
