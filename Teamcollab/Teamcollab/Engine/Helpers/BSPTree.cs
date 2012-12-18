@@ -7,19 +7,42 @@ namespace Teamcollab.Engine.Helpers
 {
   public class BSPTree<T>
   {
+    public delegate bool NodeComparison(T data);
+    public delegate int TraverseComparison(T data);
+
     #region Properties
 
     #endregion
 
     #region Members
-
+    Node<T> start;
+    //NodeComparison comparison;
     #endregion
 
-    public BSPTree()
+    public BSPTree(T origin)
     {
-
+      start = new Node<T>();
+      start.Back = null;
+      start.Left = null;
+      start.Right = null;
+      start.Data = origin;
     }
 
+    public T Find(NodeComparison comparison)
+    {
+
+      if (comparison(start.Data))
+      {
+        return start.Data;
+      }
+
+      return start.Data;
+    }
+
+    private static Node<T> Traverse(Node<T> me, T t)
+    {
+      return null;
+    }
 
     private class Node<T>
     {

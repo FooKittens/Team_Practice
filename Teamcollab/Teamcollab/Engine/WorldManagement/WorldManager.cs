@@ -19,7 +19,6 @@ namespace Teamcollab.Engine.WorldManagement
 
     #region Matrices
 
-
     /// <summary>
     /// Transforms cluster coordinates into tile coordinates.
     /// Example: Cluster(-1, 0) becomes (-1 * ClusterWidth, 0 * ClusterHeight).
@@ -69,7 +68,7 @@ namespace Teamcollab.Engine.WorldManagement
     // Singleton instance
     private static WorldManager singleton;
 
-    List<Cluster> clusters;
+    BSPTree<Cluster> clusters;
     ResourceCollection<Texture2D> tileTextures;
     #endregion
 
@@ -142,19 +141,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     private void Initialize()
     {
-      clusters = new List<Cluster>();
-
-      //AddCluster(new Coordinates(0, 0));
-      const int clustersWidth = 25;
-      const int clustersHeight = 25;
-
-      for (int y = -25; y < clustersHeight; ++y)
-      {
-        for (int x = -25; x < clustersWidth; ++x)
-        {
-          AddCluster(new Coordinates(x, y));
-        }
-      }
+      AddCluster(new Coordinates(0, 0));
 
       grassText = tileTextures.Query("Grass");
     }
@@ -169,28 +156,30 @@ namespace Teamcollab.Engine.WorldManagement
     public void Draw(SpriteBatch spriteBatch)
     {
 
-      foreach (Cluster cluster in clusters)
-      {
-        // Test with cluster bounds
-        if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
-        {
-          continue;
-        }
+      #region Old Code
+      //foreach (Cluster cluster in clusters)
+      //{
+      //  // Test with cluster bounds
+      //  if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
+      //  {
+      //    continue;
+      //  }
 
-        for (int y = 0; y < Constants.ClusterHeight; ++y)
-        {
-          for (int x = 0; x < Constants.ClusterWidth; ++x)
-          {
-            Vector2 origin = new Vector2(16, 16);
+      //  for (int y = 0; y < Constants.ClusterHeight; ++y)
+      //  {
+      //    for (int x = 0; x < Constants.ClusterWidth; ++x)
+      //    {
+      //      Vector2 origin = new Vector2(16, 16);
 
-            Vector2 tPos = GetTileAt(clusters[0], x, y).Position;
+      //      Vector2 tPos = GetTileAt(clusters[0], x, y).Position;
 
-            Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
+      //      Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
 
-            spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
-          }
-        }
-      }
+      //      spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
+      //    }
+      //  }
+      //}
+      #endregion
     }
 
     /// <summary>
@@ -324,9 +313,24 @@ namespace Teamcollab.Engine.WorldManagement
         }
       }
 
+      if (clusters == null)
+      {
+        clusters = new BSPTree<Cluster>(cluster);
+      }
+
+      Cluster hittamig = FindCluster(0, 0);
       
 
-      clusters.Add(cluster);
+      //clusters.Add(cluster);
+    }
+
+    private Cluster FindCluster(int x, int y)
+    {
+      return clusters.Find(delegate(Cluster c1)
+        {
+          return c1.Coordinates.X == x && c1.Coordinates.Y == y;
+        }
+      );
     }
 
 
