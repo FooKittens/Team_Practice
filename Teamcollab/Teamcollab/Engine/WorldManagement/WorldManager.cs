@@ -68,7 +68,7 @@ namespace Teamcollab.Engine.WorldManagement
     // Singleton instance
     private static WorldManager singleton;
 
-    BSPTree<Cluster> clusters;
+    World currentWorld;
     ResourceCollection<Texture2D> tileTextures;
     #endregion
 
@@ -108,6 +108,10 @@ namespace Teamcollab.Engine.WorldManagement
 
     #endregion
 
+    // DEBUG TEST CONSTANTS
+    const int WorldWidth = 10;
+    const int WorldHeight = 10;
+
     static WorldManager()
     {
       CreateMatrices();
@@ -118,7 +122,43 @@ namespace Teamcollab.Engine.WorldManagement
       tileTextures = new ResourceCollection<Texture2D>();
       tileTextures.Add("Grass", game.Content.Load<Texture2D>("square"));
 
-      Initialize();
+      Initialize(WorldManager.CreateWorld(WorldWidth, WorldHeight));
+    }
+
+    /// <summary>
+    /// Creates a world with a set of initial clusters as defined
+    /// by the parameters.
+    /// </summary>
+    /// <param name="left">Max left cluster coordinate.</param>
+    /// <param name="right">Max right cluster coordinate.</param>
+    /// <param name="top">Max top cluster coordinate.</param>
+    /// <param name="bottom">Max bottom cluster coordinate.</param>
+    /// <returns></returns>
+    public static World CreateWorld(int left, int right, int top, int bottom)
+    {
+      World world = new World();
+
+      for (int y = top; y < bottom; ++y)
+      {
+        for (int x = left; x < right; ++x)
+        {
+          AddCluster(world, new Coordinates(x, y));
+        }
+      }
+
+      return world;
+    }
+
+    /// <summary>
+    /// Creates a world with the specified width and height.
+    /// World will be centered on 0,0.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <returns></returns>
+    public static World CreateWorld(int width, int height)
+    {
+      return CreateWorld(-width / 2, width / 2, -height / 2, height / 2);
     }
 
     /// <summary>
@@ -135,32 +175,13 @@ namespace Teamcollab.Engine.WorldManagement
 
       return singleton;
     }
-
-    const int clustersX = 4;
-    const int clustersY = 4;
-
+     
     /// <summary>
     /// Initializes the worldmanager instance.
     /// </summary>
-    private void Initialize()
+    private void Initialize(World world)
     {
-      AddCluster(new Coordinates(0, 0));
-
-      for (int y = -clustersY / 2; y <= clustersY / 2; ++y)
-      {
-        for (int x = -clustersX / 2; x <= clustersX / 2; ++x)
-        {
-          if (x == 0 && y == 0)
-          {
-            continue;
-          }
-          AddCluster(new Coordinates(x, y));
-        }
-      }
-
-      int searches;
-      //clusters.Find(CreateNodeComparison(-2, -2), out searches);
-
+      currentWorld = world;
       grassText = tileTextures.Query("Grass");
     }
 
@@ -169,68 +190,34 @@ namespace Teamcollab.Engine.WorldManagement
 
     }
 
-
     Resource<Texture2D> grassText;
     public void Draw(SpriteBatch spriteBatch)
     {
-
-      //DrawCluster(0, 0, spriteBatch);
-
-      for (int y = -clustersY / 2; y < clustersY / 2; ++y)
+      for (int y = -WorldHeight / 2; y <= WorldHeight / 2; ++y)
       {
-        for (int x = -clustersX / 2; x < clustersX / 2; ++x)
+        for (int x = -WorldWidth / 2; x <= WorldWidth / 2; ++x)
         {
-          DrawCluster(x, y, spriteBatch);
-        }
-      }
+          Cluster cluster = currentWorld.GetCluster(x, y);
 
-      #region Old Code
-      //foreach (Cluster cluster in clusters)
-      //{
-      //  // Test with cluster bounds
-      //  if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
-      //  {
-      //    continue;
-      //  }
+          // Test with cluster bounds
+          if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
+          {
+            continue;
+          }
 
-      //  for (int y = 0; y < Constants.ClusterHeight; ++y)
-      //  {
-      //    for (int x = 0; x < Constants.ClusterWidth; ++x)
-      //    {
-      //      Vector2 origin = new Vector2(16, 16);
+          for (int tileY = 0; tileY < Constants.ClusterHeight; ++tileY)
+          {
+            for (int tileX = 0; tileX < Constants.ClusterWidth; ++tileX)
+            {
+              Vector2 origin = new Vector2(16, 16);
 
-      //      Vector2 tPos = GetTileAt(clusters[0], x, y).Position;
+              Vector2 tPos = GetTileAt(cluster, tileX, tileY).Position;
 
-      //      Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
+              Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
 
-      //      spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
-      //    }
-      //  }
-      //}
-      #endregion
-    }
-
-    private void DrawCluster(int clusterX, int clusterY, SpriteBatch spriteBatch)
-    {
-      Cluster cluster = clusters.Find(CreateNodeComparison(clusterX, clusterY));
-
-      if (cluster == null)
-      {
-        return;
-      }
-
-
-      for (int y = 0; y < Constants.ClusterHeight; ++y)
-      {
-        for (int x = 0; x < Constants.ClusterWidth; ++x)
-        {
-          Vector2 origin = new Vector2(16, 16);
-
-          Vector2 tPos = GetTileAt(cluster, x, y).Position;
-
-          Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
-
-          spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
+              spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
+            }
+          }
         }
       }
     }
@@ -340,7 +327,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// Insert a cluster at the given coordinates in cluster space.
     /// </summary>
     /// <param name="clusterCoordinates"></param>
-    private void AddCluster(Coordinates clusterCoordinates)
+    private static void AddCluster(World world, Coordinates clusterCoordinates)
     {
       Cluster cluster = new Cluster(ClusterType.Evergreen, clusterCoordinates);
 
@@ -366,56 +353,8 @@ namespace Teamcollab.Engine.WorldManagement
         }
       }
 
-      if (clusters == null)
-      {
-        clusters = new BSPTree<Cluster>(cluster);
-      }
-      else
-      {
-        clusters.Insert(
-          cluster,
-          CreateNodeComparison(clusterCoordinates.X, clusterCoordinates.Y)
-        );
-      }
+      world.Clusters.Add(cluster);
     }
-
-    private Cluster FindCluster(int x, int y)
-    {
-      return clusters.Find(CreateNodeComparison(x, y));
-    }
-
-
-    // TODO(Peter): Create a generic solution for Tiles and Clusters.
-    private BSPTree<Cluster>.TraverseComparison CreateNodeComparison(int x, int y)
-    {
-      Coordinates find = new Coordinates(x, y);
-
-      int n = 0;
-
-      return new BSPTree<Cluster>.TraverseComparison(delegate(Cluster c1)
-        {
-          int dir;
-          n++;
-          if (c1.Coordinates == find)
-          {
-            dir = 0;
-          }
-          else if ((c1.Coordinates.X < find.X && n % 2 == 0) ||
-                   (c1.Coordinates.Y < find.Y) && n % 2 != 0)
-          {
-            dir = -1;
-          }
-          else
-          {
-            dir = 1;
-          }
-
-          
-          return dir;
-        }
-      );
-    }
-
 
     /// <summary>
     /// Gets the tile at the given coordinates in the cluster
@@ -423,7 +362,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// <param name="cluster">Cluster to search</param>
     /// <param name="coord">Coordinate to use</param>
     /// <returns>Tell me if you see this</returns>
-    private Tile GetTileAt(Cluster cluster, Coordinates coord)
+    private static Tile GetTileAt(Cluster cluster, Coordinates coord)
     {
       return GetTileAt(cluster, coord.X, coord.Y);
     }
@@ -432,10 +371,10 @@ namespace Teamcollab.Engine.WorldManagement
     /// Gets the tile at the given coordinates in the cluster.
     /// </summary>
     /// <param name="cluster">The cluster to retrieve from.</param>
-    /// <param name="x">X-coordinate in tilecoordinates.</param>
+    /// <param name="x">X-coordinate in tilecoordinates.</param> 
     /// <param name="y">Y-coordinate in tilecoordinates.</param>
     /// <returns></returns>
-    private Tile GetTileAt(Cluster cluster, int x, int y)
+    private static Tile GetTileAt(Cluster cluster, int x, int y)
     {
       return cluster.Tiles[y * Constants.ClusterWidth + x];
     }
