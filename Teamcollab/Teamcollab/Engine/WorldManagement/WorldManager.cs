@@ -136,8 +136,8 @@ namespace Teamcollab.Engine.WorldManagement
       return singleton;
     }
 
-    const int clustersX = 8;
-    const int clustersY = 8;
+    const int clustersX = 4;
+    const int clustersY = 4;
 
     /// <summary>
     /// Initializes the worldmanager instance.
@@ -146,9 +146,9 @@ namespace Teamcollab.Engine.WorldManagement
     {
       AddCluster(new Coordinates(0, 0));
 
-      for (int y = -clustersY / 2; y < clustersY / 2; ++y)
+      for (int y = -clustersY / 2; y <= clustersY / 2; ++y)
       {
-        for (int x = -clustersX / 2; x < clustersX / 2; ++x)
+        for (int x = -clustersX / 2; x <= clustersX / 2; ++x)
         {
           if (x == 0 && y == 0)
           {
@@ -159,7 +159,7 @@ namespace Teamcollab.Engine.WorldManagement
       }
 
       int searches;
-      clusters.Find(CreateNodeComparison(-2, -2), out searches);
+      //clusters.Find(CreateNodeComparison(-2, -2), out searches);
 
       grassText = tileTextures.Query("Grass");
     }
@@ -173,11 +173,9 @@ namespace Teamcollab.Engine.WorldManagement
     Resource<Texture2D> grassText;
     public void Draw(SpriteBatch spriteBatch)
     {
-      DrawCluster(0, 0, spriteBatch);
-      DrawCluster(1, 1, spriteBatch);
-      
 
-      return;
+      //DrawCluster(0, 0, spriteBatch);
+
       for (int y = -clustersY / 2; y < clustersY / 2; ++y)
       {
         for (int x = -clustersX / 2; x < clustersX / 2; ++x)
@@ -386,6 +384,7 @@ namespace Teamcollab.Engine.WorldManagement
       return clusters.Find(CreateNodeComparison(x, y));
     }
 
+
     // TODO(Peter): Create a generic solution for Tiles and Clusters.
     private BSPTree<Cluster>.TraverseComparison CreateNodeComparison(int x, int y)
     {
@@ -393,75 +392,25 @@ namespace Teamcollab.Engine.WorldManagement
 
       int n = 0;
 
-      float xMin = -clustersX / 2,
-          xMax = clustersX / 2,
-          yMin = -clustersY / 2,
-          yMax = clustersY / 2;
-
-      return new BSPTree<Cluster>.TraverseComparison(delegate()
+      return new BSPTree<Cluster>.TraverseComparison(delegate(Cluster c1)
         {
           int dir;
-
-          //if (c1.Coordinates == find)
-          //{
-          //  dir = 0;
-          //}
-          //else if (c1.Coordinates.X < find.X || c1.Coordinates.Y < find.Y)
-          //{
-          //  dir = -1;
-          //}
-          //else
-          //{
-          //  dir = 1;
-          //}
-
-          float xCheck = (xMax - 1 + xMin) / 2;
-          float yCheck = (yMax - 1 + yMin) / 2;
-
-          if (n % 2 == 0)
+          n++;
+          if (c1.Coordinates == find)
           {
-            if (x < 1)
-            {
-              dir = 0;
-            }
-            else if (x < xCheck)
-            {
-              xMax = xCheck;
-              dir = -1;
-            }
-            else if (x > xCheck)
-            {
-              xMin = xCheck;
-              dir = 1;
-            }
-            else
-            {
-              dir = 0;
-            }
+            dir = 0;
+          }
+          else if ((c1.Coordinates.X < find.X && n % 2 == 0) ||
+                   (c1.Coordinates.Y < find.Y) && n % 2 != 0)
+          {
+            dir = -1;
           }
           else
           {
-            if (y < 1)
-            {
-              dir = 0;
-            }
-            else if (y < yCheck)
-            {
-              yMax = yCheck;
-              dir =  -1;
-            }
-            else if (y > yCheck)
-            {
-              yMin = yCheck;
-              dir = 1;
-            }
-            else
-            {
-              dir = 0;
-            }
+            dir = 1;
           }
 
-          n++;
+          
           return dir;
         }
       );
