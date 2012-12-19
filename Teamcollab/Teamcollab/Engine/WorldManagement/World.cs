@@ -53,29 +53,6 @@ namespace Teamcollab.Engine.WorldManagement
       Array.Resize<Cluster>(ref clusters, clusters.Length + amount);
     }
 
-    public void SortClusters()
-    {
-      Array.Sort<Cluster>(clusters, delegate(Cluster c1, Cluster c2)
-        {
-          long c1Hash = c1.GetHashCode();
-          long c2Hash = c2.GetHashCode();
-
-          if (c1Hash == c2Hash)
-          {
-            return 0;
-          }
-          else if (c1Hash < c2Hash)
-          {
-            return -1;
-          }
-
-          return 1;
-        }
-      );
-
-      isSorted = true;
-    }
-
     /// <summary>
     /// Sorts an array of cluster(ideally the buffer of a world) recursively
     /// by their hash values through the Quicksort algorithm.
@@ -148,8 +125,6 @@ namespace Teamcollab.Engine.WorldManagement
       }
     }
 
-
-    // TODO(Peter): Handle attempts to find non existing clusters.
     /// <summary>
     /// Finds a cluster in the cluster buffer through binary search.
     /// </summary>
