@@ -76,6 +76,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataSerialization\ApplicationSettings.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
+    <Compile Include="GameObjects\DrawableEntity.cs" />
     <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
     <Compile Include="Engine\WorldManagement\World.cs" />
@@ -83,6 +84,8 @@
     <Compile Include="Engine\WorldManagement\Cluster.cs" />
     <Compile Include="Engine\WorldManagement\Tile.cs" />
     <Compile Include="GameObjects\DrawableEntity.cs" />
+	<Compile Include="Engine\WorldManagement\Cluster.cs" />
+    <Compile Include="Engine\WorldManagement\Tile.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />
     <Compile Include="GameObjects\EntityType.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
     <Compile Include="Settings.cs" />
+
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
