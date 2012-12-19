@@ -76,21 +76,13 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataSerialization\ApplicationSettings.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
-    <Compile Include="GameObjects\DrawableEntity.cs" />
-    <Compile Include="Engine\Helpers\BSPTree.cs" />
     <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
     <Compile Include="Engine\WorldManagement\World.cs" />
     <Compile Include="Engine\WorldManagement\WorldManager.cs" />
-    <Compile Include="Engine\World\WorldManager.cs" />
-    <Compile Include="GameObjects\DrawableEntity.cs" />
-    <Compile Include="GameObjects\Entity.cs" />
-    <Compile Include="GameObjects\EntityManager.cs" />
-    <Compile Include="GameObjects\EntityType.cs" />
-    <Compile Include="Engine\WorldManagement\World.cs" />
-    <Compile Include="Engine\WorldManagement\WorldManager.cs" />
-	<Compile Include="Engine\WorldManagement\Cluster.cs" />
+    <Compile Include="Engine\WorldManagement\Cluster.cs" />
     <Compile Include="Engine\WorldManagement\Tile.cs" />
+    <Compile Include="GameObjects\DrawableEntity.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />
     <Compile Include="GameObjects\EntityType.cs" />
@@ -105,7 +97,6 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
     <Compile Include="Settings.cs" />
-
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -146,7 +137,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Engine\World\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
