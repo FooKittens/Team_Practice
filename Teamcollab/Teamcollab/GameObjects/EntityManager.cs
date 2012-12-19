@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Teamcollab.Engine.World;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.GameObjects
 {

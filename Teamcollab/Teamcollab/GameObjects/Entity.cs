@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Resources;
 using Microsoft.Xna.Framework;
-using Teamcollab.Engine.World;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.GameObjects
 {
