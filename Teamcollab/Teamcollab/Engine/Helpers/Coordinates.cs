@@ -3,7 +3,7 @@
   /// <summary>
   /// Two integers x,y representing coordinates
   /// </summary>
-  struct Coordinates
+  public struct Coordinates
   {
     public int X;
     public int Y;
