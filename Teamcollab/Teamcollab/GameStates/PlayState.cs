@@ -24,7 +24,6 @@ namespace Teamcollab.GameStates
     #region Members
     SpriteBatch spriteBatch;
     WorldManager worldManager;
-    Camera2D camera;
     #endregion
 
     Effect testShader;
@@ -49,7 +48,7 @@ namespace Teamcollab.GameStates
 
     public override void Update(GameTime gameTime)
     {
-      Camera2D.Update();
+      Camera2D.Update(gameTime);
       worldManager.Update(gameTime);
 
       //t = (float)gameTime.TotalGameTime.TotalSeconds;
@@ -57,13 +56,18 @@ namespace Teamcollab.GameStates
 
       if (InputManager.KeyDown(Keys.W))
       {
-        Camera2D.SetTargetPosition(new Vector2(640, 0));
+        Camera2D.SetTargetPosition(WorldManager.TransformByCluster(new Vector2(-64, -64), new Vector2(-25, -25)));
       }
       else if (InputManager.KeyDown(Keys.S))
-      {      
-
-        //Camera2D.SetTargetPosition(Vector2.Transform(new Vector2 (-640, 0), WorldManager.TilePositionTransform));
+      {
+        Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(Vector2.Zero));
       }
+
+      float deltaScroll = InputManager.MouseWheelChange();
+
+      deltaScroll = Math.Sign(InputManager.MouseWheelChange()) * 2.5f;
+      Camera2D.SetTargetScale(Camera2D.Scale + deltaScroll);
+
 
       if (InputManager.KeyDown(Keys.E))
       {
@@ -92,22 +96,14 @@ namespace Teamcollab.GameStates
 
       testShader.Parameters["World"].SetValue(Matrix.Identity);
 
-      testShader.Parameters["View"].SetValue(
-        Matrix.CreateLookAt(new Vector3(0, 100, -1), new Vector3(0, 100, 0), new Vector3(0, -1, 0))
-      );
+      testShader.Parameters["View"].SetValue(Camera2D.View);
 
-      testShader.Parameters["Projection"].SetValue(
-         Matrix.CreateOrthographicOffCenter(
-         -Settings.ScreenWidth / 2 / 32,
-         Settings.ScreenWidth / 2 / 32,
-         -Settings.ScreenHeight / 2 / 32,
-         Settings.ScreenHeight / 2 / 32,
-         0,
-         1
-         )
-       );
+      testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
+      RasterizerState rs = new RasterizerState();
+      rs.FillMode = FillMode.WireFrame;
+
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, testShader);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }

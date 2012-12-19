@@ -89,6 +89,8 @@
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />
     <Compile Include="GameObjects\EntityType.cs" />
+    <Compile Include="Engine\WorldManagement\World.cs" />
+    <Compile Include="Engine\WorldManagement\WorldManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\MenuState.cs" />
     <Compile Include="GameStates\PlayState.cs" />
