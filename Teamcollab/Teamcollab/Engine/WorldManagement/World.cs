@@ -40,7 +40,7 @@ namespace Teamcollab.Engine.WorldManagement
         SortClusters();
       }
 
-      return BinaryClusterSearch(clusters.ToArray(), Cluster.GetHashFromXY(x, y));
+      return BinaryClusterSearch(clusters, 0, clusters.Count, Cluster.GetHashFromXY(x, y));
     }
 
     public void SortClusters()
@@ -68,27 +68,27 @@ namespace Teamcollab.Engine.WorldManagement
 
 
     // TODO(Peter): Needs heavy optimization on the array division.
-    private Cluster BinaryClusterSearch(Cluster[] array, long hashkey)
+    private Cluster BinaryClusterSearch(List<Cluster> clusters, int start, int length, long hashkey)
     {
-      int center = (array.Length) / 2;
+      int center = start + length / 2;
 
-      long centerHash = array[center].HashCode;
+      long centerHash = clusters[center].HashCode;
 
       if (centerHash == hashkey)
       {
-        return array[array.Length / 2];
+        return clusters[center];
       }
       else if (centerHash > hashkey)
       {
-        Cluster[] leftArray = new Cluster[center];
-        Array.Copy(array, 0, leftArray, 0, center);
-        return BinaryClusterSearch(leftArray, hashkey);
+        //Cluster[] leftArray = new Cluster[center];
+        //Array.Copy(array, min, leftArray, 0, center);
+        return BinaryClusterSearch(clusters, start, length / 2, hashkey);
       }
       else
       {
-        Cluster[] rightArray = new Cluster[array.Length - center];
-        Array.Copy(array, center, rightArray, 0, array.Length - center);
-        return BinaryClusterSearch(rightArray, hashkey);
+        //Cluster[] rightArray = new Cluster[array.Length - center];
+        //Array.Copy(array, center, rightArray, 0, array.Length - center);
+        return BinaryClusterSearch(clusters, center, (length + start) - center, hashkey);
       }
     }
 
