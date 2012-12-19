@@ -109,8 +109,8 @@ namespace Teamcollab.Engine.WorldManagement
     #endregion
 
     // DEBUG TEST CONSTANTS
-    const int WorldWidth = 10;
-    const int WorldHeight = 10;
+    const int WorldWidth = 2;
+    const int WorldHeight = 2;
 
     static WorldManager()
     {
@@ -138,9 +138,9 @@ namespace Teamcollab.Engine.WorldManagement
     {
       World world = new World();
 
-      for (int y = top; y < bottom; ++y)
+      for (int y = top; y <= bottom; ++y)
       {
-        for (int x = left; x < right; ++x)
+        for (int x = left; x <= right; ++x)
         {
           AddCluster(world, new Coordinates(x, y));
         }
@@ -353,7 +353,7 @@ namespace Teamcollab.Engine.WorldManagement
         }
       }
 
-      world.Clusters.Add(cluster);
+      world.AddCluster(cluster);
     }
 
     /// <summary>

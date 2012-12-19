@@ -11,6 +11,15 @@ namespace Teamcollab.Engine.WorldManagement
     Evergreen,
   }
 
+  [Serializable]
+  public struct ClusterData
+  {
+    public ClusterType Type;
+    public Tile[] Tiles;
+    public Coordinates Coordinates;
+    public bool Active;
+  }
+
   /// <summary>
   /// Handles a collection of Tiles
   /// </summary>
@@ -20,6 +29,7 @@ namespace Teamcollab.Engine.WorldManagement
     public ClusterType Type;
     public Tile[] Tiles;
     public Coordinates Coordinates;
+    public long HashCode;
     public bool Active;
 
     public Cluster(ClusterType type, Coordinates coordinates)
@@ -28,6 +38,7 @@ namespace Teamcollab.Engine.WorldManagement
       Tiles = new Tile[Constants.ClusterWidth * Constants.ClusterHeight];
       Active = false;
       Coordinates = coordinates;
+      HashCode = GetHashCode();
     }
 
     public override string ToString()
@@ -35,15 +46,15 @@ namespace Teamcollab.Engine.WorldManagement
       return string.Format("({0}, {1})", Coordinates.X, Coordinates.Y);
     }
 
-    public override int GetHashCode()
+    public new long GetHashCode()
     {
       return GetHashFromXY(Coordinates.X, Coordinates.Y);
     }
 
-    public static int GetHashFromXY(int x, int y)
+    public static long GetHashFromXY(int x, int y)
     {
       long hash = ((long)x << 32) + y;
-      return (int)(hash >> 32);
+      return hash;
     }
   }
 }
