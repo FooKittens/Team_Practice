@@ -59,11 +59,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicShader.fx">
-      <Name>BasicShader</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
+    <Compile Include="Fonts\ImmediateDrawerFont.spritefont">
+      <Name>ImmediateDrawerFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Art\" />
+    <Folder Include="Music\" />
+    <Folder Include="SoundEffects\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

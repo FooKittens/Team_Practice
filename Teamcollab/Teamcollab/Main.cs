@@ -1,18 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Teamcollab.Managers;
-using Teamcollab.Engine;
-using Teamcollab.DataSerialization;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Teamcollab.DataSerialization;
 using Teamcollab.Engine.Helpers;
+using Teamcollab.Managers;
 
 namespace Teamcollab
 {
@@ -57,6 +48,8 @@ namespace Teamcollab
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
       stateManager.Draw();
+
+      ImmediateDrawer.GetInstance(this).Draw();
 
 			base.Draw(gameTime);
 		}
