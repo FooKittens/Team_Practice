@@ -1,32 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
+using Teamcollab.Engine.Helpers;
 
 namespace Teamcollab.Engine.WorldManagement
 {
   [Serializable]
   public class World
   {
-    public List<Cluster> Clusters;
+    private List<Cluster> clusters;
+    private bool isSorted;
 
     public World()
     {
-      Clusters = new List<Cluster>();
+      clusters = new List<Cluster>();
+      isSorted = true;
+    }
+
+    public delegate void ObjectOutOfBoundsHandler(Cluster cluster);
+
+    public event ObjectOutOfBoundsHandler ObjectOutOfBounds;
+
+    /// <summary>
+    /// Adds a cluster to the Worlds cluster list and sorts the list.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    public void AddCluster(Cluster cluster)
+    {
+      cluster.HashCode = cluster.GetHashCode();
+      clusters.Add(cluster);
+      isSorted = false;
     }
 
     public Cluster GetCluster(int x, int y)
     {
-      return BinaryClusterSearch(Clusters.ToArray(), Cluster.GetHashFromXY(x, y));
+      if (isSorted == false)
+      {
+        SortClusters();
+      }
+
+      return BinaryClusterSearch(clusters.ToArray(), Cluster.GetHashFromXY(x, y));
     }
 
     public void SortClusters()
     {
-      Clusters.Sort(delegate(Cluster c1, Cluster c2)
+      clusters.Sort(delegate(Cluster c1, Cluster c2)
         {
-          int c1Hash = c1.GetHashCode();
-          int c2Hash = c2.GetHashCode();
+          long c1Hash = c1.GetHashCode();
+          long c2Hash = c2.GetHashCode();
 
           if (c1Hash == c2Hash)
           {
@@ -40,13 +62,17 @@ namespace Teamcollab.Engine.WorldManagement
           return 1;
         }
       );
+
+      isSorted = true;
     }
 
-    private Cluster BinaryClusterSearch(Cluster[] array, int hashkey)
-    {
-      int center = array.Length / 2;
 
-      int centerHash = array[center].GetHashCode();
+    // TODO(Peter): Needs heavy optimization on the array division.
+    private Cluster BinaryClusterSearch(Cluster[] array, long hashkey)
+    {
+      int center = (array.Length) / 2;
+
+      long centerHash = array[center].HashCode;
 
       if (centerHash == hashkey)
       {
@@ -60,23 +86,24 @@ namespace Teamcollab.Engine.WorldManagement
       }
       else
       {
-        Cluster[] rightArray = new Cluster[center];
-        Array.Copy(array, center, rightArray, 0, center - 1);
+        Cluster[] rightArray = new Cluster[array.Length - center];
+        Array.Copy(array, center, rightArray, 0, array.Length - center);
         return BinaryClusterSearch(rightArray, hashkey);
       }
     }
 
+    
 
     [XmlElement("Clusters")]
     public Cluster[] _Clusters
     {
       get
       {
-        return Clusters.ToArray();
+        return clusters.ToArray();
       }
       set
       {
-        Clusters = new List<Cluster>(value);
+        clusters = new List<Cluster>(value);
       }
     }
   }
