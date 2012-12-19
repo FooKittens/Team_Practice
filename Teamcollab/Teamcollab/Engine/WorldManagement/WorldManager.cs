@@ -109,8 +109,8 @@ namespace Teamcollab.Engine.WorldManagement
     #endregion
 
     // DEBUG TEST CONSTANTS
-    const int WorldWidth = 200;
-    const int WorldHeight = 200;
+    const int WorldWidth = 10;
+    const int WorldHeight = 10;
 
     static WorldManager()
     {
