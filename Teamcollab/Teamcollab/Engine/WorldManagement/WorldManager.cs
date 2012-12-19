@@ -109,8 +109,8 @@ namespace Teamcollab.Engine.WorldManagement
     #endregion
 
     // DEBUG TEST CONSTANTS
-    const int WorldWidth = 74;
-    const int WorldHeight = 74;
+    const int WorldWidth = 200;
+    const int WorldHeight = 200;
 
     static WorldManager()
     {
@@ -201,6 +201,11 @@ namespace Teamcollab.Engine.WorldManagement
 
           // Test with cluster bounds
           if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
+          {
+            continue;
+          }
+
+          if (IsInView(cluster) == false)
           {
             continue;
           }

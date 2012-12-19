@@ -72,13 +72,11 @@ namespace Teamcollab.Engine.WorldManagement
     {
       int center = start + length / 2;
 
-      long centerHash = clusters[center].HashCode;
-
-      if (centerHash == hashkey)
+      if (clusters[center].HashCode == hashkey)
       {
         return clusters[center];
       }
-      else if (centerHash > hashkey)
+      else if (clusters[center].HashCode > hashkey)
       {
         //Cluster[] leftArray = new Cluster[center];
         //Array.Copy(array, min, leftArray, 0, center);
