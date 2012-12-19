@@ -12,7 +12,7 @@ namespace Teamcollab.Engine.WorldManagement
     private bool isSorted;
     private int insertIndex;
 
-    public World(int startSize = 0)
+    public World(int startSize = 10)
     {
       clusters = new Cluster[startSize];
       isSorted = true;
@@ -28,7 +28,7 @@ namespace Teamcollab.Engine.WorldManagement
     {
       if (insertIndex == clusters.Length)
       {
-        GrowClusterBuffer(ref clusters, 1);
+        GrowClusterBuffer(ref clusters, 10);
       }
 
       cluster.HashCode = cluster.GetHashCode();
@@ -41,6 +41,7 @@ namespace Teamcollab.Engine.WorldManagement
       if (isSorted == false)
       {
         QuickSortClusters(ref clusters, clusters.Length / 2);
+        isSorted = true;
       }
 
       return BinaryClusterSearch(clusters, 0, insertIndex, Cluster.GetHashFromXY(x, y));
