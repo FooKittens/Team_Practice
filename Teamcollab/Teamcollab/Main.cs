@@ -49,6 +49,13 @@ namespace Teamcollab
       InputManager.Update();
       stateManager.Update(gameTime);
 
+      // Temporary test code.
+      if (InputManager.KeyNewDown(Keys.F4))
+      {
+        graphics.IsFullScreen = !graphics.IsFullScreen;
+        graphics.ApplyChanges();
+      }
+
 			base.Update(gameTime);
 		}
 
