@@ -44,6 +44,7 @@ namespace Teamcollab.Engine.WorldManagement
         isSorted = true;
       }
 
+      // Search the array between 0 and the last inserted cluster.
       return BinaryClusterSearch(clusters, 0, insertIndex, Cluster.GetHashFromXY(x, y));
     }
 
@@ -86,8 +87,6 @@ namespace Teamcollab.Engine.WorldManagement
     /// <param name="right">Every index right of this will be ignored.</param>
     private static void QuickSortClusters(ref Cluster[] array, int pivot)
     {
-      //Array.Resize(ref array, Array.IndexOf(array, null));
-
       if (array.Length <= 2)
       {
         return;
