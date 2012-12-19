@@ -8,18 +8,16 @@ using Microsoft.Xna.Framework;
 
 namespace Teamcollab.GameObjects
 {
-  class DrawableEntity : Entity
+  abstract class DrawableEntity : Entity
   {
     #region Properties
     #endregion
 
     #region Members
-    protected EntityType entityType;
-    protected Resource<Texture2D> resource;
-    protected Vector2 position;
     #endregion
 
-    public DrawableEntity()
+    public DrawableEntity(Vector2 positionInCluster)
+      :base(positionInCluster)
     {
     }
 
