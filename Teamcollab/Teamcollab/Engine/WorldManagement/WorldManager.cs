@@ -216,7 +216,7 @@ namespace Teamcollab.Engine.WorldManagement
             {
               Vector2 origin = new Vector2(16, 16);
 
-              Vector2 tPos = GetTileAt(cluster, tileX, tileY).Position;
+              Vector2 tPos = cluster.GetTileAt(tileX, tileY).Position;
 
               Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
 
@@ -351,37 +351,14 @@ namespace Teamcollab.Engine.WorldManagement
         {
           Vector2 tilePos = Vector2.Transform(new Vector2(x, y), tileTranslate);          
 
-          Tile t = GetTileAt(cluster, x, y);
+          Tile t = cluster.GetTileAt(x, y);
           t.Position = tilePos;
           t.Type = TileType.Grass;
-          cluster.Tiles[y * Constants.ClusterWidth + x] = t;
+          cluster.SetTileAt(x, y, t);
         }
       }
 
       world.AddCluster(cluster);
-    }
-
-    /// <summary>
-    /// Gets the tile at the given coordinates in the cluster
-    /// </summary>
-    /// <param name="cluster">Cluster to search</param>
-    /// <param name="coord">Coordinate to use</param>
-    /// <returns>Tell me if you see this</returns>
-    private static Tile GetTileAt(Cluster cluster, Coordinates coord)
-    {
-      return GetTileAt(cluster, coord.X, coord.Y);
-    }
-
-    /// <summary>
-    /// Gets the tile at the given coordinates in the cluster.
-    /// </summary>
-    /// <param name="cluster">The cluster to retrieve from.</param>
-    /// <param name="x">X-coordinate in tilecoordinates.</param> 
-    /// <param name="y">Y-coordinate in tilecoordinates.</param>
-    /// <returns></returns>
-    private static Tile GetTileAt(Cluster cluster, int x, int y)
-    {
-      return cluster.Tiles[y * Constants.ClusterWidth + x];
     }
   }
 }
