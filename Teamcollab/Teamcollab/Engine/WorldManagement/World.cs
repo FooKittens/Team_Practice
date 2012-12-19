@@ -31,7 +31,7 @@ namespace Teamcollab.Engine.WorldManagement
         GrowClusterBuffer(ref clusters, 10);
       }
 
-      cluster.HashCode = cluster.GetHashCode();
+      cluster.SetHashCode();
       clusters[insertIndex++] = cluster;
       isSorted = false;
     }
@@ -48,7 +48,6 @@ namespace Teamcollab.Engine.WorldManagement
       return BinaryClusterSearch(clusters, 0, insertIndex, Cluster.GetHashFromXY(x, y));
     }
 
-    // TODO(Peter): Monitor performance of this method.
     public static void GrowClusterBuffer(ref Cluster[] clusters, int amount)
     {
       Array.Resize<Cluster>(ref clusters, clusters.Length + amount);
@@ -78,15 +77,17 @@ namespace Teamcollab.Engine.WorldManagement
     }
 
     /// <summary>
-    /// Sorts an array of cluster(ideally the buffer of a world) 
+    /// Sorts an array of cluster(ideally the buffer of a world) recursively
     /// by their hash values through the Quicksort algorithm.
     /// </summary>
     /// <param name="array">Array to sort.</param>
     /// <param name="pivot">Array index to begin lookup.</param>
-    /// <param name="left">Every index left of this will be ignored.</param>
-    /// <param name="right">Every index right of this will be ignored.</param>
     private static void QuickSortClusters(ref Cluster[] array, int pivot)
     {
+      /* If the input array size is two or less, the sorting is done.
+       * the one exception is when an unsorted array with the size of two is
+       * given as an input parameter.
+       * TODO(Peter): Handle this edge-case.*/
       if (array.Length <= 2)
       {
         return;
@@ -98,54 +99,53 @@ namespace Teamcollab.Engine.WorldManagement
       Cluster[] more = new Cluster[array.Length];
 
       // Index for less array
-      int li = 0;
+      int lessIndex = 0;
       // Index for more array
-      int mi = 0;
+      int moreIndex = 0;
 
       for (int i = 0; i < array.Length; ++i)
       {
-
+        // Skip the pivot as it will be appended to the less array.
         if (i == pivot)
         {
           continue;
         }
 
+        /* Null clusters are considered as 'more' than any cluster
+         * that actually exists as we want them in the end of the array. */
         if (array[i] == null)
         {
-          more[mi++] = array[i];
+          more[moreIndex++] = array[i];
         }
+        // Like above, if the pivot is null, all clusters are less than the pivot.
         else if (array[pivot] == null || array[i].HashCode < array[pivot].HashCode)
         {
-          less[li++] = array[i];
+          less[lessIndex++] = array[i];
         }
         else if (array[i].HashCode > array[pivot].HashCode)
         {
-          more[mi++] = array[i];
+          more[moreIndex++] = array[i];
         }
       }
 
-      less[li++] = array[pivot];
+      // Append the pivot to the less list.
+      less[lessIndex++] = array[pivot];
 
-      Array.Resize(ref less, li);
-      Array.Resize(ref more, mi);
+      // Resize arrays to remove the extra allocated space.
+      Array.Resize(ref less, lessIndex);
+      Array.Resize(ref more, moreIndex);
 
-      // Sort left.
-      QuickSortClusters(ref less, li / 2);
+      // Sort the less segment recursively.
+      QuickSortClusters(ref less, lessIndex / 2);
 
-      // Sort right.
-      QuickSortClusters(ref more, mi / 2);
+      // Sort the more segment recursively.
+      QuickSortClusters(ref more, moreIndex / 2);
 
-      // Re-Assign Array
-      int arrIndex = 0;
-      for (int i = 0; i < less.Length; ++i, ++arrIndex)
+      // Re-assign with the two now sorted segments.
+      for (int i = 0; i < array.Length; ++i)
       {
-        array[arrIndex] = less[i];
+        array[i] = i < less.Length ? less[i] : more[i - less.Length];        
       }
-      for (int i = 0; i < more.Length; ++i, ++arrIndex)
-      {
-        array[arrIndex] = more[i];
-      }
-      
     }
 
 

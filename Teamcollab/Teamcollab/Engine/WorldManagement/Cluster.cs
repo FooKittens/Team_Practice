@@ -26,10 +26,12 @@ namespace Teamcollab.Engine.WorldManagement
   [Serializable]
   public class Cluster
   {
+    public long HashCode { get; private set; }
+
     public ClusterType Type;
     public Tile[] Tiles;
     public Coordinates Coordinates;
-    public long HashCode;
+    
     public bool Active;
 
     public Cluster(ClusterType type, Coordinates coordinates)
@@ -46,9 +48,9 @@ namespace Teamcollab.Engine.WorldManagement
       return string.Format("({0}, {1})", Coordinates.X, Coordinates.Y);
     }
 
-    public new long GetHashCode()
+    public void SetHashCode()
     {
-      return GetHashFromXY(Coordinates.X, Coordinates.Y);
+      HashCode = GetHashFromXY(Coordinates.X, Coordinates.Y);
     }
 
     public static long GetHashFromXY(int x, int y)
