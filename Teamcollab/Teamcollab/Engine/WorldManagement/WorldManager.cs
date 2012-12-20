@@ -16,7 +16,7 @@ namespace Teamcollab.Engine.WorldManagement
     #region Properties
     
     #endregion
-
+    
     #region Matrices
 
     /// <summary>
@@ -75,10 +75,7 @@ namespace Teamcollab.Engine.WorldManagement
     #region Static Methods
     public static Vector2 GetTileScreenPosition(Vector2 tilePosition)
     {
-      return Vector2.Transform(
-        tilePosition,
-        TilePositionTransform * TileScreenTransform
-      );
+      return Vector2.Transform(tilePosition, TileScreenTransform);
     }
 
     public static Vector2 TransformByCluster(Vector2 tilePosition,
