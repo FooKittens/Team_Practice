@@ -59,9 +59,16 @@ namespace Teamcollab.Engine.WorldManagement
       HashCode = GetHashCode();
     }
 
-
+    // TODO REMOVE
+    Resource<Texture2D> res;
     public void Draw(SpriteBatch spriteBatch)
     {
+      // TODO REMOVE
+      if (res == null)
+      {
+        res = tileTextures.Query("Square");
+      }
+
       for (int y = 0; y < Constants.ClusterHeight; ++y)
       {
         for (int x = 0; x < Constants.ClusterWidth; ++x)
@@ -71,7 +78,7 @@ namespace Teamcollab.Engine.WorldManagement
           Vector2 drawPos = WorldManager.TransformByCluster(tile.Position, Coordinates);
           drawPos = WorldManager.GetTileScreenPosition(drawPos);
 
-          spriteBatch.Draw(tileTextures.Query("Square"), drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
+          spriteBatch.Draw(res, drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
         }
       }
     }
