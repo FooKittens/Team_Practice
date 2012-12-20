@@ -97,6 +97,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\ResourceCollection.cs" />
+    <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +138,10 @@
       <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Engine\DataManagement\" />
+    <Folder Include="Engine\World\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.DataSerialization;
 using Teamcollab.Engine.Helpers;
 using Teamcollab.Managers;
-using Microsoft.Xna.Framework.Input;
+using Teamcollab.Resources;
 
 namespace Teamcollab
 {
@@ -28,6 +28,7 @@ namespace Teamcollab
 
 		protected override void Initialize()
 		{
+      ResourceManager.Initialize(Content);
       stateManager = new StateManager(this);
 			base.Initialize();
 		}
@@ -40,13 +41,6 @@ namespace Teamcollab
 		{
       InputManager.Update();
       stateManager.Update(gameTime);
-
-      // Temporary test code.
-      if (InputManager.KeyNewDown(Keys.F4))
-      {
-        graphics.IsFullScreen = !graphics.IsFullScreen;
-        graphics.ApplyChanges();
-      }
 
 			base.Update(gameTime);
 		}

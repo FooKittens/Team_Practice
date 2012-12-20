@@ -1,5 +1,8 @@
 ﻿using Teamcollab.Engine.Helpers;
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Teamcollab.Resources;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -39,6 +42,14 @@ namespace Teamcollab.Engine.WorldManagement
     public Coordinates Coordinates;
     #endregion
 
+    static ResourceCollection<Texture2D> tileTextures;
+
+    // Static Constructor for loading tiletextures initially.
+    static Cluster()
+    {
+      tileTextures = ResourceManager.TileTextureBank;
+    }
+
     public Cluster(ClusterType type, Coordinates coordinates)
     {
       Type = type;
@@ -46,6 +57,61 @@ namespace Teamcollab.Engine.WorldManagement
       Active = false;
       Coordinates = coordinates;
       HashCode = GetHashCode();
+    }
+
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+      for (int y = 0; y < Constants.ClusterHeight; ++y)
+      {
+        for (int x = 0; x < Constants.ClusterWidth; ++x)
+        {
+          Tile tile = GetTileAt(x, y);
+
+          Vector2 drawPos = WorldManager.TransformByCluster(tile.Position, Coordinates);
+          drawPos = WorldManager.GetTileScreenPosition(drawPos);
+
+          spriteBatch.Draw(tileTextures.Query("Square"), drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
+        }
+      }
+    }
+
+    /// <summary>
+    /// Retrieves the bounding rectangle for a cluster in pixels.
+    /// </summary>
+    /// <param name="cluster">Cluster to get bounds from.</param>
+    public static Rectangle GetClusterBounds(Cluster cluster)
+    {
+      // Creates cluster edges with clockwise winding.
+      Vector2[] vertices = new[] {
+        new Vector2(-0.5f, -0.5f), // Top Left
+        new Vector2(0.5f, -0.5f), // Top Right
+        new Vector2(0.5f, 0.5f), // Bottom Right
+        new Vector2(-0.5f, 0.5f) // Bottom Left
+      };
+
+      // Matrix for translating into tilespace and then scaling to screen.
+      // Matrix mat = ClusterTileTransform * TileScreenTransform;
+
+      /* Translate all vertices to the correct cluster and transform
+       * into pixel coordinates. */
+      for (int i = 0; i < vertices.Length; ++i)
+      {
+        vertices[i] += cluster.Coordinates;
+        vertices[i] = WorldManager.GetClusterScreenCenter(vertices[i]);
+
+        //vertices[i] = Vector2.Transform(vertices[i], mat);
+      }
+
+      // Bounding Rectangle.
+      Rectangle rect = new Rectangle(
+        (int)vertices[0].X,
+        (int)vertices[0].Y,
+        (int)(vertices[1].X - vertices[0].X),
+        (int)(vertices[2].Y - vertices[1].Y)
+      );
+
+      return rect;
     }
 
     public void SetTileAt(int x, int y, Tile newTile)
