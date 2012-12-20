@@ -187,46 +187,13 @@ namespace Teamcollab.Engine.WorldManagement
 
     public void Update(GameTime gameTime)
     {
-
+      currentWorld.Update(gameTime);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
 
       currentWorld.Draw(spriteBatch);
-
-      //for (int y = -WorldHeight / 2; y <= WorldHeight / 2; ++y)
-      //{
-      //  for (int x = -WorldWidth / 2; x <= WorldWidth / 2; ++x)
-      //  {
-      //    Cluster cluster = currentWorld.GetCluster(x, y);
-
-      //    // Test with cluster bounds
-      //    if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
-      //    {
-      //      continue;
-      //    }
-
-      //    if (IsInView(cluster) == false)
-      //    {
-      //      continue;
-      //    }
-
-      //    for (int tileY = 0; tileY < Constants.ClusterHeight; ++tileY)
-      //    {
-      //      for (int tileX = 0; tileX < Constants.ClusterWidth; ++tileX)
-      //      {
-      //        Vector2 origin = new Vector2(16, 16);
-
-      //        Vector2 tPos = cluster.GetTileAt(tileX, tileY).Position;
-
-      //        Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
-      //        transformed = GetTileScreenPosition(transformed);
-
-      //        spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
-      //      }
-      //    }
-      //  }
       
     }
 
@@ -271,29 +238,7 @@ namespace Teamcollab.Engine.WorldManagement
       WorldPixelTransform = Matrix.CreateScale(Constants.WorldPixelRatio);
     }
 
-    /// <summary>
-    /// Determines if a given cluster is in view.
-    /// </summary>
-    /// <param name="cluster">The cluster to investigate.</param>
-    private bool IsInView(Cluster cluster)
-    {
-      Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
-      Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
 
-      topLeft = Vector2.Transform(topLeft, ScreenClusterTransform);
-      bottomRight = Vector2.Transform(bottomRight, ScreenClusterTransform);
-
-      // Offsets are in cluster coordinates.
-      if (cluster.Coordinates.X + 0.5f >= topLeft.X &&
-          cluster.Coordinates.X - 0.5f <= bottomRight.X &&
-          cluster.Coordinates.Y - 0.5f <= bottomRight.Y &&
-          cluster.Coordinates.Y + 0.5f >= topLeft.Y)
-      {
-        return true;
-      }
-
-      return false;
-    }
 
     /// <summary>
     /// Insert a cluster at the given coordinates in cluster space.

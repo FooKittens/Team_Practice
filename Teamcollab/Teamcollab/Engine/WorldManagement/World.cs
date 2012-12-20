@@ -36,11 +36,35 @@ namespace Teamcollab.Engine.WorldManagement
           continue;
         }
 
-        if (Cluster.GetClusterBounds(cluster).Intersects(Camera2D.Bounds))
+        if (IsInView(cluster))
         {
           cluster.Draw(spriteBatch);
         }
       }
+    }
+
+    /// <summary>
+    /// Determines if a given cluster is in view.
+    /// </summary>
+    /// <param name="cluster">The cluster to investigate.</param>
+    private bool IsInView(Cluster cluster)
+    {
+      Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
+      Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
+
+      topLeft = WorldManager.TransformScreenToCluster(topLeft);
+      bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
+      
+      // Offsets are in cluster coordinates.
+      if (cluster.Coordinates.X + 0.5f >= topLeft.X &&
+          cluster.Coordinates.X - 0.5f <= bottomRight.X &&
+          cluster.Coordinates.Y - 0.5f <= bottomRight.Y &&
+          cluster.Coordinates.Y + 0.5f >= topLeft.Y)
+      {
+        return true;
+      }
+
+      return false;
     }
 
     /// <summary>
