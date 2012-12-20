@@ -56,11 +56,13 @@ namespace Teamcollab.GameStates
 
       if (InputManager.KeyDown(Keys.W))
       {
-        Camera2D.SetTargetPosition(WorldManager.TransformByCluster(new Vector2(-64, -64), new Vector2(-25, -25)));
+        //Camera2D.SetTargetPosition(WorldManager.TransformByCluster(new Vector2(-64, -64), new Vector2(-5, -5)));
+        Camera2D.SetPosition(Camera2D.Position + new Vector2(0, -2));
       }
       else if (InputManager.KeyDown(Keys.S))
       {
-        Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(Vector2.Zero));
+        //Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(Vector2.Zero));
+        Camera2D.SetPosition(Camera2D.Position + new Vector2(5, 0));
       }
 
       float deltaScroll = InputManager.MouseWheelChange();
