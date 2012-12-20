@@ -70,7 +70,6 @@ namespace Teamcollab.GameStates
       deltaScroll = Math.Sign(InputManager.MouseWheelChange()) * 2.5f;
       Camera2D.SetTargetScale(Camera2D.Scale + deltaScroll);
 
-
       if (InputManager.KeyDown(Keys.E))
       {
         Camera2D.SetTargetScale(1f);
@@ -87,7 +86,6 @@ namespace Teamcollab.GameStates
           StateChangeRequested(ApplicationState.Menu);
         }
       }
-
     }
 
     public override void Draw()
