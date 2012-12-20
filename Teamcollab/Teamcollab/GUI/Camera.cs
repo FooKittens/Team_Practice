@@ -10,6 +10,7 @@ namespace Teamcollab.GUI
   {
     #region Properties
     static public Vector2 Position { get { return position; } }
+    static public Vector2 TargetPosition { get { return targetPosition; } }
     static public Vector2 Origin { get; private set; }
     static public Matrix View { get; private set; }
     static public Matrix Projection { get; private set; }
@@ -33,16 +34,20 @@ namespace Teamcollab.GUI
     #endregion
 
     #region Members
-    static Vector2 halfScreenSize; // Half is used more than whole
+    static private Vector2 halfScreenSize; // Half is used more than whole
     static private Vector2 position;
     static private Vector2 targetPosition;
     static private float targetScale;
+    static private Matrix translationMatrix;
     #endregion
 
     static Camera2D()
     {
       Scale = 1f;
-      halfScreenSize = new Vector2(Settings.ScreenWidth / 2, Settings.ScreenHeight / 2);
+      halfScreenSize = new Vector2(
+        Settings.ScreenWidth / 2,
+        Settings.ScreenHeight / 2
+      );
       position = Vector2.Zero;
       Origin = halfScreenSize / Scale;
       targetScale = 1f;
@@ -93,14 +98,14 @@ namespace Teamcollab.GUI
     static private void AutoZoom(GameTime gameTime)
     {
       float diff = targetScale - Scale;
-      if (Math.Abs(diff) < 0.01f)
+      if (Math.Abs(diff) < 0.001f)
       {
         Scale = targetScale;
       }
       else
       {
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        float acc = diff * 320; // TODO (Martin): 320? Random working value... Probably because of pixel size?
+        float acc = diff * 320; // TODO (Martin): 320? Random working value...
         Scale = (acc * (float)Math.Pow(time, 2)) / 2 + Scale;
       }
 
@@ -120,7 +125,7 @@ namespace Teamcollab.GUI
       else
       {
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        Vector2 acc = diff * 320; // TODO (Martin): 320? Random working value... Probably because of pixel size?
+        Vector2 acc = diff * 320; // TODO (Martin): 320? Random working value...
         position = (acc * (float)Math.Pow(time, 2) + (acc * (float)Math.Pow(time, 2)) / 2 + position);
       }
     }
@@ -146,6 +151,9 @@ namespace Teamcollab.GUI
           0,
           10
         );
+      translationMatrix = Matrix.CreateScale(1 / Scale) *
+      Matrix.CreateTranslation(-Origin.X, -Origin.Y, 0) *
+      Matrix.CreateTranslation(Position.X, Position.Y, 0);
     }
 
     /// <summary>
@@ -155,7 +163,7 @@ namespace Teamcollab.GUI
     /// <returns>World coordinate</returns>
     static public Vector2 TranslatePositionByCamera(Vector2 camCoord)
     {
-      return (camCoord / Scale) - (Origin - Position);
+      return Vector2.Transform(camCoord, translationMatrix);
     }
   }
 }
