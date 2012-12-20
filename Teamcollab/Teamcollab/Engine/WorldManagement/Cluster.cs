@@ -20,7 +20,6 @@ namespace Teamcollab.Engine.WorldManagement
     public ClusterType Type;
     public Tile[] Tiles;
     public Coordinates Coordinates;
-    public bool Active;
   }
 
   /// <summary>
