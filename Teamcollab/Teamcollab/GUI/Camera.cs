@@ -10,6 +10,7 @@ namespace Teamcollab.GUI
   {
     #region Properties
     static public Vector2 Position { get { return position; } }
+    static public Vector2 TargetPosition { get { return targetPosition; } }
     static public Vector2 Origin { get; private set; }
     static public Matrix View { get; private set; }
     static public Matrix Projection { get; private set; }

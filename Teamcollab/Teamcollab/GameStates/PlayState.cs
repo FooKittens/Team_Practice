@@ -46,6 +46,37 @@ namespace Teamcollab.GameStates
     float inten = 0f;
     float t;
 
+    enum Direction
+    {
+      Up,
+      Down,
+      Left,
+      Right
+    }
+    private void MoveCameraOneCluster(Direction dir)
+    {
+      Coordinates change = Coordinates.Zero;
+      switch (dir)
+      {
+        case Direction.Up:
+          change.Y = -1;
+          break;
+        case Direction.Down:
+          change.Y = 1;
+          break;
+        case Direction.Left:
+          change.X = -1;
+          break;
+        case Direction.Right:
+          change.X = 1;
+          break;
+      }
+      Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.TargetPosition);
+      change.X += (int)camCluster.X;
+      change.Y += (int)camCluster.Y;
+      Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(change));
+    }
+
     public override void Update(GameTime gameTime)
     {
       Camera2D.Update(gameTime);
@@ -54,15 +85,22 @@ namespace Teamcollab.GameStates
       //t = (float)gameTime.TotalGameTime.TotalSeconds;
       inten = (float)Math.Sin(t) / 2 + 0.75f;
 
-      if (InputManager.KeyDown(Keys.W))
+      Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.TargetPosition);
+      if (InputManager.KeyNewDown(Keys.W))
       {
-        //Camera2D.SetTargetPosition(WorldManager.TransformByCluster(new Vector2(-64, -64), new Vector2(-5, -5)));
-        Camera2D.SetPosition(Camera2D.Position + new Vector2(0, -2));
+        MoveCameraOneCluster(Direction.Up);
       }
-      else if (InputManager.KeyDown(Keys.S))
+      else if (InputManager.KeyNewDown(Keys.A))
       {
-        //Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(Vector2.Zero));
-        Camera2D.SetPosition(Camera2D.Position + new Vector2(5, 0));
+        MoveCameraOneCluster(Direction.Left);
+      }
+      else if (InputManager.KeyNewDown(Keys.S))
+      {
+        MoveCameraOneCluster(Direction.Down);
+      }
+      else if (InputManager.KeyNewDown(Keys.D))
+      {
+        MoveCameraOneCluster(Direction.Right);
       }
 
       float deltaScroll = InputManager.MouseWheelChange();
