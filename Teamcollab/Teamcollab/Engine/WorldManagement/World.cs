@@ -33,6 +33,7 @@ namespace Teamcollab.Engine.WorldManagement
       CheckClusterUnloading();
     }
 
+    // Temporary method for checking solving clusters that are outside the camera
     private void CheckClusterUnloading()
     {
       bool changed = false;
@@ -53,6 +54,10 @@ namespace Teamcollab.Engine.WorldManagement
       }
     }
     
+    /// <summary>
+    /// Multithreaded method that unloads clusters into the database.s
+    /// </summary>
+    /// <param name="cluster"></param>
     private void UnloadCluster(Cluster cluster)
     {
       Thread thread = new Thread(delegate()
