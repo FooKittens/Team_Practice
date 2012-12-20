@@ -91,8 +91,7 @@ namespace Teamcollab.Engine.WorldManagement
 
       Vector2 res =  Vector2.Transform(
         tilePosition + cTranslate,
-        TilePositionTransform *
-        TileScreenTransform
+        TilePositionTransform
       );
 
       return res;
@@ -103,6 +102,14 @@ namespace Teamcollab.Engine.WorldManagement
       return Vector2.Transform(
         clusterCoordinates,
         ClusterTileTransform * TileScreenTransform
+      );
+    }
+
+    public static Vector2 TransformScreenToCluster(Vector2 screenCoordinates)
+    {
+      return Vector2.Transform(
+        screenCoordinates,
+        ScreenClusterTransform
       );
     }
 
