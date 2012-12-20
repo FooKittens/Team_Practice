@@ -238,8 +238,6 @@ namespace Teamcollab.Engine.WorldManagement
       WorldPixelTransform = Matrix.CreateScale(Constants.WorldPixelRatio);
     }
 
-
-
     /// <summary>
     /// Insert a cluster at the given coordinates in cluster space.
     /// </summary>

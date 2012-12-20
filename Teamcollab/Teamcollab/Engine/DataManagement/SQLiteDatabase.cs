@@ -11,6 +11,9 @@ namespace Teamcollab.Engine.DataManagement
   {
     #region Properties
     public bool Connected { get { return connection.State == ConnectionState.Open; } }
+    public string[] CommandHistory { get { return commandHistory.ToArray(); } }
+
+    protected SQLiteConnection Connection { get { return connection; } }
     #endregion
 
     // TEMP CONSTS

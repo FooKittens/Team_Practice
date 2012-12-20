@@ -58,6 +58,16 @@ namespace Teamcollab.Engine.WorldManagement
       HashCode = GetHashCode();
     }
 
+    public Cluster(ClusterData data)
+    {
+      Type = data.Type;
+      tiles = data.Tiles;
+      Coordinates = data.Coordinates;
+      
+      SetHashCode();
+      Active = false;
+    }
+
     // TODO REMOVE
     Resource<Texture2D> res;
     public void Draw(SpriteBatch spriteBatch)
@@ -170,6 +180,15 @@ namespace Teamcollab.Engine.WorldManagement
     {
       long hash = ((long)x << 32) + y;
       return hash;
+    }
+
+    public ClusterData GetData()
+    {
+      ClusterData data = new ClusterData();
+      data.Coordinates = Coordinates;
+      data.Tiles = tiles;
+      data.Type = Type;
+      return data;
     }
   }
 }
