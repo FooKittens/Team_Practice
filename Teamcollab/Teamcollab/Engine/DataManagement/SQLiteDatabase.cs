@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 using System.Data;
+using System.IO;
 
 namespace Teamcollab.Engine.DataManagement
 {
@@ -27,11 +28,13 @@ namespace Teamcollab.Engine.DataManagement
 
     public SQLiteDatabase(string filepath)
     {
-      cnnString = filepath;
-      connection = new SQLiteConnection(
-        string.Format("Data Source={0}",
-        filepath)
-      );
+      commandHistory = new Queue<string>();
+      if (File.Exists(filepath) == false)
+      {
+        throw new FileNotFoundException("Could not find db file");
+      }
+      cnnString = string.Format("Data Source={0}", filepath);
+      connection = new SQLiteConnection(cnnString);
     }
 
     /// <summary>
@@ -40,6 +43,9 @@ namespace Teamcollab.Engine.DataManagement
     /// <param name="query">An SQL query for selecting.</param>
     public virtual DataTable Select(string query)
     {
+      // Blocking loop for thread safety.
+      while (Connected) ;
+
       AddToCommandHistory(query);
 
       DataTable table = new DataTable();
@@ -63,6 +69,9 @@ namespace Teamcollab.Engine.DataManagement
     /// <param name="sql">SQL Language Query.</param>
     public virtual void Insert(string sql)
     {
+      // Blocking loop for thread safety.
+      while (Connected) ;
+
       connection.Open();
       using (SQLiteCommand cmd = new SQLiteCommand(connection))
       {
@@ -74,6 +83,9 @@ namespace Teamcollab.Engine.DataManagement
 
     public virtual int RunNonQuery(string sql)
     {
+      // Blocking loop for thread safety.
+      while (Connected) ;
+
       int rowsUpdated = 0;
 
       connection.Open();

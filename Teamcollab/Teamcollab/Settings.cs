@@ -13,6 +13,7 @@ namespace Teamcollab
   {
     public static int ScreenWidth { get; private set; }
     public static int ScreenHeight { get; private set; }
+    public static bool MultiThreading { get; private set; }
 
 
     /// <summary>
@@ -23,6 +24,7 @@ namespace Teamcollab
     {
       ScreenWidth = data.ScreenWidth;
       ScreenHeight = data.ScreenHeight;
+      MultiThreading = data.MultiThreading;
     }
   }
 }

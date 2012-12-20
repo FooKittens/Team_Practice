@@ -5,6 +5,8 @@ using Teamcollab.Engine.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.GUI;
+using Teamcollab.Engine.DataManagement;
+using System.Threading;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -15,11 +17,20 @@ namespace Teamcollab.Engine.WorldManagement
     private bool isSorted;
     private int insertIndex;
 
+    ClusterDatabase clusterDb;
+
+    Thread clusterCullThread;
+
     public World(int startSize = 10)
     {
       clusters = new Cluster[startSize];
       isSorted = true;
       insertIndex = 0;
+      clusterDb = new ClusterDatabase("ClusterData.s3db");
+      clusterDb.RunNonQuery("DELETE FROM clusters");
+
+      clusterCullThread = new Thread(AsyncClusterManager);
+      clusterCullThread.Start();
     }
 
     public void Update(GameTime gameTime)
@@ -27,18 +38,45 @@ namespace Teamcollab.Engine.WorldManagement
 
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    private void AsyncClusterManager()
     {
-      foreach (Cluster cluster in clusters)
+      while (true)
       {
-        if (cluster == null)
+        bool changed = false;
+        for (int i = 0; i < clusters.Length; ++i)
         {
-          continue;
+          if (clusters[i] != null && IsInView(clusters[i]) == false)
+          {
+            clusterDb.InsertCluster(clusters[i]);
+            clusters[i] = null;
+            changed = true;
+          }
         }
 
-        if (IsInView(cluster))
+        if (changed)
         {
-          cluster.Draw(spriteBatch);
+          isSorted = false;
+        }
+
+        Thread.Sleep(50);
+      }
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+      lock (clusters)
+      {
+        foreach (Cluster cluster in clusters)
+        {
+          if (cluster == null)
+          {
+            continue;
+          }
+
+          if (IsInView(cluster))
+          {
+            cluster.Draw(spriteBatch);
+          }
         }
       }
     }
@@ -49,17 +87,22 @@ namespace Teamcollab.Engine.WorldManagement
     /// <param name="cluster">The cluster to investigate.</param>
     private bool IsInView(Cluster cluster)
     {
+      return IsInView(cluster.Coordinates);
+    }
+
+    private bool IsInView(Coordinates clusterCoordinates)
+    {
       Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
       Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
 
       topLeft = WorldManager.TransformScreenToCluster(topLeft);
       bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
-      
+
       // Offsets are in cluster coordinates.
-      if (cluster.Coordinates.X + 0.5f >= topLeft.X &&
-          cluster.Coordinates.X - 0.5f <= bottomRight.X &&
-          cluster.Coordinates.Y - 0.5f <= bottomRight.Y &&
-          cluster.Coordinates.Y + 0.5f >= topLeft.Y)
+      if (clusterCoordinates.X + 0.5f >= topLeft.X &&
+          clusterCoordinates.X - 0.5f <= bottomRight.X &&
+          clusterCoordinates.Y - 0.5f <= bottomRight.Y &&
+          clusterCoordinates.Y + 0.5f >= topLeft.Y)
       {
         return true;
       }
@@ -89,9 +132,10 @@ namespace Teamcollab.Engine.WorldManagement
       if (isSorted == false)
       {
         QuickSortClusters(ref clusters, clusters.Length / 2);
+
         isSorted = true;
       }
-
+      
       // Search the array between 0 and the last inserted cluster.
       return BinaryClusterSearch(clusters, 0, insertIndex, Cluster.GetHashFromXY(x, y));
     }
@@ -107,7 +151,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     /// <param name="array">Array to sort.</param>
     /// <param name="pivot">Array index to begin lookup.</param>
-    private static void QuickSortClusters(ref Cluster[] array, int pivot)
+    private void QuickSortClusters(ref Cluster[] array, int pivot)
     {
       /* If the input array size is two or less, the sorting is done.
        * the one exception is when an unsorted array with the size of two is
@@ -167,9 +211,10 @@ namespace Teamcollab.Engine.WorldManagement
       QuickSortClusters(ref more, moreIndex / 2);
 
       // Re-assign with the two now sorted segments.
+
       for (int i = 0; i < array.Length; ++i)
       {
-        array[i] = i < less.Length ? less[i] : more[i - less.Length];        
+        array[i] = i < less.Length ? less[i] : more[i - less.Length];
       }
     }
 

@@ -10,6 +10,7 @@ namespace Teamcollab.DataSerialization
   {
     public int ScreenHeight;
     public int ScreenWidth;
+    public bool MultiThreading;
 
 
     /// <summary>
@@ -20,6 +21,7 @@ namespace Teamcollab.DataSerialization
       SettingsData appSettings = new SettingsData();
       appSettings.ScreenWidth = 1280;
       appSettings.ScreenHeight = 768;
+      appSettings.MultiThreading = true;
 
       return appSettings;
     }
