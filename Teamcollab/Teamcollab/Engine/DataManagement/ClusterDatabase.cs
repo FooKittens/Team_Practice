@@ -57,9 +57,6 @@ namespace Teamcollab.Engine.DataManagement
 
     public void InsertCluster(ClusterData data)
     {
-      // Blocking loop for thread safety.
-      while (Connected) ;
-
       long hashcode = Cluster.GetHashFromXY(data.Coordinates.X, data.Coordinates.Y);
 
       string sql = string.Format(

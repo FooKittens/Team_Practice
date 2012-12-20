@@ -31,7 +31,7 @@ namespace Teamcollab.Engine.DataManagement
       commandHistory = new Queue<string>();
       if (File.Exists(filepath) == false)
       {
-        throw new FileNotFoundException("Could not find db file");
+        throw new FileNotFoundException("Could not find database file.");
       }
       cnnString = string.Format("Data Source={0}", filepath);
       connection = new SQLiteConnection(cnnString);
@@ -43,9 +43,6 @@ namespace Teamcollab.Engine.DataManagement
     /// <param name="query">An SQL query for selecting.</param>
     public virtual DataTable Select(string query)
     {
-      // Blocking loop for thread safety.
-      while (Connected) ;
-
       AddToCommandHistory(query);
 
       DataTable table = new DataTable();
@@ -69,9 +66,6 @@ namespace Teamcollab.Engine.DataManagement
     /// <param name="sql">SQL Language Query.</param>
     public virtual void Insert(string sql)
     {
-      // Blocking loop for thread safety.
-      while (Connected) ;
-
       connection.Open();
       using (SQLiteCommand cmd = new SQLiteCommand(connection))
       {
@@ -83,9 +77,6 @@ namespace Teamcollab.Engine.DataManagement
 
     public virtual int RunNonQuery(string sql)
     {
-      // Blocking loop for thread safety.
-      while (Connected) ;
-
       int rowsUpdated = 0;
 
       connection.Open();

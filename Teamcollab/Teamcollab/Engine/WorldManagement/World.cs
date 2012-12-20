@@ -19,8 +19,6 @@ namespace Teamcollab.Engine.WorldManagement
 
     ClusterDatabase clusterDb;
 
-    Thread clusterCullThread;
-
     public World(int startSize = 10)
     {
       clusters = new Cluster[startSize];
@@ -28,38 +26,43 @@ namespace Teamcollab.Engine.WorldManagement
       insertIndex = 0;
       clusterDb = new ClusterDatabase("ClusterData.s3db");
       clusterDb.RunNonQuery("DELETE FROM clusters");
-
-      clusterCullThread = new Thread(AsyncClusterManager);
-      clusterCullThread.Start();
     }
 
     public void Update(GameTime gameTime)
     {
-
+      CheckClusterUnloading();
     }
 
-    private void AsyncClusterManager()
+    private void CheckClusterUnloading()
     {
-      while (true)
+      bool changed = false;
+      for (int i = 0; i < clusters.Length; ++i)
       {
-        bool changed = false;
-        for (int i = 0; i < clusters.Length; ++i)
+        if (clusters[i] != null && IsInView(clusters[i]) == false)
         {
-          if (clusters[i] != null && IsInView(clusters[i]) == false)
-          {
-            clusterDb.InsertCluster(clusters[i]);
-            clusters[i] = null;
-            changed = true;
-          }
+          UnloadCluster(clusters[i]);
+          clusters[i] = null;
+          changed = true;
+          insertIndex--;
         }
-
-        if (changed)
-        {
-          isSorted = false;
-        }
-
-        Thread.Sleep(50);
       }
+
+      if (changed)
+      {
+        isSorted = false;
+      }
+    }
+    
+    private void UnloadCluster(Cluster cluster)
+    {
+      Thread thread = new Thread(delegate()
+        {
+          // Block the thread while the database is busy.
+          while (clusterDb.Connected) ;
+
+          clusterDb.InsertCluster(cluster);
+        }
+      );
     }
 
     public void Draw(SpriteBatch spriteBatch)
