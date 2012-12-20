@@ -37,14 +37,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="grass32x32.png">
+    <Compile Include="Art\grass32x32.png">
       <Name>grass32x32</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="square.png">
+    <Compile Include="Art\square.png">
       <Name>square</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -66,7 +66,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Art\" />
     <Folder Include="Music\" />
     <Folder Include="SoundEffects\" />
   </ItemGroup>

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using Teamcollab.Engine.Helpers;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Teamcollab.GUI;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -17,6 +20,27 @@ namespace Teamcollab.Engine.WorldManagement
       clusters = new Cluster[startSize];
       isSorted = true;
       insertIndex = 0;
+    }
+
+    public void Update(GameTime gameTime)
+    {
+
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+      foreach (Cluster cluster in clusters)
+      {
+        if (cluster == null)
+        {
+          continue;
+        }
+
+        if (Cluster.GetClusterBounds(cluster).Intersects(Camera2D.Bounds))
+        {
+          cluster.Draw(spriteBatch);
+        }
+      }
     }
 
     /// <summary>

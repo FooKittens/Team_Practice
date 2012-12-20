@@ -116,8 +116,8 @@ namespace Teamcollab.Engine.WorldManagement
     #endregion
 
     // DEBUG TEST CONSTANTS
-    const int WorldWidth = 10;
-    const int WorldHeight = 10;
+    const int WorldWidth = 2;
+    const int WorldHeight = 2;
 
     static WorldManager()
     {
@@ -126,9 +126,6 @@ namespace Teamcollab.Engine.WorldManagement
 
     private WorldManager(Game game)
     {
-      tileTextures = new ResourceCollection<Texture2D>();
-      tileTextures.Add("Grass", game.Content.Load<Texture2D>("square"));
-
       Initialize(WorldManager.CreateWorld(WorldWidth, WorldHeight));
     }
 
@@ -189,7 +186,6 @@ namespace Teamcollab.Engine.WorldManagement
     private void Initialize(World world)
     {
       currentWorld = world;
-      grassText = tileTextures.Query("Grass");
     }
 
     public void Update(GameTime gameTime)
@@ -197,41 +193,44 @@ namespace Teamcollab.Engine.WorldManagement
 
     }
 
-    Resource<Texture2D> grassText;
     public void Draw(SpriteBatch spriteBatch)
     {
-      for (int y = -WorldHeight / 2; y <= WorldHeight / 2; ++y)
-      {
-        for (int x = -WorldWidth / 2; x <= WorldWidth / 2; ++x)
-        {
-          Cluster cluster = currentWorld.GetCluster(x, y);
 
-          // Test with cluster bounds
-          if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
-          {
-            continue;
-          }
+      currentWorld.Draw(spriteBatch);
 
-          if (IsInView(cluster) == false)
-          {
-            continue;
-          }
+      //for (int y = -WorldHeight / 2; y <= WorldHeight / 2; ++y)
+      //{
+      //  for (int x = -WorldWidth / 2; x <= WorldWidth / 2; ++x)
+      //  {
+      //    Cluster cluster = currentWorld.GetCluster(x, y);
 
-          for (int tileY = 0; tileY < Constants.ClusterHeight; ++tileY)
-          {
-            for (int tileX = 0; tileX < Constants.ClusterWidth; ++tileX)
-            {
-              Vector2 origin = new Vector2(16, 16);
+      //    // Test with cluster bounds
+      //    if (GetClusterBounds(cluster).Intersects(Camera2D.Bounds) == false)
+      //    {
+      //      continue;
+      //    }
 
-              Vector2 tPos = cluster.GetTileAt(tileX, tileY).Position;
+      //    if (IsInView(cluster) == false)
+      //    {
+      //      continue;
+      //    }
 
-              Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
+      //    for (int tileY = 0; tileY < Constants.ClusterHeight; ++tileY)
+      //    {
+      //      for (int tileX = 0; tileX < Constants.ClusterWidth; ++tileX)
+      //      {
+      //        Vector2 origin = new Vector2(16, 16);
 
-              spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
-            }
-          }
-        }
-      }
+      //        Vector2 tPos = cluster.GetTileAt(tileX, tileY).Position;
+
+      //        Vector2 transformed = TransformByCluster(tPos, cluster.Coordinates);
+      //        transformed = GetTileScreenPosition(transformed);
+
+      //        spriteBatch.Draw(grassText, transformed, null, Color.White, 0f, origin, 1, SpriteEffects.None, 0f);
+      //      }
+      //    }
+      //  }
+      
     }
 
     /// <summary>
@@ -297,42 +296,6 @@ namespace Teamcollab.Engine.WorldManagement
       }
 
       return false;
-    }
-
-    /// <summary>
-    /// Retrieves the bounding rectangle for a cluster in pixels.
-    /// </summary>
-    /// <param name="cluster">Cluster to get bounds from.</param>
-    private static Rectangle GetClusterBounds(Cluster cluster)
-    {
-      // Creates cluster edges with clockwise winding.
-      Vector2[] vertices = new[] {
-        new Vector2(-0.5f, -0.5f), // Top Left
-        new Vector2(0.5f, -0.5f), // Top Right
-        new Vector2(0.5f, 0.5f), // Bottom Right
-        new Vector2(-0.5f, 0.5f) // Bottom Left
-      };
-
-      // Matrix for translating into tilespace and then scaling to screen.
-      Matrix mat = ClusterTileTransform * TileScreenTransform;
-
-      /* Translate all vertices to the correct cluster and transform
-       * into pixel coordinates. */
-      for (int i = 0; i < vertices.Length; ++i)
-      {
-        vertices[i] += cluster.Coordinates;
-        vertices[i] = Vector2.Transform(vertices[i], mat);
-      }
-
-      // Bounding Rectangle.
-      Rectangle rect = new Rectangle(
-        (int)vertices[0].X,
-        (int)vertices[0].Y,
-        (int)(vertices[1].X - vertices[0].X),
-        (int)(vertices[2].Y - vertices[1].Y)        
-      );
-
-      return rect;
     }
 
     /// <summary>
