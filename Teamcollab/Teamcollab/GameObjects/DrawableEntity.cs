@@ -10,7 +10,7 @@ namespace Teamcollab.GameObjects
 {
   abstract class DrawableEntity : Entity
   {
-    #region Properties
+    #region Properties;
     #endregion
 
     #region Members
@@ -20,6 +20,14 @@ namespace Teamcollab.GameObjects
       :base(positionInCluster)
     {
     }
+
+    public override void Update(GameTime gameTime)
+    {
+      base.Update(gameTime);
+      UpdateAnimation();
+    }
+
+    protected abstract void UpdateAnimation();
 
     /// <summary>
     /// Used by the entity to draw itself

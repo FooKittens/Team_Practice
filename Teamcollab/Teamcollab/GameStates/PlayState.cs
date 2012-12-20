@@ -72,8 +72,8 @@ namespace Teamcollab.GameStates
           break;
       }
       Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.TargetPosition);
-      change.X += (int)camCluster.X;
-      change.Y += (int)camCluster.Y;
+      change.X += Convert.ToInt32(camCluster.X);
+      change.Y += Convert.ToInt32(camCluster.Y);
       Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(change));
     }
 
@@ -85,7 +85,6 @@ namespace Teamcollab.GameStates
       //t = (float)gameTime.TotalGameTime.TotalSeconds;
       inten = (float)Math.Sin(t) / 2 + 0.75f;
 
-      Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.TargetPosition);
       if (InputManager.KeyNewDown(Keys.W))
       {
         MoveCameraOneCluster(Direction.Up);

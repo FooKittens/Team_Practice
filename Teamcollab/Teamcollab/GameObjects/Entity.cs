@@ -11,10 +11,7 @@ namespace Teamcollab.GameObjects
 {
   struct EntityData
   {
-    public bool needsUpdate;
-    public bool isDead;
-    public Vector2 positionInCluster;
-    public EntityType entityType;
+
   }
 
   /// <summary>
@@ -23,59 +20,19 @@ namespace Teamcollab.GameObjects
   abstract class Entity
   {
     #region Properties
-    public bool NeedsUpdate
-    {
-      get
-      {
-        return data.needsUpdate;
-      }
-      protected set
-      {
-        data.needsUpdate = value;
-      }
-    }
-    public bool IsDead
-    {
-      get
-      {
-        return data.isDead;
-      }
-      protected set
-      {
-        data.isDead = value;
-      }
-    }
-    public Vector2 PositionInCluster
-    {
-      get
-      {
-        return data.positionInCluster;
-      }
-      protected set
-      {
-        data.positionInCluster = value;
-      }
-    }
-    public EntityType EntityType
-    {
-      get
-      {
-        return data.entityType;
-      }
-      protected set
-      {
-        data.entityType = value;
-      }
-    }
+    public Vector2 PositionInCluster { get { return positionInCluster; } }
+    public abstract EntityType EntityType { get; }
+    public bool NeedsUpdate { get; protected set; }
     #endregion
 
     #region Members
-    protected EntityData data;
+    protected bool isDead;
+    protected Vector2 positionInCluster;
     #endregion
 
     public Entity(Vector2 positionInCluster)
     {
-      PositionInCluster = positionInCluster;
+      this.positionInCluster = positionInCluster;
     }
 
     /// <summary>
@@ -84,23 +41,17 @@ namespace Teamcollab.GameObjects
     /// <param name="gameTime"></param>
     public virtual void Update(GameTime gameTime)
     {
-      UpdateInput();
-      UpdateMovement();
       UpdateState();
-      UpdateAnimation();
     }
 
-    protected abstract void UpdateInput();
-    protected abstract void UpdateMovement();
     protected abstract void UpdateState();
-    protected abstract void UpdateAnimation();
 
     /// <summary>
     /// Destroys the entity and sets IsDead to true
     /// </summary>
     public virtual void Destroy()
     {
-      IsDead = true;
+      isDead = true;
     }
 
     /// <summary>
@@ -123,7 +74,7 @@ namespace Teamcollab.GameObjects
     /// </param>
     public void ChangeCluster(Vector2 newClusterPosition, WorldManager worldManager)
     {
-      PositionInCluster = newClusterPosition;
+      positionInCluster = newClusterPosition;
     }
   }
 }

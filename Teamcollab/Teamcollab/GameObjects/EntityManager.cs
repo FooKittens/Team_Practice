@@ -14,7 +14,7 @@ namespace Teamcollab.GameObjects
     #endregion
 
     #region Members
-    List<Entity> entityList;
+    List<Entity> entities;
     #endregion
 
     #region Events
@@ -26,6 +26,7 @@ namespace Teamcollab.GameObjects
     public EntityManager(Cluster cluster)
     {
       parent = cluster;
+      entities = new List<Entity>();
     }
 
     private void BoundsCheck(Entity entity)
@@ -38,6 +39,22 @@ namespace Teamcollab.GameObjects
       {
         ObjectOutOfBoundsEvent(entity);
       }
+    }
+
+    public void Update(GameTime gameTime)
+    {
+      foreach (Entity entity in entities)
+      {
+        if (entity.NeedsUpdate)
+        {
+          entity.Update(gameTime);
+        }
+      }
+    }
+
+    public void AddObject(Entity entity)
+    {
+      entities.Add(entity);
     }
   }
 }
