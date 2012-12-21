@@ -50,6 +50,7 @@ namespace Teamcollab.Engine.DataManagement
       databaseWorker = new BackgroundWorker();
       databaseWorker.DoWork += AsyncLoader;
       databaseWorker.DoWork += AsyncUnloader;
+      databaseWorker.RunWorkerCompleted += WorkCompletedHandler;
     }
 
     public void Abort()
@@ -98,12 +99,21 @@ namespace Teamcollab.Engine.DataManagement
 
       if (databaseWorker.IsBusy == false)
       {
-        databaseWorker.RunWorkerAsync();
+        databaseWorker.RunWorkerAsync();  
       }
+
       //if (loadThread.IsAlive == false)
       //{
       //  StartLoading();
       //}
+    }
+
+    private void WorkCompletedHandler(object obj, RunWorkerCompletedEventArgs args)
+    {
+      if (loadList.Count > 0 || unloadList.Count > 0)
+      {
+        databaseWorker.RunWorkerAsync();
+      }
     }
 
 
