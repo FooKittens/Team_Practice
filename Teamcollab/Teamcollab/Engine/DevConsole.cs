@@ -111,7 +111,7 @@ namespace Teamcollab.Engine
       }
 
       // Test for getting key codes
-      Keys[] keys = InputManager.GetCurrentKeys();
+      Keys[] keys = InputManager.GetNewPressedKeys();
       foreach (Keys key in keys)
       {
         WriteLine("Key: {0}.", key);

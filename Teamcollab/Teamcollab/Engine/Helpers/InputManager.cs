@@ -44,19 +44,25 @@ namespace Teamcollab.Engine.Helpers
     /// </summary>
     public static Keys[] GetNewPressedKeys()
     {
-      List<Keys> newKeys = new List<Keys>();
       Keys[] nKeys = keys.GetPressedKeys();
       Keys[] oKeys = prevKeys.GetPressedKeys();
-      
+
+      // Store since calculation will be used twice.
+      int sizeDiff = nKeys.Length - oKeys.Length;
+
+      // All pressed keys fit in here.
+      Keys[] newKeys = new Keys[sizeDiff < 0 ? 0 : sizeDiff];
+
+      int kIndex = 0;
       foreach (Keys newKey in nKeys)
       {
         if (!FoundKey(newKey, oKeys))
         {
-          newKeys.Add(newKey);
+          newKeys[kIndex++] = newKey;
         }
       }
 
-      return nKeys;
+      return newKeys;
     }
 
     /// <summary>
