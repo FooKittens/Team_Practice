@@ -55,60 +55,69 @@ namespace Teamcollab.Engine
         IsCheckingForKeys = true;
 
         #region Basic Input
-        if (InputManager.KeyRelease(Keys.A))
-          currentWrittenLine += 'a';
-        if (InputManager.KeyRelease(Keys.B))
-          currentWrittenLine += 'b';
-        if (InputManager.KeyRelease(Keys.C))
-          currentWrittenLine += 'c';
-        if (InputManager.KeyRelease(Keys.D))
-          currentWrittenLine += 'd';
-        if (InputManager.KeyRelease(Keys.E))
-          currentWrittenLine += 'e';
-        if (InputManager.KeyRelease(Keys.F))
-          currentWrittenLine += 'f';
-        if (InputManager.KeyRelease(Keys.G))
-          currentWrittenLine += 'g';
-        if (InputManager.KeyRelease(Keys.H))
-          currentWrittenLine += 'h';
-        if (InputManager.KeyRelease(Keys.I))
-          currentWrittenLine += 'i';
-        if (InputManager.KeyRelease(Keys.J))
-          currentWrittenLine += 'j';
-        if (InputManager.KeyRelease(Keys.K))
-          currentWrittenLine += 'k';
-        if (InputManager.KeyRelease(Keys.L))
-          currentWrittenLine += 'l';
-        if (InputManager.KeyRelease(Keys.M))
-          currentWrittenLine += 'm';
-        if (InputManager.KeyRelease(Keys.N))
-          currentWrittenLine += 'n';
-        if (InputManager.KeyRelease(Keys.O))
-          currentWrittenLine += 'o';
-        if (InputManager.KeyRelease(Keys.P))
-          currentWrittenLine += 'p';
-        if (InputManager.KeyRelease(Keys.Q))
-          currentWrittenLine += 'q';
-        if (InputManager.KeyRelease(Keys.R))
-          currentWrittenLine += 'r';
-        if (InputManager.KeyRelease(Keys.S))
-          currentWrittenLine += 's';
-        if (InputManager.KeyRelease(Keys.T))
-          currentWrittenLine += 't';
-        if (InputManager.KeyRelease(Keys.U))
-          currentWrittenLine += 'u';
-        if (InputManager.KeyRelease(Keys.V))
-          currentWrittenLine += 'v';
-        if (InputManager.KeyRelease(Keys.W))
-          currentWrittenLine += 'w';
-        if (InputManager.KeyRelease(Keys.X))
-          currentWrittenLine += 'x';
-        if (InputManager.KeyRelease(Keys.Y))
-          currentWrittenLine += 'y';
-        if (InputManager.KeyRelease(Keys.Z))
-          currentWrittenLine += 'z';
-        if (InputManager.KeyRelease(Keys.Space))
-          currentWrittenLine += ' ';
+        string input = "";
+        if (InputManager.KeyNewDown(Keys.A))
+          input = "a";
+        else if (InputManager.KeyNewDown(Keys.B))
+          input = "b";
+        else if (InputManager.KeyNewDown(Keys.C))
+          input = "c";
+        else if (InputManager.KeyNewDown(Keys.D))
+          input = "d";
+        else if (InputManager.KeyNewDown(Keys.E))
+          input = "e";
+        else if (InputManager.KeyNewDown(Keys.F))
+          input = "f";
+        else if (InputManager.KeyNewDown(Keys.G))
+          input = "g";
+        else if (InputManager.KeyNewDown(Keys.H))
+          input = "h";
+        else if (InputManager.KeyNewDown(Keys.I))
+          input = "i";
+        else if (InputManager.KeyNewDown(Keys.J))
+          input = "j";
+        else if (InputManager.KeyNewDown(Keys.K))
+          input = "k";
+        else if (InputManager.KeyNewDown(Keys.L))
+          input = "l";
+        else if (InputManager.KeyNewDown(Keys.M))
+          input = "m";
+        else if (InputManager.KeyNewDown(Keys.N))
+          input = "n";
+        else if (InputManager.KeyNewDown(Keys.O))
+          input = "o";
+        else if (InputManager.KeyNewDown(Keys.P))
+          input = "p";
+        else if (InputManager.KeyNewDown(Keys.Q))
+          input = "q";
+        else if (InputManager.KeyNewDown(Keys.R))
+          input = "r";
+        else if (InputManager.KeyNewDown(Keys.S))
+          input = "s";
+        else if (InputManager.KeyNewDown(Keys.T))
+          input = "t";
+        else if (InputManager.KeyNewDown(Keys.U))
+          input = "u";
+        else if (InputManager.KeyNewDown(Keys.V))
+          input = "v";
+        else if (InputManager.KeyNewDown(Keys.W))
+          input = "w";
+        else if (InputManager.KeyNewDown(Keys.X))
+          input = "x";
+        else if (InputManager.KeyNewDown(Keys.Y))
+          input = "y";
+        else if (InputManager.KeyNewDown(Keys.Z))
+          input = "z";
+        else if (InputManager.KeyNewDown(Keys.Space))
+          input = " ";
+        else if (InputManager.KeyNewDown(Keys.OemEnlW))
+          input = "'";
+        if (InputManager.KeyDown(Keys.LeftShift) ||
+          InputManager.KeyDown(Keys.RightShift))
+        {
+          input = input.ToUpper();
+        }
+        currentWrittenLine += input;
         #endregion
 
         #region Slash, Enter, Back, Escape
@@ -130,7 +139,7 @@ namespace Teamcollab.Engine
             }
             else
             {
-              textRows.Add(currentWrittenLine);
+              WriteLine(currentWrittenLine);
             }
 
             currentWrittenLine = "";
@@ -201,9 +210,9 @@ namespace Teamcollab.Engine
       if (command.StartsWith("help"))
       {
         #region /help
-        textRows.Add("Available commands:");
-        textRows.Add("/help - display this");
-        textRows.Add("/color [COLOR] - change the color of the console text");
+        WriteLine("Available commands:");
+        WriteLine("/help - display this");
+        WriteLine("/color [COLOR] - change the color of the console text");
         #endregion
       }
       else if (command.StartsWith("color"))
@@ -226,11 +235,11 @@ namespace Teamcollab.Engine
         else if (command.EndsWith("black"))
           color = Color.Black;
         else
-          textRows.Add("Not a valid color. Correct usage is /color [COLOR]");
+          WriteLine("Not a valid color. Correct usage is /color [COLOR]");
         #endregion
       }
       else
-        textRows.Add(string.Format("{0} is not a valid command", command));
+        WriteLine("{0} is not a valid command", command);
     }
   }
 }
