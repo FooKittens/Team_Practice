@@ -154,6 +154,7 @@ namespace Teamcollab.Engine.DataManagement
           lock (databaseLock)
           {
             clusterDb.InsertCluster(cluster);
+            DevConsole.WriteLine("Inserted {0} into database", cluster);
           }
         }
         catch (DataException ex)
