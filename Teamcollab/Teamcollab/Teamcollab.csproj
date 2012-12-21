@@ -82,6 +82,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataSerialization\ApplicationSettings.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
+    <Compile Include="Engine\DataManagement\AsyncClusterManager.cs" />
     <Compile Include="Engine\DataManagement\SQLiteDatabase.cs" />
     <Compile Include="Engine\DataManagement\ClusterDatabase.cs" />
     <Compile Include="Engine\Helpers\Coordinates.cs" />

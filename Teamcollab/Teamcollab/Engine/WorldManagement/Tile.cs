@@ -27,13 +27,11 @@ namespace Teamcollab.Engine.WorldManagement
   {
     #region Members
     public TileType Type;
-    public Vector2 Position;
     #endregion
 
-    public Tile(TileType type, Vector2 position)
+    public Tile(TileType type)
     {
       Type = type;
-      Position = position;
     }
   }
 }

@@ -113,8 +113,8 @@ namespace Teamcollab.Engine.WorldManagement
     #endregion
 
     // DEBUG TEST CONSTANTS
-    const int WorldWidth = 50;
-    const int WorldHeight = 50;
+    const int WorldWidth = 10;
+    const int WorldHeight = 10;
 
     static WorldManager()
     {
@@ -137,13 +137,14 @@ namespace Teamcollab.Engine.WorldManagement
     /// <returns></returns>
     public static World CreateWorld(int left, int right, int top, int bottom)
     {
-      World world = new World();
+      World world = new World((right - left) * (bottom - top));
 
       for (int y = top; y <= bottom; ++y)
       {
         for (int x = left; x <= right; ++x)
         {
-          AddCluster(world, new Coordinates(x, y));
+          world.AddCluster(world.CreateCluster(x, y));
+          //AddCluster(world, new Coordinates(x, y));
         }
       }
 
@@ -262,7 +263,6 @@ namespace Teamcollab.Engine.WorldManagement
           Vector2 tilePos = Vector2.Transform(new Vector2(x, y), tileTranslate);          
 
           Tile t = cluster.GetTileAt(x, y);
-          t.Position = tilePos;
           t.Type = TileType.Grass;
           cluster.SetTileAt(x, y, t);
         }

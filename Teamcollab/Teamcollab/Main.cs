@@ -5,6 +5,7 @@ using Teamcollab.DataSerialization;
 using Teamcollab.Engine.Helpers;
 using Teamcollab.Managers;
 using Teamcollab.Resources;
+using System;
 
 namespace Teamcollab
 {
@@ -69,6 +70,7 @@ namespace Teamcollab
       return;
       #endif
 
+      bool error = false;
 
       SettingsData data;
       try
@@ -79,7 +81,7 @@ namespace Teamcollab
       }
       catch (FileNotFoundException)
       {
-      #if DEBUG
+        #if DEBUG
         // Obtain a default object to initialize settings with.
         data = SettingsData.GetDefault();
 
@@ -89,10 +91,10 @@ namespace Teamcollab
           Constants.SettingsPath,
           FileMode.Create
         );
-      #else
+        #else
         // We want to notice problems in the release build.
         throw;
-      #endif
+        #endif
       }
 
       Settings.Initialize(data);

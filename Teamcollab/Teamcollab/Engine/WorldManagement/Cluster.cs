@@ -49,23 +49,45 @@ namespace Teamcollab.Engine.WorldManagement
       tileTextures = ResourceManager.TileTextureBank;
     }
 
-    public Cluster(ClusterType type, Coordinates coordinates)
+    public Cluster(ClusterType type, int x, int y)
     {
       Type = type;
       tiles = new Tile[Constants.ClusterWidth * Constants.ClusterHeight];
       Active = false;
-      Coordinates = coordinates;
+      Coordinates = new Coordinates(x, y);
       HashCode = GetHashCode();
     }
+
+    public Cluster(ClusterType type, Coordinates coordinates)
+      :this(type, coordinates.X, coordinates.Y) { }
 
     public Cluster(ClusterData data)
     {
       Type = data.Type;
       tiles = data.Tiles;
       Coordinates = data.Coordinates;
-      
+
       SetHashCode();
       Active = false;
+    }
+
+    public void Unload()
+    {
+      Loaded = false;
+      tiles = null;
+      res = null;
+    }
+
+    public void Load(ClusterData data)
+    {
+      if (HashCode != GetHashFromXY(data.Coordinates.X, data.Coordinates.Y))
+      {
+        throw new Exception("Data does not match the cluster");
+      }
+      res = ResourceManager.TileTextureBank.Query("Grass");
+      tiles = data.Tiles;
+
+      SetHashCode();
     }
 
     // TODO REMOVE
@@ -84,7 +106,12 @@ namespace Teamcollab.Engine.WorldManagement
         {
           Tile tile = GetTileAt(x, y);
 
-          Vector2 drawPos = WorldManager.TransformByCluster(tile.Position, Coordinates);
+          Vector2 tilePos = new Vector2(
+            x - Constants.ClusterWidth / 2,
+            y - Constants.ClusterHeight / 2
+          );
+
+          Vector2 drawPos = WorldManager.TransformByCluster(tilePos, Coordinates);
           drawPos = WorldManager.GetTileScreenPosition(drawPos);
 
           spriteBatch.Draw(res, drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
@@ -188,6 +215,36 @@ namespace Teamcollab.Engine.WorldManagement
       data.Coordinates = Coordinates;
       data.Tiles = tiles;
       data.Type = Type;
+      return data;
+    }
+
+    public byte[] GetClusterBytes()
+    {
+      const int clusterLength = Constants.ClusterWidth * Constants.ClusterHeight;
+
+      byte[] data = new byte[1 + clusterLength + 8];
+      data[0] = (byte)Type;
+      
+      for(int i = 1; i < clusterLength + 1; ++i)
+      {
+        data[i] = (byte)tiles[i - 1].Type;
+      }
+
+      byte[] coordBytes = new byte[8];
+      for (int i = 0; i < 4; ++i)
+      {
+        coordBytes[i] = BitConverter.GetBytes(Coordinates.X)[i];
+      }
+      for (int i = 4; i < 8; ++i)
+      {
+        coordBytes[i] = BitConverter.GetBytes(Coordinates.Y)[i - 4];
+      }
+
+      for (int i = 1 + clusterLength; i < 1 + clusterLength + 8; ++i)
+      {
+        data[i] = coordBytes[i - (1 + clusterLength)];
+      }
+
       return data;
     }
   }

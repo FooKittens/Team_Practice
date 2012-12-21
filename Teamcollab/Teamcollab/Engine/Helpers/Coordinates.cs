@@ -1,52 +1,56 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 namespace Teamcollab.Engine.Helpers
 {
   /// <summary>
   /// Two integers x,y representing coordinates
   /// </summary>
+  [Serializable]
   public struct Coordinates
   {
+    public static Coordinates Zero { get { return zero; } }
+
+    public int X { get { return x; } set { x = value; } }
+    public int Y { get { return y; } set { y = value; } }
 
     #region Static Caching
     private static readonly Coordinates zero = new Coordinates(0, 0); 
     #endregion
 
-    public int X;
-    public int Y;
+    public int x;
+    public int y;
 
     public Coordinates(int x, int y)
     {
-      X = x;
-      Y = y;
+      this.x = x;
+      this.y = y;
     }
-
-    public static Coordinates Zero { get { return zero; } }
 
     public static Coordinates operator +(Coordinates lhs, Coordinates rhs)
     {
-      lhs.X += rhs.X;
-      lhs.Y += rhs.Y;
+      lhs.x += rhs.x;
+      lhs.y += rhs.y;
       return lhs;
     }
 
     public static Coordinates operator -(Coordinates lhs, Coordinates rhs)
     {
-      lhs.X -= rhs.X;
-      lhs.Y -= rhs.Y;
+      lhs.x -= rhs.x;
+      lhs.y -= rhs.y;
       return lhs;
     }
 
     public static Coordinates operator *(Coordinates lhs, Coordinates rhs)
     {
-      lhs.X *= rhs.X;
-      lhs.Y *= rhs.Y;
+      lhs.x *= rhs.x;
+      lhs.y *= rhs.y;
       return lhs;
     }
 
     public static Coordinates operator /(Coordinates lhs, Coordinates rhs)
     {
-      lhs.X /= rhs.X;
-      lhs.Y /= rhs.Y;
+      lhs.x /= rhs.x;
+      lhs.y /= rhs.y;
       return lhs;
     }
 
@@ -72,7 +76,7 @@ namespace Teamcollab.Engine.Helpers
 
     private static bool Equals(Coordinates lhs, Coordinates rhs)
     {
-      if (lhs.X == rhs.X && lhs.Y == rhs.Y)
+      if (lhs.x == rhs.x && lhs.y == rhs.y)
       {
         return true;
       }
@@ -87,17 +91,17 @@ namespace Teamcollab.Engine.Helpers
 
     public override string ToString()
     {
-      return string.Format("X: {0}, Y: {1}", X, Y);
+      return string.Format("x: {0}, y: {1}", x, y);
     }
 
     public static implicit operator Vector2(Coordinates c)
     {
-      return new Vector2(c.X, c.Y);
+      return new Vector2(c.x, c.y);
     }
 
     public static implicit operator Point(Coordinates c)
     {
-      return new Point(c.X, c.Y);
+      return new Point(c.x, c.y);
     }
   }
 }

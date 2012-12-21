@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.GUI;
 using Teamcollab.Engine.DataManagement;
 using System.Threading;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Data;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -17,76 +20,174 @@ namespace Teamcollab.Engine.WorldManagement
     private bool isSorted;
     private int insertIndex;
 
-    ClusterDatabase clusterDb;
+    Stack<Cluster> loadedClusters;
+
+    AsyncClusterManager asyncManager;
 
     public World(int startSize = 10)
     {
+      loadedClusters = new Stack<Cluster>();
       clusters = new Cluster[startSize];
       isSorted = true;
       insertIndex = 0;
-      clusterDb = new ClusterDatabase("ClusterData.s3db");
-      clusterDb.RunNonQuery("DELETE FROM clusters");
+
+      asyncManager = new AsyncClusterManager();
+      asyncManager.ClusterUnloaded += ClusterUnloadedHandler;
+      asyncManager.ClusterLoaded += ClusterLoadedHandler;
+      asyncManager.ClusterNotLoaded += ClusterNotLoadedHandler;
+      asyncManager.UnloadWaitLimit = 1;
+    }
+
+    private void ClusterLoadedHandler(Cluster cluster)
+    {
+
+      if (BinaryClusterSearch(clusters, 0, insertIndex, cluster.HashCode) == null)
+      {
+        loadedClusters.Push(cluster);
+      }
+      
+    }
+
+    private void ClusterUnloadedHandler(Cluster cluster)
+    {
+      if (GetCluster(cluster.Coordinates.X, cluster.Coordinates.Y) != null)
+      {
+        return;
+      }
+    }
+
+    private void ClusterNotLoadedHandler(Coordinates coords)
+    {
+      loadedClusters.Push(CreateCluster(coords));
+    }
+
+    public Cluster CreateCluster(int clusterX, int clusterY)
+    {
+      Cluster cluster = new Cluster(ClusterType.Evergreen, clusterX, clusterY);
+
+      for (int y = 0; y < Constants.ClusterHeight; ++y)
+      {
+        for (int x = 0; x < Constants.ClusterWidth; ++x)
+        {
+          Vector2 tilePos = new Vector2(
+            x - Constants.ClusterWidth / 2,
+            y - Constants.ClusterHeight / 2
+          );
+
+          Tile t = cluster.GetTileAt(x, y);
+          t.Type = TileType.Grass;
+          cluster.SetTileAt(x, y, t);
+        }
+      }
+
+      return cluster;
+    }
+
+    public Cluster CreateCluster(Coordinates coordinates)
+    {
+      return CreateCluster(coordinates.X, coordinates.Y);
     }
 
     public void Update(GameTime gameTime)
     {
-      CheckClusterUnloading();
+      CheckClusterLoading();
+
+      while(loadedClusters.Count > 0)
+      {
+        Cluster c = loadedClusters.Pop();
+        if (GetCluster(c.Coordinates.X, c.Coordinates.Y) == null)
+        {
+          AddCluster(c);
+        }
+      }
     }
 
-    // Temporary method for checking solving clusters that are outside the camera
-    private void CheckClusterUnloading()
+    private void TrimClusters()
     {
-      bool changed = false;
+      int firstNull = -1;
+      clusters = QuickSortClusters(clusters, clusters.Length / 2);
       for (int i = 0; i < clusters.Length; ++i)
       {
-        if (clusters[i] != null && IsInView(clusters[i]) == false)
+        insertIndex = clusters[i] == null ? insertIndex : i;
+        if (firstNull == -1 && clusters[i] == null)
         {
-          UnloadCluster(clusters[i]);
-          clusters[i] = null;
-          changed = true;
-          insertIndex--;
+          firstNull = i;
         }
       }
 
-      if (changed)
-      {
-        isSorted = false;
-      }
+      Array.Resize<Cluster>(ref clusters, firstNull + 1);
+      insertIndex = clusters.Length - 1;
     }
-    
-    /// <summary>
-    /// Multithreaded method that unloads clusters into the database.s
-    /// </summary>
-    /// <param name="cluster"></param>
-    private void UnloadCluster(Cluster cluster)
-    {
-      Thread thread = new Thread(delegate()
-        {
-          // Block the thread while the database is busy.
-          while (clusterDb.Connected) ;
 
-          clusterDb.InsertCluster(cluster);
+    // TEST METHOD
+    private bool TestClusterRange(Cluster cluster)
+    {
+      Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.Position);
+
+      if (Convert.ToInt32(Math.Abs(cluster.Coordinates.X - camCluster.X)) > 2 ||
+          Convert.ToInt32(Math.Abs(cluster.Coordinates.Y - camCluster.Y)) > 2)
+      {
+        return false;
+      }
+
+      return true;
+    }
+
+    private void CheckClusterLoading()
+    {
+      int removedCount = 0;
+      for (int i = 0; i < clusters.Length; ++i)
+      {
+        if (clusters[i] != null && TestClusterRange(clusters[i]) == false)
+        {
+          Debug.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
+          asyncManager.UnloadCluster(clusters[i]);
+          clusters[i] = null;
+          removedCount++;
+          isSorted = false;
         }
+      }
+
+      if (removedCount > 0)
+      {
+        TrimClusters();
+      }
+
+      Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.Position);
+
+      Rectangle rect = new Rectangle(
+        Convert.ToInt32(camCluster.X - 2),
+        Convert.ToInt32(camCluster.Y - 2),
+        4,
+        4
       );
+
+      for (int y = rect.Top; y <= rect.Bottom; ++y)
+      {
+        for (int x = rect.Left; x <= rect.Right; ++x)
+        {
+          if (GetCluster(x, y) != null) continue;
+          
+          asyncManager.LoadCluster(new Coordinates(x, y));
+        }
+      }
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-      lock (clusters)
+      foreach (Cluster cluster in clusters)
       {
-        foreach (Cluster cluster in clusters)
+        if (cluster == null)
         {
-          if (cluster == null)
-          {
-            continue;
-          }
+          continue;
+        }
 
-          if (IsInView(cluster))
-          {
-            cluster.Draw(spriteBatch);
-          }
+        if (IsInView(cluster))
+        {
+          cluster.Draw(spriteBatch);
         }
       }
+      
     }
 
     /// <summary>
@@ -139,8 +240,7 @@ namespace Teamcollab.Engine.WorldManagement
     {
       if (isSorted == false)
       {
-        QuickSortClusters(ref clusters, clusters.Length / 2);
-
+        clusters = QuickSortClusters(clusters, clusters.Length / 2);
         isSorted = true;
       }
       
@@ -159,7 +259,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     /// <param name="array">Array to sort.</param>
     /// <param name="pivot">Array index to begin lookup.</param>
-    private void QuickSortClusters(ref Cluster[] array, int pivot)
+    private static Cluster[] QuickSortClusters(Cluster[] array, int pivot)
     {
       /* If the input array size is two or less, the sorting is done.
        * the one exception is when an unsorted array with the size of two is
@@ -167,7 +267,7 @@ namespace Teamcollab.Engine.WorldManagement
        * TODO(Peter): Handle this edge-case.*/
       if (array.Length <= 2)
       {
-        return;
+        return array;
       }
 
       /* Create two arrays of max value since the worst case scenario
@@ -213,17 +313,23 @@ namespace Teamcollab.Engine.WorldManagement
       Array.Resize(ref more, moreIndex);
 
       // Sort the less segment recursively.
-      QuickSortClusters(ref less, lessIndex / 2);
+      QuickSortClusters(less, lessIndex / 2);
 
       // Sort the more segment recursively.
-      QuickSortClusters(ref more, moreIndex / 2);
+      QuickSortClusters(more, moreIndex / 2);
 
       // Re-assign with the two now sorted segments.
-
-      for (int i = 0; i < array.Length; ++i)
+      int arrIndex = 0;
+      for (int i = 0; i < less.Length; ++i, arrIndex++)
       {
-        array[i] = i < less.Length ? less[i] : more[i - less.Length];
+        array[arrIndex] = less[i];
       }
+      for (int i = 0; i < more.Length; ++i, arrIndex++)
+      {
+        array[arrIndex] = more[i];
+      }
+
+      return array;
     }
 
     /// <summary>
@@ -238,6 +344,12 @@ namespace Teamcollab.Engine.WorldManagement
       int start, int length, long hashkey)
     {
       int center = start + length / 2;
+
+      // Not found condition.
+      if (clusters[center] == null || clusters[center].HashCode != hashkey && length == 1)
+      {
+        return null;
+      }
 
       if (clusters[center].HashCode == hashkey)
       {

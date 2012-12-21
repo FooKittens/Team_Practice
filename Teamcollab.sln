@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A68AF5B0-99E6-4429-B7A3-5F32D76745E6}"
 	ProjectSection(SolutionItems) = preProject
 		Performance1.psess = Performance1.psess
+		Performance4.psess = Performance4.psess
+		Performance5.psess = Performance5.psess
 	EndProjectSection
 EndProject
 Global

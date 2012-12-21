@@ -44,8 +44,8 @@ namespace Teamcollab.Engine.DataManagement
     public virtual DataTable Select(string query)
     {
       AddToCommandHistory(query);
-
       DataTable table = new DataTable();
+      
       connection.Open();
       using (SQLiteCommand cmd = new SQLiteCommand(connection))
       {
@@ -73,7 +73,8 @@ namespace Teamcollab.Engine.DataManagement
         cmd.ExecuteNonQuery();
       }
       connection.Close();
-    }
+      
+  }
 
     public virtual int RunNonQuery(string sql)
     {
@@ -86,6 +87,7 @@ namespace Teamcollab.Engine.DataManagement
         rowsUpdated = cmd.ExecuteNonQuery();
       }
       connection.Close();
+
       return rowsUpdated;
     }
 
