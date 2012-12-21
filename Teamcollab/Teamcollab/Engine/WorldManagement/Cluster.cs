@@ -3,6 +3,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Resources;
+using System.Runtime.InteropServices;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -75,7 +76,7 @@ namespace Teamcollab.Engine.WorldManagement
     {
       Loaded = false;
       tiles = null;
-      res = null;
+      squareRes = null;
     }
 
     public void Load(ClusterData data)
@@ -84,20 +85,22 @@ namespace Teamcollab.Engine.WorldManagement
       {
         throw new Exception("Data does not match the cluster");
       }
-      res = ResourceManager.TileTextureBank.Query("Grass");
+      squareRes = ResourceManager.TileTextureBank.Query("Grass");
       tiles = data.Tiles;
 
       SetHashCode();
     }
 
     // TODO REMOVE
-    Resource<Texture2D> res;
+    Resource<Texture2D> squareRes;
+    Resource<Texture2D> grassRes;
     public void Draw(SpriteBatch spriteBatch)
     {
       // TODO REMOVE
-      if (res == null)
+      if (squareRes == null)
       {
-        res = tileTextures.Query("Square");
+        squareRes = tileTextures.Query("Square");
+        grassRes = tileTextures.Query("Grass");
       }
 
       for (int y = 0; y < Constants.ClusterHeight; ++y)
@@ -114,7 +117,9 @@ namespace Teamcollab.Engine.WorldManagement
           Vector2 drawPos = WorldManager.TransformByCluster(tilePos, Coordinates);
           drawPos = WorldManager.GetTileScreenPosition(drawPos);
 
-          spriteBatch.Draw(res, drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
+          Resource<Texture2D> texture = tile.Type == TileType.Water ? grassRes : squareRes;
+
+          spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
         }
       }
     }
@@ -218,17 +223,57 @@ namespace Teamcollab.Engine.WorldManagement
       return data;
     }
 
+    /// <summary>
+    /// Gets the cluster as a byte array, uses huffman encoding
+    /// for tiledata.
+    /// </summary>
+    /// <returns></returns>
     public byte[] GetClusterBytes()
     {
       const int clusterLength = Constants.ClusterWidth * Constants.ClusterHeight;
 
-      byte[] data = new byte[1 + clusterLength + 8];
+      byte[] data = new byte[1];
       data[0] = (byte)Type;
       
-      for(int i = 1; i < clusterLength + 1; ++i)
+      //for(int i = 1; i < clusterLength + 1; ++i)
+      //{
+      //  data[i] = (byte)tiles[i - 1].Type;
+      //}
+
+      int tileDataIndex = 1;
+      for (int i = 0; i < clusterLength; ++i)
       {
-        data[i] = (byte)tiles[i - 1].Type;
+        byte b = (byte)tiles[i].Type;
+        int nCount = i;
+        
+        // Count the consecutive occurences.
+        while (tiles[nCount++].Type == (TileType)b && nCount < clusterLength) ;
+
+        // Consecutive occurences of the same tiletype.
+        int oCount = nCount - i;
+        i += oCount - 1;
+
+        // Tiledata is always 5 bytes, 1 byte for the type, 4 for the int counter.
+        byte[] tileData = new byte[5];
+        
+        // Set the type
+        tileData[0] = b;
+        
+        for (int k = 0; k < 4; ++k)
+          tileData[k + 1] = BitConverter.GetBytes(oCount)[k];
+
+        // Resize the data array so the tiledata will fit.
+        Array.Resize<byte>(ref data, data.Length + tileData.Length);
+        
+        // Insert tile data.
+        for (int k = 0; k < tileData.Length; ++k)
+        {
+          data[tileDataIndex++] = tileData[k];
+        }
+        
       }
+      // Resize array to fit a coordinates object.
+      Array.Resize<byte>(ref data, data.Length + Marshal.SizeOf(Coordinates));
 
       byte[] coordBytes = new byte[8];
       for (int i = 0; i < 4; ++i)
@@ -240,9 +285,9 @@ namespace Teamcollab.Engine.WorldManagement
         coordBytes[i] = BitConverter.GetBytes(Coordinates.Y)[i - 4];
       }
 
-      for (int i = 1 + clusterLength; i < 1 + clusterLength + 8; ++i)
+      for (int i = 0; i < coordBytes.Length; ++i)
       {
-        data[i] = coordBytes[i - (1 + clusterLength)];
+        data[tileDataIndex++] = coordBytes[i];
       }
 
       return data;

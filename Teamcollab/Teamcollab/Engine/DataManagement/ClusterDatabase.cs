@@ -130,11 +130,35 @@ namespace Teamcollab.Engine.DataManagement
 
       data = new ClusterData();
       data.Tiles = new Tile[clusterLength];
-      data.Type = (ClusterType)bytes[0];
-      for (int i = 1; i < clusterLength + 1; ++i)
+      
+      // Get huffman encoded tile data.
+      using (MemoryStream stream = new MemoryStream(bytes))
       {
-        data.Tiles[i - 1] = new Tile((TileType)bytes[i]);
+        data.Type = (ClusterType)stream.ReadByte();
+        int tileIndex = 0;
+        while (tileIndex < clusterLength)
+        {
+          //stream.Seek(streamIndex, SeekOrigin.End);
+          TileType type = (TileType)stream.ReadByte();
+          
+          byte[] intCounter = new byte[4];
+
+          for (int i = 0; i < 4; ++i)
+            intCounter[i] = (byte)stream.ReadByte();
+                    
+          int tileCount = BitConverter.ToInt32(intCounter, 0);
+          
+          for (int i = 0; i < tileCount; ++i)
+          {
+            data.Tiles[tileIndex++] = new Tile(type);
+          }
+        }
       }
+
+      //for (int i = 1; i < clusterLength + 1; ++i)
+      //{
+      //  data.Tiles[i - 1] = new Tile((TileType)bytes[i]);
+      //}
 
       Coordinates coords = new Coordinates();
       coords.X = BitConverter.ToInt32(bytes, bytes.Length - 8);

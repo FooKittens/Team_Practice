@@ -61,6 +61,8 @@ namespace Teamcollab.Engine.WorldManagement
       loadedClusters.Push(CreateCluster(coords));
     }
 
+    static Random rand = new Random();
+
     public Cluster CreateCluster(int clusterX, int clusterY)
     {
       Cluster cluster = new Cluster(ClusterType.Evergreen, clusterX, clusterY);
@@ -75,7 +77,16 @@ namespace Teamcollab.Engine.WorldManagement
           );
 
           Tile t = cluster.GetTileAt(x, y);
-          t.Type = TileType.Grass;
+          if ((x == 0 || x == Constants.ClusterWidth - 1) ||
+             (y == 0 || y == Constants.ClusterHeight - 1))
+          {
+            t.Type = TileType.Grass;
+          }
+          else
+          {
+            t.Type = TileType.Water;
+          }
+          //t.Type = (TileType)(rand.Next() % 2 + 1);
           cluster.SetTileAt(x, y, t);
         }
       }
