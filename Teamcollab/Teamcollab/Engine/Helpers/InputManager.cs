@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Teamcollab.Engine.Helpers
 {
@@ -33,10 +34,29 @@ namespace Teamcollab.Engine.Helpers
     /// <summary>
     /// Returns all currently pressed keys.
     /// </summary>
-    /// <returns></returns>
     public static Keys[] GetCurrentKeys()
     {
       return keys.GetPressedKeys();
+    }
+
+    /// <summary>
+    /// Retrieves all new pressed keys since last update.
+    /// </summary>
+    public static Keys[] GetNewPressedKeys()
+    {
+      List<Keys> newKeys = new List<Keys>();
+      Keys[] nKeys = keys.GetPressedKeys();
+      Keys[] oKeys = prevKeys.GetPressedKeys();
+      
+      foreach (Keys newKey in nKeys)
+      {
+        if (!FoundKey(newKey, oKeys))
+        {
+          newKeys.Add(newKey);
+        }
+      }
+
+      return nKeys;
     }
 
     /// <summary>

@@ -110,6 +110,13 @@ namespace Teamcollab.Engine
         #endregion
       }
 
+      // Test for getting key codes
+      Keys[] keys = InputManager.GetCurrentKeys();
+      foreach (Keys key in keys)
+      {
+        WriteLine("Key: {0}.", key);
+      }
+
       previouslyVisible = Visible;
       IsCheckingForKeys = false;
 
