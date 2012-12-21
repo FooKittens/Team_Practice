@@ -35,6 +35,11 @@ namespace Teamcollab.Engine.Helpers
     /// </summary>
     public static bool KeyAnyNewDown()
     {
+      if (DevConsole.Visible && !DevConsole.IsCheckingForKeys)
+      {
+        return false;
+      }
+
       Keys[] newPressed = keys.GetPressedKeys();
       Keys[] prevPressed = prevKeys.GetPressedKeys();
 
@@ -63,6 +68,11 @@ namespace Teamcollab.Engine.Helpers
     /// </summary>
     public static bool KeyNewDown(Keys key)
     {
+      if (DevConsole.Visible && !DevConsole.IsCheckingForKeys)
+      {
+        return false;
+      }
+
       if (keys.IsKeyDown(key) && prevKeys.IsKeyUp(key))
       {
         return true;
@@ -75,6 +85,11 @@ namespace Teamcollab.Engine.Helpers
     /// </summary>
     public static bool KeyDown(Keys key)
     {
+      if (DevConsole.Visible && !DevConsole.IsCheckingForKeys)
+      {
+        return false;
+      }
+
       if (keys.IsKeyDown(key))
       {
         return true;
@@ -87,12 +102,38 @@ namespace Teamcollab.Engine.Helpers
     /// </summary>
     public static bool KeyRelease(Keys key)
     {
+      if (DevConsole.Visible && !DevConsole.IsCheckingForKeys)
+      {
+        return false;
+      }
+
       if (keys.IsKeyUp(key) && prevKeys.IsKeyDown(key))
       {
         return true;
       }
       return false;
     }
+
+    #region Helpers
+    /// <summary>
+    /// Checks the input collection for an occurence of the parameter key.
+    /// </summary>
+    /// <param name="key">The key to search for.</param>
+    /// <param name="collection">The collection to look in.</param>
+    /// <returns>Can't see this :(</returns>
+    private static bool FoundKey(Keys key, Keys[] collection)
+    {
+      foreach (Keys k in collection)
+      {
+        if (key == k)
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+    #endregion
     #endregion
 
     #region Mouse
@@ -178,27 +219,6 @@ namespace Teamcollab.Engine.Helpers
     public static Vector2 MousePreviousPosition()
     {
       return new Vector2(prevMouse.X, prevMouse.Y);
-    }
-    #endregion
-
-    #region Helpers
-    /// <summary>
-    /// Checks the input collection for an occurence of the parameter key.
-    /// </summary>
-    /// <param name="key">The key to search for.</param>
-    /// <param name="collection">The collection to look in.</param>
-    /// <returns>Can't see this :(</returns>
-    private static bool FoundKey(Keys key, Keys[] collection)
-    {
-      foreach (Keys k in collection)
-      {
-        if (key == k)
-        {
-          return true;
-        }
-      }
-
-      return false;
     }
     #endregion
   }

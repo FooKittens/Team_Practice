@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Teamcollab.Engine.Helpers;
+using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab.Engine
 {
@@ -11,6 +13,7 @@ namespace Teamcollab.Engine
   {
     #region Properties
     public static bool Visible { get; set; }
+    public static bool IsCheckingForKeys { get; private set; }
     #endregion
 
     #region Member
@@ -19,32 +22,148 @@ namespace Teamcollab.Engine
     static SpriteBatch spriteBatch;
     static Texture2D pixel;
     static List<string> textRows;
+    static string currentWrittenLine;
+    static bool previouslyVisible;
+    static Color color;
+    #endregion
+
+    #region Constants
+    const int consoleMaxLines = 15;
     #endregion
 
     public static void Initialize(Game game)
     {
-      DevConsole.devFont = game.Content.Load<SpriteFont>("Fonts\\ImmediateDrawerFont");
+      DevConsole.devFont = game.Content.Load<SpriteFont>(
+        "Fonts\\ImmediateDrawerFont"
+      );
       spriteBatch = new SpriteBatch(game.GraphicsDevice);
       pixel = new Texture2D(game.GraphicsDevice, 1, 1);
       pixel.SetData<Color>(new[] { Color.White });
       textRows = new List<string>();
+      currentWrittenLine = "";
+      previouslyVisible = false;
+      color = Color.White;
+      IsCheckingForKeys = false;
 
       initialized = true;
     }
 
     public static void Update(GameTime gameTime)
     {
+      if (previouslyVisible)
+      {
+        IsCheckingForKeys = true;
 
+        #region Basic Input
+        if (InputManager.KeyRelease(Keys.A))
+          currentWrittenLine += 'a';
+        if (InputManager.KeyRelease(Keys.B))
+          currentWrittenLine += 'b';
+        if (InputManager.KeyRelease(Keys.C))
+          currentWrittenLine += 'c';
+        if (InputManager.KeyRelease(Keys.D))
+          currentWrittenLine += 'd';
+        if (InputManager.KeyRelease(Keys.E))
+          currentWrittenLine += 'e';
+        if (InputManager.KeyRelease(Keys.F))
+          currentWrittenLine += 'f';
+        if (InputManager.KeyRelease(Keys.G))
+          currentWrittenLine += 'g';
+        if (InputManager.KeyRelease(Keys.H))
+          currentWrittenLine += 'h';
+        if (InputManager.KeyRelease(Keys.I))
+          currentWrittenLine += 'i';
+        if (InputManager.KeyRelease(Keys.J))
+          currentWrittenLine += 'j';
+        if (InputManager.KeyRelease(Keys.K))
+          currentWrittenLine += 'k';
+        if (InputManager.KeyRelease(Keys.L))
+          currentWrittenLine += 'l';
+        if (InputManager.KeyRelease(Keys.M))
+          currentWrittenLine += 'm';
+        if (InputManager.KeyRelease(Keys.N))
+          currentWrittenLine += 'n';
+        if (InputManager.KeyRelease(Keys.O))
+          currentWrittenLine += 'o';
+        if (InputManager.KeyRelease(Keys.P))
+          currentWrittenLine += 'p';
+        if (InputManager.KeyRelease(Keys.Q))
+          currentWrittenLine += 'q';
+        if (InputManager.KeyRelease(Keys.R))
+          currentWrittenLine += 'r';
+        if (InputManager.KeyRelease(Keys.S))
+          currentWrittenLine += 's';
+        if (InputManager.KeyRelease(Keys.T))
+          currentWrittenLine += 't';
+        if (InputManager.KeyRelease(Keys.U))
+          currentWrittenLine += 'u';
+        if (InputManager.KeyRelease(Keys.V))
+          currentWrittenLine += 'v';
+        if (InputManager.KeyRelease(Keys.W))
+          currentWrittenLine += 'w';
+        if (InputManager.KeyRelease(Keys.X))
+          currentWrittenLine += 'x';
+        if (InputManager.KeyRelease(Keys.Y))
+          currentWrittenLine += 'y';
+        if (InputManager.KeyRelease(Keys.Z))
+          currentWrittenLine += 'z';
+        if (InputManager.KeyRelease(Keys.Space))
+          currentWrittenLine += ' ';
+        #endregion
+
+        #region Slash, Enter, Back, Escape
+        if ((InputManager.KeyDown(Keys.LeftShift) ||
+          InputManager.KeyDown(Keys.RightShift)) &&
+          InputManager.KeyRelease(Keys.D7))
+        {
+          currentWrittenLine += '/';
+        }
+
+        if (InputManager.KeyRelease(Keys.Enter))
+        {
+          if (currentWrittenLine != "")
+          {
+            if (currentWrittenLine.StartsWith("/"))
+            {
+              currentWrittenLine = currentWrittenLine.Remove(0, 1);
+              RecieveCommand(currentWrittenLine);
+            }
+            else
+            {
+              textRows.Add(currentWrittenLine);
+            }
+
+            currentWrittenLine = "";
+          }
+        }
+
+        if (InputManager.KeyRelease(Keys.Back))
+        {
+          if (currentWrittenLine.Length > 0)
+          {
+            currentWrittenLine = currentWrittenLine.Remove(
+              currentWrittenLine.Length - 1
+            );
+          }
+        }
+
+        if (InputManager.KeyRelease(Keys.Escape))
+        {
+          Visible = false;
+        }
+        #endregion
+      }
+
+      previouslyVisible = Visible;
+      IsCheckingForKeys = false;
     }
 
     public static void Draw()
     {
-      if (!Visible)
+      if (Visible == false)
       {
         return;
       }
-
-      const int consoleMaxLines = 15;
 
       spriteBatch.Begin();
 
@@ -52,17 +171,23 @@ namespace Teamcollab.Engine
       // Draw an alpha blended rectangle behind the text.
       spriteBatch.Draw(
         pixel,
-        new Rectangle(0, 0, Settings.ScreenWidth, consoleMaxLines * devFont.LineSpacing),
+        new Rectangle(0, 0, Settings.ScreenWidth,
+          consoleMaxLines * devFont.LineSpacing
+        ),
         Color.Black * 0.45f
       );
 
       Vector2 textOffset = Vector2.Zero;
-      int startRow = textRows.Count <  consoleMaxLines ? 0 : textRows.Count - consoleMaxLines;
+      int startRow = textRows.Count < consoleMaxLines ?
+        0 : textRows.Count - consoleMaxLines + 1 // + 1 for write line
+      ;
       for(int i = startRow; i < textRows.Count; ++i)
       {
-        spriteBatch.DrawString(devFont, textRows[i], textOffset, Color.White);
+        spriteBatch.DrawString(devFont, textRows[i], textOffset, color);
         textOffset.Y += devFont.LineSpacing;
       }
+      spriteBatch.DrawString(devFont, currentWrittenLine,
+        new Vector2(0, (consoleMaxLines - 1) * devFont.LineSpacing), color);
       spriteBatch.End();
     }
 
@@ -73,7 +198,39 @@ namespace Teamcollab.Engine
 
     private static void RecieveCommand(string command)
     {
-
+      if (command.StartsWith("help"))
+      {
+        #region /help
+        textRows.Add("Available commands:");
+        textRows.Add("/help - display this");
+        textRows.Add("/color [COLOR] - change the color of the console text");
+        #endregion
+      }
+      else if (command.StartsWith("color"))
+      {
+        #region /color
+        if (command.EndsWith("blue"))
+          color = Color.Blue;
+        else if (command.EndsWith("red"))
+          color = Color.Red;
+        else if (command.EndsWith("green"))
+          color = Color.Green;
+        else if (command.EndsWith("yellow"))
+          color = Color.Yellow;
+        else if (command.EndsWith("orange"))
+          color = Color.Orange;
+        else if (command.EndsWith("purple"))
+          color = Color.Purple;
+        else if (command.EndsWith("white"))
+          color = Color.White;
+        else if (command.EndsWith("black"))
+          color = Color.Black;
+        else
+          textRows.Add("Not a valid color. Correct usage is /color [COLOR]");
+        #endregion
+      }
+      else
+        textRows.Add(string.Format("{0} is not a valid command", command));
     }
   }
 }
