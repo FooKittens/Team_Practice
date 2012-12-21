@@ -67,6 +67,8 @@ namespace Teamcollab.Engine.WorldManagement
     {
       Cluster cluster = new Cluster(ClusterType.Evergreen, clusterX, clusterY);
 
+      TileType currentType = 0;
+
       for (int y = 0; y < Constants.ClusterHeight; ++y)
       {
         for (int x = 0; x < Constants.ClusterWidth; ++x)
@@ -77,16 +79,21 @@ namespace Teamcollab.Engine.WorldManagement
           );
 
           Tile t = cluster.GetTileAt(x, y);
-          if ((x == 0 || x == Constants.ClusterWidth - 1) ||
-             (y == 0 || y == Constants.ClusterHeight - 1))
+
+          if (x % 5 == 0)
           {
-            t.Type = TileType.Grass;
+            currentType = (TileType)(rand.Next() % 2 + 1);
           }
-          else
-          {
-            t.Type = TileType.Water;
-          }
-          //t.Type = (TileType)(rand.Next() % 2 + 1);
+          //if ((x == 0 || x == Constants.ClusterWidth - 1) ||
+          //   (y == 0 || y == Constants.ClusterHeight - 1))
+          //{
+          //  t.Type = TileType.Grass;
+          //}
+          //else
+          //{
+          //  t.Type = TileType.Water;
+          //}
+          t.Type = currentType;
           cluster.SetTileAt(x, y, t);
         }
       }

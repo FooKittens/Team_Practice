@@ -27,7 +27,7 @@ namespace Teamcollab.Engine.DataManagement
     public event ClusterLoadedHandler ClusterLoaded;
     public event ClusterNotInDatabaseHandler ClusterNotLoaded;
 
-    object locker = new object();
+    object databaseLock = new object();
     
     #region Members
     List<Cluster> unloadList;
@@ -114,10 +114,13 @@ namespace Teamcollab.Engine.DataManagement
         Coordinates coords = loadList[0];
         loadList.RemoveAt(0);
         Cluster cluster;
-        lock (locker)
+
+        // Lock the database lock to prevent the unloader from trying to connect.
+        lock (databaseLock)
         {
           cluster = clusterDb.Find(coords.X, coords.Y);
         }
+
         if (cluster == null && ClusterNotLoaded != null)
         {
           ClusterNotLoaded(coords);
@@ -127,8 +130,6 @@ namespace Teamcollab.Engine.DataManagement
           ClusterLoaded(cluster);
         }
       }
-
-      Thread.Sleep(5);
     }
 
     private void AsyncUnloader(object obj, DoWorkEventArgs args)
@@ -140,7 +141,7 @@ namespace Teamcollab.Engine.DataManagement
 
         try
         {
-          lock (locker)
+          lock (databaseLock)
           {
             clusterDb.InsertCluster(cluster);
           }
