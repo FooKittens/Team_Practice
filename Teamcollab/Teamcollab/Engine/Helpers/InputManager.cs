@@ -31,6 +31,15 @@ namespace Teamcollab.Engine.Helpers
 
     #region Keyboard
     /// <summary>
+    /// Returns all currently pressed keys.
+    /// </summary>
+    /// <returns></returns>
+    public static Keys[] GetCurrentKeys()
+    {
+      return keys.GetPressedKeys();
+    }
+
+    /// <summary>
     /// Returns true if any new key began being pressed this frame
     /// </summary>
     public static bool KeyAnyNewDown()
