@@ -61,6 +61,12 @@ namespace Teamcollab
         DevConsole.WriteLine("TROLOLOLOL");
       }
 
+      if (InputManager.KeyNewDown(Keys.F4))
+      {
+        graphics.IsFullScreen = !graphics.IsFullScreen;
+        graphics.ApplyChanges();
+      }
+
       DevConsole.Update(gameTime);
 			base.Update(gameTime);
 		}
