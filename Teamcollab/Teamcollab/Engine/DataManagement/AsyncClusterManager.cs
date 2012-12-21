@@ -8,6 +8,7 @@ using Teamcollab.Engine.Helpers;
 using System.Data;
 using System.Diagnostics;
 using System.Data.SQLite;
+using System.ComponentModel;
 
 namespace Teamcollab.Engine.DataManagement
 {
@@ -33,16 +34,22 @@ namespace Teamcollab.Engine.DataManagement
     List<Coordinates> loadList;
     Thread unloadThread;
     Thread loadThread;
+
+    BackgroundWorker databaseWorker;
+
     ClusterDatabase clusterDb;
     #endregion
 
     public AsyncClusterManager()
     {
-      loadThread = new Thread(AsyncLoader);
-      unloadThread = new Thread(AsyncUnloader);
+      //loadThread = new Thread(AsyncLoader);
+      //unloadThread = new Thread(AsyncUnloader);
       clusterDb = new ClusterDatabase("ClusterData.s3db");
       unloadList = new List<Cluster>();
       loadList = new List<Coordinates>();
+      databaseWorker = new BackgroundWorker();
+      databaseWorker.DoWork += AsyncLoader;
+      databaseWorker.DoWork += AsyncUnloader;
     }
 
     public void Abort()
@@ -63,12 +70,18 @@ namespace Teamcollab.Engine.DataManagement
       {
         loadList.Remove(cluster.Coordinates);
       }
-      
-      if(unloadList.Count > UnloadWaitLimit &&
-        unloadThread.IsAlive == false)
+
+
+      if (unloadList.Count > UnloadWaitLimit && databaseWorker.IsBusy == false)
       {
-        StartUnloading();
+        databaseWorker.RunWorkerAsync();
       }
+
+      //if(unloadList.Count > UnloadWaitLimit &&
+      //  unloadThread.IsAlive == false)
+      //{
+      //  StartUnloading();
+      //}
     }
 
     public void LoadCluster(Coordinates coordinates)
@@ -82,16 +95,21 @@ namespace Teamcollab.Engine.DataManagement
 
       Debug.WriteLine(string.Format("Loading ({0}, {1}).", coordinates.X, coordinates.Y));
       loadList.Add(coordinates);
-      if (loadThread.IsAlive == false)
+
+      if (databaseWorker.IsBusy == false)
       {
-        StartLoading();
+        databaseWorker.RunWorkerAsync();
       }
+      //if (loadThread.IsAlive == false)
+      //{
+      //  StartLoading();
+      //}
     }
 
 
-    private void AsyncLoader()
+    private void AsyncLoader(object obj, DoWorkEventArgs args)
     {
-      while(loadList.Count > 0)
+      while (loadList.Count > 0)
       {
         Coordinates coords = loadList[0];
         loadList.RemoveAt(0);
@@ -104,14 +122,16 @@ namespace Teamcollab.Engine.DataManagement
         {
           ClusterNotLoaded(coords);
         }
-        else if(ClusterLoaded != null)
+        else if (ClusterLoaded != null)
         {
           ClusterLoaded(cluster);
         }
       }
+
+      Thread.Sleep(5);
     }
 
-    private void AsyncUnloader()
+    private void AsyncUnloader(object obj, DoWorkEventArgs args)
     {
       while(unloadList.Count > 0)
       {
@@ -140,16 +160,16 @@ namespace Teamcollab.Engine.DataManagement
       }
     }
 
-    private void StartUnloading()
-    {
-      unloadThread = new Thread(AsyncUnloader);
-      unloadThread.Start();
-    }
+    //private void StartUnloading()
+    //{
+    //  unloadThread = new Thread(AsyncUnloader);
+    //  unloadThread.Start();
+    //}
 
-    private void StartLoading()
-    {
-      loadThread = new Thread(AsyncLoader);
-      loadThread.Start();
-    }
+    //private void StartLoading()
+    //{
+    //  loadThread = new Thread(AsyncLoader);
+    //  loadThread.Start();
+    //}
   }
 }
