@@ -27,11 +27,17 @@ namespace Teamcollab.Engine
     static Color color;
     static TimeSpan caretTimer;
     static bool showCaret;
+    static int inputLineY;
     #endregion
 
     #region Constants
     const int ConsoleMaxLines = 15;
-    readonly TimeSpan CaretTickTime = TimeSpan.FromMilliseconds(75);
+    static readonly TimeSpan CaretTickTime = TimeSpan.FromMilliseconds(125);
+    static readonly Color DefaultTextColor = new Color(255, 205, 139);
+    static readonly Color DefaultBackground = 
+      new Color(0.125f, 0.125f, 0.19f, 0.95f);
+    static readonly Color DefaultInputBarColor =
+      new Color(0.1f, 0.1f, 0.125f, 0.9f);
     #endregion
 
     public static void Initialize(Game game)
@@ -41,13 +47,15 @@ namespace Teamcollab.Engine
       );
       spriteBatch = new SpriteBatch(game.GraphicsDevice);
       pixel = new Texture2D(game.GraphicsDevice, 1, 1);
-      pixel.SetData<Color>(new[] { Color.White });
+      pixel.SetData<Color>(new[] { Color.White } );
       textRows = new List<string>();
       currentWrittenLine = "";
       previouslyVisible = false;
-      color = Color.White;
+      color = DefaultTextColor;
       IsCheckingForKeys = false;
+      inputLineY = (ConsoleMaxLines - 1) * devFont.LineSpacing;
 
+      // Set when all members are initialized.
       initialized = true;
     }
 
@@ -57,10 +65,7 @@ namespace Teamcollab.Engine
       {
         IsCheckingForKeys = true;
 
-        #region Basic Input
-
         currentWrittenLine += GetInputString();
-        #endregion
 
         #region Slash, Enter, Back, Escape
         if ((InputManager.KeyDown(Keys.LeftShift) ||
@@ -107,6 +112,14 @@ namespace Teamcollab.Engine
 
       previouslyVisible = Visible;
       IsCheckingForKeys = false;
+
+      // Update caret vars.
+      caretTimer += gameTime.ElapsedGameTime;
+      if (caretTimer > CaretTickTime)
+      {
+        caretTimer = TimeSpan.Zero;
+        showCaret = !showCaret;
+      }
     }
 
     public static void Draw()
@@ -125,7 +138,7 @@ namespace Teamcollab.Engine
         new Rectangle(0, 0, Settings.ScreenWidth,
           ConsoleMaxLines * devFont.LineSpacing
         ),
-        Color.Black * 0.45f
+        DefaultBackground
       );
 
       Vector2 textOffset = Vector2.Zero;
@@ -137,8 +150,8 @@ namespace Teamcollab.Engine
         spriteBatch.DrawString(devFont, textRows[i], textOffset, color);
         textOffset.Y += devFont.LineSpacing;
       }
-      spriteBatch.DrawString(devFont, currentWrittenLine,
-        new Vector2(0, (ConsoleMaxLines - 1) * devFont.LineSpacing), color);     
+
+      DrawInputBar();
 
       spriteBatch.End();
     }
@@ -177,6 +190,8 @@ namespace Teamcollab.Engine
           color = Color.White;
         else if (command.EndsWith("black"))
           color = Color.Black;
+        else if (command.EndsWith("default"))
+          color = DefaultTextColor;
         else
           WriteLine("Not a valid color. Correct usage is /color [COLOR]");
         #endregion
@@ -251,6 +266,34 @@ namespace Teamcollab.Engine
       }
 
       return input;
+    }
+
+    private static void DrawInputBar()
+    {     
+      spriteBatch.Draw(
+        pixel,
+        new Rectangle(0, inputLineY, Settings.ScreenWidth, devFont.LineSpacing),
+        DefaultInputBarColor
+      );
+
+      // Separator line
+      spriteBatch.Draw(pixel, new Rectangle(0, inputLineY, Settings.ScreenWidth, 2), Color.Red);
+
+      spriteBatch.DrawString(
+        devFont,
+        currentWrittenLine,
+        new Vector2(0, inputLineY),
+        color
+      );
+
+      if (showCaret)
+      {
+        Vector2 caretPos = new Vector2(
+          devFont.MeasureString(currentWrittenLine).X, inputLineY
+        );
+
+        spriteBatch.DrawString(devFont, "|", caretPos, color);
+      }
     }
   }
 }
