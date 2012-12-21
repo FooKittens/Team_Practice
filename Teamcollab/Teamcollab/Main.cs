@@ -6,6 +6,8 @@ using Teamcollab.Engine.Helpers;
 using Teamcollab.Managers;
 using Teamcollab.Resources;
 using System;
+using Teamcollab.Engine;
+using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab
 {
@@ -30,6 +32,7 @@ namespace Teamcollab
 		protected override void Initialize()
 		{
       ResourceManager.Initialize(Content);
+      DevConsole.Initialize(this);
       stateManager = new StateManager(this);
 			base.Initialize();
 		}
@@ -43,6 +46,22 @@ namespace Teamcollab
       InputManager.Update();
       stateManager.Update(gameTime);
 
+      // Dev Console test code
+      if (InputManager.KeyNewDown(Keys.C))
+      {
+        DevConsole.Visible = !DevConsole.Visible;
+      }
+
+      if (InputManager.KeyNewDown(Keys.X))
+      {
+        DevConsole.WriteLine("Testing {0}, {1} and {2}", 1, 2, 3);
+      }
+      if (InputManager.KeyNewDown(Keys.Z))
+      {
+        DevConsole.WriteLine("TROLOLOLOL");
+      }
+
+      DevConsole.Update(gameTime);
 			base.Update(gameTime);
 		}
 
@@ -53,7 +72,7 @@ namespace Teamcollab
       stateManager.Draw();
 
       ImmediateDrawer.GetInstance(this).Draw();
-
+      DevConsole.Draw();
 			base.Draw(gameTime);
 		}
 

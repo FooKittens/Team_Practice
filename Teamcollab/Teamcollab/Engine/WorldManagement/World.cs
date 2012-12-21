@@ -158,7 +158,7 @@ namespace Teamcollab.Engine.WorldManagement
       {
         if (clusters[i] != null && TestClusterRange(clusters[i]) == false)
         {
-          Debug.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
+          DevConsole.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
           asyncManager.UnloadCluster(clusters[i]);
           clusters[i] = null;
           removedCount++;

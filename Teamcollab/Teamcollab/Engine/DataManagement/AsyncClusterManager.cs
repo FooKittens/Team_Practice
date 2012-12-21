@@ -94,7 +94,7 @@ namespace Teamcollab.Engine.DataManagement
       }))
         return;
 
-      Debug.WriteLine(string.Format("Loading ({0}, {1}).", coordinates.X, coordinates.Y));
+      DevConsole.WriteLine(string.Format("Loading ({0}, {1}).", coordinates.X, coordinates.Y));
       loadList.Add(coordinates);
 
       if (databaseWorker.IsBusy == false)
@@ -158,11 +158,11 @@ namespace Teamcollab.Engine.DataManagement
         }
         catch (DataException ex)
         {
-          Debug.WriteLine(ex.Message);
+          DevConsole.WriteLine(ex.Message);
         }
         catch (SQLiteException sqlex)
         {
-          Debug.WriteLine("EXCEPTION: " + sqlex.Message);
+          DevConsole.WriteLine("EXCEPTION: " + sqlex.Message);
         }
         
         // Tell the cluster to unload its resources.
