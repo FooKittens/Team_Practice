@@ -25,10 +25,13 @@ namespace Teamcollab.Engine
     static string currentWrittenLine;
     static bool previouslyVisible;
     static Color color;
+    static TimeSpan caretTimer;
+    static bool showCaret;
     #endregion
 
     #region Constants
-    const int consoleMaxLines = 15;
+    const int ConsoleMaxLines = 15;
+    readonly TimeSpan CaretTickTime = TimeSpan.FromMilliseconds(75);
     #endregion
 
     public static void Initialize(Game game)
@@ -55,69 +58,8 @@ namespace Teamcollab.Engine
         IsCheckingForKeys = true;
 
         #region Basic Input
-        string input = "";
-        if (InputManager.KeyNewDown(Keys.A))
-          input = "a";
-        else if (InputManager.KeyNewDown(Keys.B))
-          input = "b";
-        else if (InputManager.KeyNewDown(Keys.C))
-          input = "c";
-        else if (InputManager.KeyNewDown(Keys.D))
-          input = "d";
-        else if (InputManager.KeyNewDown(Keys.E))
-          input = "e";
-        else if (InputManager.KeyNewDown(Keys.F))
-          input = "f";
-        else if (InputManager.KeyNewDown(Keys.G))
-          input = "g";
-        else if (InputManager.KeyNewDown(Keys.H))
-          input = "h";
-        else if (InputManager.KeyNewDown(Keys.I))
-          input = "i";
-        else if (InputManager.KeyNewDown(Keys.J))
-          input = "j";
-        else if (InputManager.KeyNewDown(Keys.K))
-          input = "k";
-        else if (InputManager.KeyNewDown(Keys.L))
-          input = "l";
-        else if (InputManager.KeyNewDown(Keys.M))
-          input = "m";
-        else if (InputManager.KeyNewDown(Keys.N))
-          input = "n";
-        else if (InputManager.KeyNewDown(Keys.O))
-          input = "o";
-        else if (InputManager.KeyNewDown(Keys.P))
-          input = "p";
-        else if (InputManager.KeyNewDown(Keys.Q))
-          input = "q";
-        else if (InputManager.KeyNewDown(Keys.R))
-          input = "r";
-        else if (InputManager.KeyNewDown(Keys.S))
-          input = "s";
-        else if (InputManager.KeyNewDown(Keys.T))
-          input = "t";
-        else if (InputManager.KeyNewDown(Keys.U))
-          input = "u";
-        else if (InputManager.KeyNewDown(Keys.V))
-          input = "v";
-        else if (InputManager.KeyNewDown(Keys.W))
-          input = "w";
-        else if (InputManager.KeyNewDown(Keys.X))
-          input = "x";
-        else if (InputManager.KeyNewDown(Keys.Y))
-          input = "y";
-        else if (InputManager.KeyNewDown(Keys.Z))
-          input = "z";
-        else if (InputManager.KeyNewDown(Keys.Space))
-          input = " ";
-        else if (InputManager.KeyNewDown(Keys.OemEnlW))
-          input = "'";
-        if (InputManager.KeyDown(Keys.LeftShift) ||
-          InputManager.KeyDown(Keys.RightShift))
-        {
-          input = input.ToUpper();
-        }
-        currentWrittenLine += input;
+
+        currentWrittenLine += GetInputString();
         #endregion
 
         #region Slash, Enter, Back, Escape
@@ -181,14 +123,14 @@ namespace Teamcollab.Engine
       spriteBatch.Draw(
         pixel,
         new Rectangle(0, 0, Settings.ScreenWidth,
-          consoleMaxLines * devFont.LineSpacing
+          ConsoleMaxLines * devFont.LineSpacing
         ),
         Color.Black * 0.45f
       );
 
       Vector2 textOffset = Vector2.Zero;
-      int startRow = textRows.Count < consoleMaxLines ?
-        0 : textRows.Count - consoleMaxLines + 1 // + 1 for write line
+      int startRow = textRows.Count < ConsoleMaxLines ?
+        0 : textRows.Count - ConsoleMaxLines + 1 // + 1 for write line
       ;
       for(int i = startRow; i < textRows.Count; ++i)
       {
@@ -196,7 +138,8 @@ namespace Teamcollab.Engine
         textOffset.Y += devFont.LineSpacing;
       }
       spriteBatch.DrawString(devFont, currentWrittenLine,
-        new Vector2(0, (consoleMaxLines - 1) * devFont.LineSpacing), color);
+        new Vector2(0, (ConsoleMaxLines - 1) * devFont.LineSpacing), color);     
+
       spriteBatch.End();
     }
 
@@ -240,6 +183,74 @@ namespace Teamcollab.Engine
       }
       else
         WriteLine("{0} is not a valid command", command);
+    }
+
+    private static string GetInputString()
+    {
+      string input = "";
+      if (InputManager.KeyNewDown(Keys.A))
+        input = "a";
+      else if (InputManager.KeyNewDown(Keys.B))
+        input = "b";
+      else if (InputManager.KeyNewDown(Keys.C))
+        input = "c";
+      else if (InputManager.KeyNewDown(Keys.D))
+        input = "d";
+      else if (InputManager.KeyNewDown(Keys.E))
+        input = "e";
+      else if (InputManager.KeyNewDown(Keys.F))
+        input = "f";
+      else if (InputManager.KeyNewDown(Keys.G))
+        input = "g";
+      else if (InputManager.KeyNewDown(Keys.H))
+        input = "h";
+      else if (InputManager.KeyNewDown(Keys.I))
+        input = "i";
+      else if (InputManager.KeyNewDown(Keys.J))
+        input = "j";
+      else if (InputManager.KeyNewDown(Keys.K))
+        input = "k";
+      else if (InputManager.KeyNewDown(Keys.L))
+        input = "l";
+      else if (InputManager.KeyNewDown(Keys.M))
+        input = "m";
+      else if (InputManager.KeyNewDown(Keys.N))
+        input = "n";
+      else if (InputManager.KeyNewDown(Keys.O))
+        input = "o";
+      else if (InputManager.KeyNewDown(Keys.P))
+        input = "p";
+      else if (InputManager.KeyNewDown(Keys.Q))
+        input = "q";
+      else if (InputManager.KeyNewDown(Keys.R))
+        input = "r";
+      else if (InputManager.KeyNewDown(Keys.S))
+        input = "s";
+      else if (InputManager.KeyNewDown(Keys.T))
+        input = "t";
+      else if (InputManager.KeyNewDown(Keys.U))
+        input = "u";
+      else if (InputManager.KeyNewDown(Keys.V))
+        input = "v";
+      else if (InputManager.KeyNewDown(Keys.W))
+        input = "w";
+      else if (InputManager.KeyNewDown(Keys.X))
+        input = "x";
+      else if (InputManager.KeyNewDown(Keys.Y))
+        input = "y";
+      else if (InputManager.KeyNewDown(Keys.Z))
+        input = "z";
+      else if (InputManager.KeyNewDown(Keys.Space))
+        input = " ";
+      else if (InputManager.KeyNewDown(Keys.OemEnlW))
+        input = "'";
+      if (InputManager.KeyDown(Keys.LeftShift) ||
+        InputManager.KeyDown(Keys.RightShift))
+      {
+        input = input.ToUpper();
+      }
+
+      return input;
     }
   }
 }
