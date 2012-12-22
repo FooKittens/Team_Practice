@@ -75,14 +75,8 @@ namespace Teamcollab.Engine.DataManagement
 
       if (unloadList.Count > UnloadWaitLimit && databaseWorker.IsBusy == false)
       {
-        databaseWorker.RunWorkerAsync();
+        StartBackgroundWorker();
       }
-
-      //if(unloadList.Count > UnloadWaitLimit &&
-      //  unloadThread.IsAlive == false)
-      //{
-      //  StartUnloading();
-      //}
     }
 
     public void LoadCluster(Coordinates coordinates)
@@ -99,21 +93,18 @@ namespace Teamcollab.Engine.DataManagement
 
       if (databaseWorker.IsBusy == false)
       {
-        databaseWorker.RunWorkerAsync();  
+        StartBackgroundWorker();
       }
-
-      //if (loadThread.IsAlive == false)
-      //{
-      //  StartLoading();
-      //}
     }
 
     private void WorkCompletedHandler(object obj, RunWorkerCompletedEventArgs args)
     {
       if (loadList.Count > 0 || unloadList.Count > 0)
       {
+        DevConsole.WriteLine("Backgroundworker restarting.");
         databaseWorker.RunWorkerAsync();
       }
+      DevConsole.WriteLine("Backgroundworker done.");
     }
 
 
@@ -172,16 +163,10 @@ namespace Teamcollab.Engine.DataManagement
       }
     }
 
-    //private void StartUnloading()
-    //{
-    //  unloadThread = new Thread(AsyncUnloader);
-    //  unloadThread.Start();
-    //}
-
-    //private void StartLoading()
-    //{
-    //  loadThread = new Thread(AsyncLoader);
-    //  loadThread.Start();
-    //}
+    private void StartBackgroundWorker()
+    {
+      DevConsole.WriteLine("Backgroundworker starting.");
+      databaseWorker.RunWorkerAsync();
+    }
   }
 }

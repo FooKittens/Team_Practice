@@ -47,18 +47,18 @@ namespace Teamcollab
       stateManager.Update(gameTime);
 
       // Dev Console test code
-      if (InputManager.KeyNewDown(Keys.C))
+      if (InputManager.KeyNewDown(Settings.DevConsoleKey))
       {
         DevConsole.Visible = !DevConsole.Visible;
-      }
 
-      if (InputManager.KeyNewDown(Keys.X))
-      {
-        DevConsole.WriteLine("Testing {0}, {1} and {2}", 1, 2, 3);
-      }
-      if (InputManager.KeyNewDown(Keys.Z))
-      {
-        DevConsole.WriteLine("TROLOLOLOL");
+        //if (DevConsole.Visible)
+        //{
+        //  DevConsole.Hide();
+        //}
+        //else
+        //{
+        //  DevConsole.Show();
+        //}
       }
 
       if (InputManager.KeyNewDown(Keys.F4))

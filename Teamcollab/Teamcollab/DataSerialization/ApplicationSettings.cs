@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab.DataSerialization
 {
@@ -11,6 +12,7 @@ namespace Teamcollab.DataSerialization
     public int ScreenHeight;
     public int ScreenWidth;
     public bool MultiThreading;
+    public Keys DevConsoleKey;
 
 
     /// <summary>
@@ -22,7 +24,7 @@ namespace Teamcollab.DataSerialization
       appSettings.ScreenWidth = 1280;
       appSettings.ScreenHeight = 768;
       appSettings.MultiThreading = true;
-
+      appSettings.DevConsoleKey = Keys.OemPipe;
       return appSettings;
     }
   }

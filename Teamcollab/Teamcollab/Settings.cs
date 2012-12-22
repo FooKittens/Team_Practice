@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teamcollab.DataSerialization;
+using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab
 {
@@ -14,6 +15,7 @@ namespace Teamcollab
     public static int ScreenWidth { get; private set; }
     public static int ScreenHeight { get; private set; }
     public static bool MultiThreading { get; private set; }
+    public static Keys DevConsoleKey { get; private set; }
 
 
     /// <summary>
@@ -25,6 +27,7 @@ namespace Teamcollab
       ScreenWidth = data.ScreenWidth;
       ScreenHeight = data.ScreenHeight;
       MultiThreading = data.MultiThreading;
+      DevConsoleKey = data.DevConsoleKey;
     }
   }
 }

@@ -89,6 +89,7 @@
     <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\ImmediateDrawer.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
+    <Compile Include="Engine\Helpers\TextHelper.cs" />
     <Compile Include="Engine\WorldManagement\World.cs" />
     <Compile Include="Engine\WorldManagement\WorldManager.cs" />
     <Compile Include="Engine\WorldManagement\Cluster.cs" />

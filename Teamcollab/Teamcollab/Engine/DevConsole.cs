@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Teamcollab.Engine.Helpers;
 using Microsoft.Xna.Framework.Input;
+using System.Text.RegularExpressions;
 
 namespace Teamcollab.Engine
 {
@@ -28,16 +29,17 @@ namespace Teamcollab.Engine
     static TimeSpan caretTimer;
     static bool showCaret;
     static int inputLineY;
+    static int startRowOffset;
     #endregion
 
     #region Constants
     const int ConsoleMaxLines = 15;
     static readonly TimeSpan CaretTickTime = TimeSpan.FromMilliseconds(125);
+
+    // Some color combination more or less easy on the eyes.
     static readonly Color DefaultTextColor = new Color(255, 205, 139);
-    static readonly Color DefaultBackground = 
-      new Color(0.125f, 0.125f, 0.19f, 0.95f);
-    static readonly Color DefaultInputBarColor =
-      new Color(0.1f, 0.1f, 0.125f, 0.9f);
+    static readonly Color DefaultBackground = new Color(0.125f, 0.125f, 0.19f, 0.95f);
+    static readonly Color DefaultInputBarColor = new Color(0.1f, 0.1f, 0.125f, 0.9f);
     #endregion
 
     public static void Initialize(Game game)
@@ -54,6 +56,7 @@ namespace Teamcollab.Engine
       color = DefaultTextColor;
       IsCheckingForKeys = false;
       inputLineY = (ConsoleMaxLines - 1) * devFont.LineSpacing;
+      startRowOffset = 0;
 
       // Set when all members are initialized.
       initialized = true;
@@ -67,54 +70,7 @@ namespace Teamcollab.Engine
 
         currentWrittenLine += GetInputString();
 
-        #region Slash, Enter, Back, Escape
-        if ((InputManager.KeyDown(Keys.LeftShift) ||
-          InputManager.KeyDown(Keys.RightShift)) &&
-          InputManager.KeyRelease(Keys.D7))
-        {
-          currentWrittenLine += '/';
-        }
-
-        if (InputManager.KeyRelease(Keys.Enter))
-        {
-          if (currentWrittenLine != "")
-          {
-            if (currentWrittenLine.StartsWith("/"))
-            {
-              currentWrittenLine = currentWrittenLine.Remove(0, 1);
-              RecieveCommand(currentWrittenLine);
-            }
-            else
-            {
-              WriteLine(currentWrittenLine);
-            }
-
-            currentWrittenLine = "";
-          }
-        }
-
-        if (InputManager.KeyRelease(Keys.Back))
-        {
-          if (currentWrittenLine.Length > 0)
-          {
-            currentWrittenLine = currentWrittenLine.Remove(
-              currentWrittenLine.Length - 1
-            );
-          }
-        }
-
-        if (InputManager.KeyRelease(Keys.Escape))
-        {
-          Visible = false;
-        }
-        #endregion
-      }
-
-      // Test for getting key codes
-      Keys[] keys = InputManager.GetNewPressedKeys();
-      foreach (Keys key in keys)
-      {
-        WriteLine("Key: {0}.", key);
+        HandleInput();
       }
 
       previouslyVisible = Visible;
@@ -138,7 +94,6 @@ namespace Teamcollab.Engine
 
       spriteBatch.Begin();
 
-      // TODO(Peter): Remove
       // Draw an alpha blended rectangle behind the text.
       spriteBatch.Draw(
         pixel,
@@ -149,10 +104,17 @@ namespace Teamcollab.Engine
       );
 
       Vector2 textOffset = Vector2.Zero;
-      int startRow = textRows.Count < ConsoleMaxLines ?
-        0 : textRows.Count - ConsoleMaxLines + 1 // + 1 for write line
+
+      // Now accounts for row offset from scrolling.
+      int startRow = textRows.Count + startRowOffset < ConsoleMaxLines ?
+        0 : textRows.Count + startRowOffset - ConsoleMaxLines + 1 // + 1 for write line
       ;
-      for(int i = startRow; i < textRows.Count; ++i)
+
+      // End row with scrolling calculated.
+      int endRow = textRows.Count + startRowOffset > textRows.Count ?
+        textRows.Count - 1 : textRows.Count + startRowOffset;
+
+      for(int i = startRow; i < endRow; ++i)
       {
         spriteBatch.DrawString(devFont, textRows[i], textOffset, color);
         textOffset.Y += devFont.LineSpacing;
@@ -203,6 +165,10 @@ namespace Teamcollab.Engine
           WriteLine("Not a valid color. Correct usage is /color [COLOR]");
         #endregion
       }
+      else if (command.StartsWith("SetCameraPosition"))
+      {
+        Vector2 v = TextHelper.ParseVector2(command);
+      }
       else
         WriteLine("{0} is not a valid command", command);
     }
@@ -210,62 +176,72 @@ namespace Teamcollab.Engine
     private static string GetInputString()
     {
       string input = "";
-      if (InputManager.KeyNewDown(Keys.A))
-        input = "a";
-      else if (InputManager.KeyNewDown(Keys.B))
-        input = "b";
-      else if (InputManager.KeyNewDown(Keys.C))
-        input = "c";
-      else if (InputManager.KeyNewDown(Keys.D))
-        input = "d";
-      else if (InputManager.KeyNewDown(Keys.E))
-        input = "e";
-      else if (InputManager.KeyNewDown(Keys.F))
-        input = "f";
-      else if (InputManager.KeyNewDown(Keys.G))
-        input = "g";
-      else if (InputManager.KeyNewDown(Keys.H))
-        input = "h";
-      else if (InputManager.KeyNewDown(Keys.I))
-        input = "i";
-      else if (InputManager.KeyNewDown(Keys.J))
-        input = "j";
-      else if (InputManager.KeyNewDown(Keys.K))
-        input = "k";
-      else if (InputManager.KeyNewDown(Keys.L))
-        input = "l";
-      else if (InputManager.KeyNewDown(Keys.M))
-        input = "m";
-      else if (InputManager.KeyNewDown(Keys.N))
-        input = "n";
-      else if (InputManager.KeyNewDown(Keys.O))
-        input = "o";
-      else if (InputManager.KeyNewDown(Keys.P))
-        input = "p";
-      else if (InputManager.KeyNewDown(Keys.Q))
-        input = "q";
-      else if (InputManager.KeyNewDown(Keys.R))
-        input = "r";
-      else if (InputManager.KeyNewDown(Keys.S))
-        input = "s";
-      else if (InputManager.KeyNewDown(Keys.T))
-        input = "t";
-      else if (InputManager.KeyNewDown(Keys.U))
-        input = "u";
-      else if (InputManager.KeyNewDown(Keys.V))
-        input = "v";
-      else if (InputManager.KeyNewDown(Keys.W))
-        input = "w";
-      else if (InputManager.KeyNewDown(Keys.X))
-        input = "x";
-      else if (InputManager.KeyNewDown(Keys.Y))
-        input = "y";
-      else if (InputManager.KeyNewDown(Keys.Z))
-        input = "z";
-      else if (InputManager.KeyNewDown(Keys.Space))
-        input = " ";
-      else if (InputManager.KeyNewDown(Keys.OemEnlW))
-        input = "'";
+      Keys[] nKeys = InputManager.GetNewPressedKeys();
+
+      foreach (Keys k in nKeys)
+      {
+        input += TextHelper.KeyToChar(k);
+      }
+
+      #region Martins Input Code
+      //if (InputManager.KeyNewDown(Keys.A))
+      //  input = "a";
+      //else if (InputManager.KeyNewDown(Keys.B))
+      //  input = "b";
+      //else if (InputManager.KeyNewDown(Keys.C))
+      //  input = "c";
+      //else if (InputManager.KeyNewDown(Keys.D))
+      //  input = "d";
+      //else if (InputManager.KeyNewDown(Keys.E))
+      //  input = "e";
+      //else if (InputManager.KeyNewDown(Keys.F))
+      //  input = "f";
+      //else if (InputManager.KeyNewDown(Keys.G))
+      //  input = "g";
+      //else if (InputManager.KeyNewDown(Keys.H))
+      //  input = "h";
+      //else if (InputManager.KeyNewDown(Keys.I))
+      //  input = "i";
+      //else if (InputManager.KeyNewDown(Keys.J))
+      //  input = "j";
+      //else if (InputManager.KeyNewDown(Keys.K))
+      //  input = "k";
+      //else if (InputManager.KeyNewDown(Keys.L))
+      //  input = "l";
+      //else if (InputManager.KeyNewDown(Keys.M))
+      //  input = "m";
+      //else if (InputManager.KeyNewDown(Keys.N))
+      //  input = "n";
+      //else if (InputManager.KeyNewDown(Keys.O))
+      //  input = "o";
+      //else if (InputManager.KeyNewDown(Keys.P))
+      //  input = "p";
+      //else if (InputManager.KeyNewDown(Keys.Q))
+      //  input = "q";
+      //else if (InputManager.KeyNewDown(Keys.R))
+      //  input = "r";
+      //else if (InputManager.KeyNewDown(Keys.S))
+      //  input = "s";
+      //else if (InputManager.KeyNewDown(Keys.T))
+      //  input = "t";
+      //else if (InputManager.KeyNewDown(Keys.U))
+      //  input = "u";
+      //else if (InputManager.KeyNewDown(Keys.V))
+      //  input = "v";
+      //else if (InputManager.KeyNewDown(Keys.W))
+      //  input = "w";
+      //else if (InputManager.KeyNewDown(Keys.X))
+      //  input = "x";
+      //else if (InputManager.KeyNewDown(Keys.Y))
+      //  input = "y";
+      //else if (InputManager.KeyNewDown(Keys.Z))
+      //  input = "z";
+      //else if (InputManager.KeyNewDown(Keys.Space))
+      //  input = " ";
+      //else if (InputManager.KeyNewDown(Keys.OemEnlW))
+      //  input = "'";
+      #endregion
+
       if (InputManager.KeyDown(Keys.LeftShift) ||
         InputManager.KeyDown(Keys.RightShift))
       {
@@ -284,7 +260,7 @@ namespace Teamcollab.Engine
       );
 
       // Separator line
-      spriteBatch.Draw(pixel, new Rectangle(0, inputLineY, Settings.ScreenWidth, 2), Color.Red);
+      //spriteBatch.Draw(pixel, new Rectangle(0, inputLineY, Settings.ScreenWidth, 2), Color.Red);
 
       spriteBatch.DrawString(
         devFont,
@@ -300,6 +276,62 @@ namespace Teamcollab.Engine
         );
 
         spriteBatch.DrawString(devFont, "|", caretPos, color);
+      }
+    }
+
+    private static void HandleInput()
+    {
+      #region Slash, Enter, Back, Escape
+      //if ((InputManager.KeyDown(Keys.LeftShift) ||
+      //     InputManager.KeyDown(Keys.RightShift)) &&
+      //    InputManager.KeyRelease(Keys.D7))
+      //{
+      //  currentWrittenLine += '/';
+      //}
+
+      if (InputManager.KeyNewDown(Keys.Enter))
+      {
+        if (currentWrittenLine != "")
+        {
+          if (currentWrittenLine.StartsWith("/"))
+          {
+            currentWrittenLine = currentWrittenLine.Remove(0, 1);
+            RecieveCommand(currentWrittenLine);
+          }
+          else
+          {
+            WriteLine(currentWrittenLine);
+          }
+
+          currentWrittenLine = "";
+        }
+      }
+
+      if (InputManager.KeyNewDown(Keys.Back))
+      {
+        if (currentWrittenLine.Length > 0)
+        {
+          currentWrittenLine = currentWrittenLine.Remove(
+            currentWrittenLine.Length - 1
+          );
+        }
+      }
+
+      if (InputManager.KeyNewDown(Settings.DevConsoleKey))
+      {
+        Visible = false;
+      }
+
+        #endregion
+
+      if (InputManager.KeyNewDown(Keys.PageUp))
+      {
+        startRowOffset = startRowOffset - 1 < -textRows.Count ?
+          -textRows.Count : startRowOffset - 1;
+      }
+      else if (InputManager.KeyNewDown(Keys.PageDown))
+      {
+        startRowOffset = startRowOffset + 1 > 0 ? 0 : startRowOffset + 1;
       }
     }
   }
