@@ -269,7 +269,7 @@ namespace Teamcollab.Engine
         }
       }
       else
-        WriteLine("{0} is not a valid command", command);
+        WriteLine("{0} is not a valid command.", command);
     }
 
     private static string GetInputString()
