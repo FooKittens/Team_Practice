@@ -73,8 +73,8 @@ namespace Teamcollab.Engine.Helpers
 
     /// <summary>
     /// Parses a text and returns all integers found in the text.
+    /// Numbers are separated with " " or ",".
     /// </summary>
-    /// <param name="text"></param>
     public static int[] ParseInts(string text)
     {
       var ints = new List<int>();
@@ -90,6 +90,10 @@ namespace Teamcollab.Engine.Helpers
       return ints.ToArray();
     }
 
+    /// <summary>
+    /// Parses a text and returns all single point precision numbers.
+    /// Numbers are separated with " " or ",".
+    /// </summary>
     public static float[] ParseFloats(string text)
     {
       string[] splits = text.Split(' ', ',');

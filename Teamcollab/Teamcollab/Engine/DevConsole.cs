@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Text.RegularExpressions;
 using Teamcollab.GUI;
 using Teamcollab.Engine.WorldManagement;
+using Teamcollab.DataSerialization;
 
 namespace Teamcollab.Engine
 {
@@ -20,6 +21,7 @@ namespace Teamcollab.Engine
     #endregion
 
     #region Member
+    static Game game;
     static bool initialized;
     static SpriteFont devFont;
     static SpriteBatch spriteBatch;
@@ -48,12 +50,13 @@ namespace Teamcollab.Engine
 
     public static void Initialize(Game game)
     {
+      DevConsole.game = game;
       DevConsole.devFont = game.Content.Load<SpriteFont>(
         "Fonts\\ConsoleFont"
       );
       spriteBatch = new SpriteBatch(game.GraphicsDevice);
       pixel = new Texture2D(game.GraphicsDevice, 1, 1);
-      pixel.SetData<Color>(new[] { Color.White } );
+      pixel.SetData<Color>(new[] { Color.White });
       textRows = new List<string>();
       currentWrittenLine = "";
       previouslyVisible = false;
@@ -81,7 +84,7 @@ namespace Teamcollab.Engine
       }
 
       previouslyVisible = Visible;
-      
+
 
       // Update backspace timer
       backSpaceTimer -= gameTime.ElapsedGameTime;
@@ -128,7 +131,7 @@ namespace Teamcollab.Engine
       int endRow = textRows.Count + startRowOffset > textRows.Count ?
         textRows.Count - 1 : textRows.Count + startRowOffset;
 
-      for(int i = startRow; i < endRow; ++i)
+      for (int i = startRow; i < endRow; ++i)
       {
         spriteBatch.DrawString(devFont, textRows[i], textOffset, color);
         textOffset.Y += devFont.LineSpacing;
@@ -139,17 +142,35 @@ namespace Teamcollab.Engine
       spriteBatch.End();
     }
 
+    /// <summary>
+    /// Sends a command to the console, if valid it will be executed.
+    /// </summary>
+    public static void SendCommand(string command)
+    {
+      if (command != "")
+      {
+        if (command.StartsWith("/"))
+        {
+          command = command.Remove(0, 1);
+          RecieveCommand(command);
+        }
+        else
+        {
+          WriteLine(command);
+        }
+      }
+    }
 
     public static void WriteLine(string text)
     {
       textRows.Add(text);
     }
-    
+
     public static void WriteLine(object obj)
     {
       WriteLine(obj.ToString());
     }
-    
+
     public static void WriteLine(string formatString, params object[] args)
     {
       WriteLine(string.Format(": " + formatString, args));
@@ -163,6 +184,9 @@ namespace Teamcollab.Engine
         WriteLine("Available commands:");
         WriteLine("/help - display this");
         WriteLine("/color [COLOR] - change the color of the console text");
+        WriteLine("/setcampos (x, y) - Sets the camera position to a cluster.");
+        WriteLine("/settings [PARAMS] - Loads/saves settings." +
+          " \"default\" gets default settings.");
         #endregion
       }
       else if (command.StartsWith("color"))
@@ -190,12 +214,40 @@ namespace Teamcollab.Engine
           WriteLine("Not a valid color. Correct usage is /color [COLOR]");
         #endregion
       }
-      else if (command.StartsWith("setcampos"))
+      else if (command.StartsWith("setcampos "))
       {
         Vector2[] vectors = TextHelper.ParseVector2(command);
-        Camera2D.SetPosition(
-          WorldManager.GetClusterScreenCenter(vectors[0])
-        );
+        if (vectors.Length > 0)
+        {
+          Camera2D.SetPosition(
+            WorldManager.GetClusterScreenCenter(vectors[0])
+          );
+        }
+        else
+        {
+          // TODO Lets not hardcode this stuff :p
+          string clipped = command.Remove(0, "setcampos ".Length);
+          WriteLine(
+            string.Format(
+              "Parameter(s) \"{0}\" do not contain a valid Vector2.", clipped
+            )
+          );
+          WriteLine(
+            "Correct usage is /setcampos (2, 3) or (2.2, 3.3)."
+          );
+
+        }
+      }
+      else if (command.StartsWith("quit"))
+      {
+        game.Exit();
+      }
+      else if (command.StartsWith("settings"))
+      {
+        if (command.EndsWith("default"))
+          Settings.Initialize(SettingsData.GetDefault());
+        else
+          WriteLine("Unknown parameter(s).");
       }
       else
         WriteLine("{0} is not a valid command", command);
@@ -280,7 +332,7 @@ namespace Teamcollab.Engine
     }
 
     private static void DrawInputBar()
-    {     
+    {
       spriteBatch.Draw(
         pixel,
         new Rectangle(0, inputLineY, Settings.ScreenWidth, devFont.LineSpacing),
@@ -318,20 +370,8 @@ namespace Teamcollab.Engine
       //}
       if (InputManager.KeyNewDown(Keys.Enter))
       {
-        if (currentWrittenLine != "")
-        {
-          if (currentWrittenLine.StartsWith("/"))
-          {
-            currentWrittenLine = currentWrittenLine.Remove(0, 1);
-            RecieveCommand(currentWrittenLine);
-          }
-          else
-          {
-            WriteLine(currentWrittenLine);
-          }
-
-          currentWrittenLine = "";
-        }
+        SendCommand(currentWrittenLine);
+        currentWrittenLine = "";
       }
 
       if (InputManager.KeyNewDown(Keys.Back))
@@ -365,7 +405,7 @@ namespace Teamcollab.Engine
         Visible = false;
       }
 
-        #endregion
+      #endregion
 
       if (InputManager.KeyNewDown(Keys.PageUp))
       {
@@ -377,5 +417,5 @@ namespace Teamcollab.Engine
         startRowOffset = startRowOffset + 1 > 0 ? 0 : startRowOffset + 1;
       }
     }
-  }
+  }  
 }
