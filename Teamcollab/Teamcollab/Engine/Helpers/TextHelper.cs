@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Globalization;
 
 namespace Teamcollab.Engine.Helpers
 {
@@ -14,29 +15,100 @@ namespace Teamcollab.Engine.Helpers
     public static bool AnnounceUnknownKeys { get; set; }
     #endregion
 
+    // For avoiding swedish number formats, since they're confusing.
+    static readonly NumberFormatInfo NumberFormat =
+      new CultureInfo("en-US", false).NumberFormat;
+
     #region Regular Expressions
-    static readonly string[] Vector2Matches = { "[0-9]*, [0-9]*", "([0-9]*, [0-9]*)",
-                                                "[0-9]*,[0-9]*", "([0-9]*,[0-9]*)" };
+
+    // Regexes for Vector2's - Please kill me.
+    static readonly string Vector2Match = @"((?<X>[0-9]*[.]?[0-9]*)\s*,\s*(?<Y>[0-9]*[.]?[0-9]*))";
+
+    static readonly string[] FloatMatches = { "[0-9*].[0-9*]", "[0-9*]", ".[0-9*]" };
+    static readonly string IntMatch = "[0-9*]";
 
 
     #endregion
 
 
-    public static Vector2 ParseVector2(string text)
+    #region Parsers
+    /// <summary>
+    /// Parses a text for a valid Vector2.
+    /// Example: (1, 2) or (1.25, 2) or (1.1 , 1.1)
+    /// </summary>
+    /// <param name="text">String containg a valid vector2.</param>
+    public static Vector2[] ParseVector2(string text)
     {
-      foreach (string regex in Vector2Matches)
+      MatchCollection matches = Regex.Matches(text, Vector2Match); 
+       
+      var vectors = new List<Vector2>();
+      foreach(Match match in matches)
       {
-        Match match = Regex.Match(text, regex);
-        if (match.Success)
+        float x, y;
+
+        bool succeeded = Single.TryParse(
+          match.Groups["X"].Value,
+          NumberStyles.Any,
+          NumberFormat,
+          out x
+        );
+
+        // & results together since both have to succeed.
+        succeeded &= Single.TryParse(
+          match.Groups["Y"].Value,
+          NumberStyles.Any,
+          NumberFormat,
+          out y
+        );
+
+        if(succeeded)
         {
-          string res = match.Value;
-          DevConsole.WriteLine(res);
+          Vector2 v = new Vector2(x, y);
+          vectors.Add(v);
         }
       }
-      return Vector2.Zero;
+
+      return vectors.ToArray();
     }
 
+    /// <summary>
+    /// Parses a text and returns all integers found in the text.
+    /// </summary>
+    /// <param name="text"></param>
+    public static int[] ParseInts(string text)
+    {
+      var ints = new List<int>();
+      string[] parts = text.Split(' ', ',');
+      foreach (string part in parts)
+      {
+        int i;
+        if (Int32.TryParse(part, NumberStyles.Any, NumberFormat, out i))
+        {
+          ints.Add(i);
+        }
+      }
+      return ints.ToArray();
+    }
 
+    public static float[] ParseFloats(string text)
+    {
+      string[] splits = text.Split(' ', ',');
+      
+      var floats = new List<float>();
+
+      foreach (string part in splits)
+      {
+        float f;
+        if (Single.TryParse(part, NumberStyles.Any, NumberFormat, out f))
+        {
+          floats.Add(f);
+        }
+      }
+
+      return floats.ToArray();
+    }
+
+    #endregion
     public static string KeyToChar(Keys key)
     {
       string inputChar = "";

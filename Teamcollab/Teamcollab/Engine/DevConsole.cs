@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Teamcollab.Engine.Helpers;
 using Microsoft.Xna.Framework.Input;
 using System.Text.RegularExpressions;
+using Teamcollab.GUI;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.Engine
 {
@@ -36,7 +38,7 @@ namespace Teamcollab.Engine
     #region Constants
     const int ConsoleMaxLines = 20;
     static readonly TimeSpan CaretTickTime = TimeSpan.FromMilliseconds(125);
-    static readonly TimeSpan BackSpaceTick = TimeSpan.FromMilliseconds(50);
+    static readonly TimeSpan BackSpaceTick = TimeSpan.FromMilliseconds(75);
 
     // Some color combination more or less easy on the eyes.
     static readonly Color DefaultTextColor = new Color(255, 205, 139);
@@ -72,7 +74,9 @@ namespace Teamcollab.Engine
 
         currentWrittenLine += GetInputString();
 
+        // Handles all input.
         HandleInput();
+
         IsCheckingForKeys = false;
       }
 
@@ -80,9 +84,13 @@ namespace Teamcollab.Engine
       
 
       // Update backspace timer
-      backSpaceTimer += gameTime.ElapsedGameTime;
+      backSpaceTimer -= gameTime.ElapsedGameTime;
 
-      // Update caret vars.
+      // Avoid overflows and other nasty things.
+      backSpaceTimer = backSpaceTimer < TimeSpan.Zero ?
+        TimeSpan.Zero : backSpaceTimer;
+
+      // Update caret timer for a blinking effect.
       caretTimer += gameTime.ElapsedGameTime;
       if (caretTimer > CaretTickTime)
       {
@@ -131,9 +139,20 @@ namespace Teamcollab.Engine
       spriteBatch.End();
     }
 
+
+    public static void WriteLine(string text)
+    {
+      textRows.Add(text);
+    }
+    
+    public static void WriteLine(object obj)
+    {
+      WriteLine(obj.ToString());
+    }
+    
     public static void WriteLine(string formatString, params object[] args)
     {
-      textRows.Add(string.Format(": " + formatString, args));
+      WriteLine(string.Format(": " + formatString, args));
     }
 
     private static void RecieveCommand(string command)
@@ -171,9 +190,12 @@ namespace Teamcollab.Engine
           WriteLine("Not a valid color. Correct usage is /color [COLOR]");
         #endregion
       }
-      else if (command.StartsWith("SetCameraPosition"))
+      else if (command.StartsWith("setcampos"))
       {
-        Vector2 v = TextHelper.ParseVector2(command);
+        Vector2[] vectors = TextHelper.ParseVector2(command);
+        Camera2D.SetPosition(
+          WorldManager.GetClusterScreenCenter(vectors[0])
+        );
       }
       else
         WriteLine("{0} is not a valid command", command);
@@ -314,7 +336,9 @@ namespace Teamcollab.Engine
 
       if (InputManager.KeyNewDown(Keys.Back))
       {
-        backSpaceTimer = TimeSpan.Zero;
+        // Reset backspace timer to avoid double erases on keydown.
+        backSpaceTimer = BackSpaceTick;
+
         if (currentWrittenLine.Length > 0)
         {
           currentWrittenLine = currentWrittenLine.Remove(
@@ -325,9 +349,9 @@ namespace Teamcollab.Engine
 
       // Backspace held down
       if (InputManager.KeyDown(Keys.Back) &&
-        backSpaceTimer > BackSpaceTick)
+        backSpaceTimer <= TimeSpan.Zero)
       {
-        backSpaceTimer = TimeSpan.Zero;
+        backSpaceTimer = BackSpaceTick;
         if (currentWrittenLine.Length > 0)
         {
           currentWrittenLine = currentWrittenLine.Remove(
