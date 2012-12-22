@@ -143,7 +143,7 @@ namespace Teamcollab.Engine.WorldManagement
       {
         for (int x = left; x <= right; ++x)
         {
-          world.AddCluster(world.CreateCluster(x, y));
+          //world.AddCluster(world.CreateCluster(x, y));
           //AddCluster(world, new Coordinates(x, y));
         }
       }

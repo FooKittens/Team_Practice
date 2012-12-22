@@ -83,7 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="DataSerialization\ApplicationSettings.cs" />
+    <Compile Include="DataSerialization\SettingsData.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
     <Compile Include="Engine\DataManagement\AsyncClusterManager.cs" />
     <Compile Include="Engine\DataManagement\SQLiteDatabase.cs" />

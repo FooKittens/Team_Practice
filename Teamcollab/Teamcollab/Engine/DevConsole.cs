@@ -187,6 +187,8 @@ namespace Teamcollab.Engine
         WriteLine("/setcampos (x, y) - Sets the camera position to a cluster.");
         WriteLine("/settings [PARAMS] - Loads/saves settings." +
           " \"default\" gets default settings.");
+        WriteLine("/quit - Exits the game.");
+        WriteLine("/daynight on|off - Enable/Disable Day/Night cycle.");
         #endregion
       }
       else if (command.StartsWith("color"))
@@ -248,6 +250,23 @@ namespace Teamcollab.Engine
           Settings.Initialize(SettingsData.GetDefault());
         else
           WriteLine("Unknown parameter(s).");
+      }
+      else if(command.StartsWith("daynight"))
+      {
+        if (command.EndsWith("on"))
+        {
+          Settings.DayNightCycleOn = true;
+          WriteLine("Enabled Day/Night cycle.");
+        }
+        else if (command.EndsWith("off"))
+        {
+          Settings.DayNightCycleOn = false;
+          WriteLine("Disabled Day/Night cycle.");
+        }
+        else
+        {
+          WriteLine("Valid params are \"on\" and \"off\".");
+        }
       }
       else
         WriteLine("{0} is not a valid command", command);
@@ -362,14 +381,19 @@ namespace Teamcollab.Engine
     private static void HandleInput()
     {
       #region Slash, Enter, Back, Escape
+
+      // Slash code handled by TextHelper.KeyToChar
+
       //if ((InputManager.KeyDown(Keys.LeftShift) ||
       //     InputManager.KeyDown(Keys.RightShift)) &&
       //    InputManager.KeyRelease(Keys.D7))
       //{
       //  currentWrittenLine += '/';
       //}
+
       if (InputManager.KeyNewDown(Keys.Enter))
       {
+        // Input gets validated in SendCommand.
         SendCommand(currentWrittenLine);
         currentWrittenLine = "";
       }

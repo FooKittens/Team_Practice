@@ -16,6 +16,7 @@ namespace Teamcollab
     public static int ScreenHeight { get; private set; }
     public static bool MultiThreading { get; private set; }
     public static Keys DevConsoleKey { get; private set; }
+    public static bool DayNightCycleOn { get; set; }
 
 
     /// <summary>
@@ -28,6 +29,7 @@ namespace Teamcollab
       ScreenHeight = data.ScreenHeight;
       MultiThreading = data.MultiThreading;
       DevConsoleKey = data.DevConsoleKey;
+      DayNightCycleOn = data.DayNightCycleOn;
     }
   }
 }
