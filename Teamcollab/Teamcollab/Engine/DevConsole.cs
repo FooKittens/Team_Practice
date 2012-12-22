@@ -27,14 +27,16 @@ namespace Teamcollab.Engine
     static bool previouslyVisible;
     static Color color;
     static TimeSpan caretTimer;
+    static TimeSpan backSpaceTimer;
     static bool showCaret;
     static int inputLineY;
     static int startRowOffset;
     #endregion
 
     #region Constants
-    const int ConsoleMaxLines = 15;
+    const int ConsoleMaxLines = 20;
     static readonly TimeSpan CaretTickTime = TimeSpan.FromMilliseconds(125);
+    static readonly TimeSpan BackSpaceTick = TimeSpan.FromMilliseconds(50);
 
     // Some color combination more or less easy on the eyes.
     static readonly Color DefaultTextColor = new Color(255, 205, 139);
@@ -45,7 +47,7 @@ namespace Teamcollab.Engine
     public static void Initialize(Game game)
     {
       DevConsole.devFont = game.Content.Load<SpriteFont>(
-        "Fonts\\ImmediateDrawerFont"
+        "Fonts\\ConsoleFont"
       );
       spriteBatch = new SpriteBatch(game.GraphicsDevice);
       pixel = new Texture2D(game.GraphicsDevice, 1, 1);
@@ -71,10 +73,14 @@ namespace Teamcollab.Engine
         currentWrittenLine += GetInputString();
 
         HandleInput();
+        IsCheckingForKeys = false;
       }
 
       previouslyVisible = Visible;
-      IsCheckingForKeys = false;
+      
+
+      // Update backspace timer
+      backSpaceTimer += gameTime.ElapsedGameTime;
 
       // Update caret vars.
       caretTimer += gameTime.ElapsedGameTime;
@@ -127,7 +133,7 @@ namespace Teamcollab.Engine
 
     public static void WriteLine(string formatString, params object[] args)
     {
-      textRows.Add(string.Format(formatString, args));
+      textRows.Add(string.Format(": " + formatString, args));
     }
 
     private static void RecieveCommand(string command)
@@ -288,7 +294,6 @@ namespace Teamcollab.Engine
       //{
       //  currentWrittenLine += '/';
       //}
-
       if (InputManager.KeyNewDown(Keys.Enter))
       {
         if (currentWrittenLine != "")
@@ -309,6 +314,20 @@ namespace Teamcollab.Engine
 
       if (InputManager.KeyNewDown(Keys.Back))
       {
+        backSpaceTimer = TimeSpan.Zero;
+        if (currentWrittenLine.Length > 0)
+        {
+          currentWrittenLine = currentWrittenLine.Remove(
+            currentWrittenLine.Length - 1
+          );
+        }
+      }
+
+      // Backspace held down
+      if (InputManager.KeyDown(Keys.Back) &&
+        backSpaceTimer > BackSpaceTick)
+      {
+        backSpaceTimer = TimeSpan.Zero;
         if (currentWrittenLine.Length > 0)
         {
           currentWrittenLine = currentWrittenLine.Remove(
