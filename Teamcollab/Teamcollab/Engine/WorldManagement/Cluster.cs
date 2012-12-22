@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Resources;
 using System.Runtime.InteropServices;
+using System.IO.Compression;
+using Teamcollab.Engine.DataManagement;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -214,66 +216,24 @@ namespace Teamcollab.Engine.WorldManagement
       return hash;
     }
 
-    public ClusterData GetData()
-    {
-      ClusterData data = new ClusterData();
-      data.Coordinates = Coordinates;
-      data.Tiles = tiles;
-      data.Type = Type;
-      return data;
-    }
-
     /// <summary>
-    /// Gets the cluster as a byte array, uses huffman encoding
-    /// for tiledata.
+    /// Gets the cluster as a byte array.
     /// </summary>
-    /// <returns></returns>
-    public byte[] GetClusterBytes()
+    public byte[] GetData()
     {
       const int clusterLength = Constants.ClusterWidth * Constants.ClusterHeight;
 
-      byte[] data = new byte[1];
-      data[0] = (byte)Type;
-      
-      //for(int i = 1; i < clusterLength + 1; ++i)
-      //{
-      //  data[i] = (byte)tiles[i - 1].Type;
-      //}
+      // 1 for cluster type, 8 for 2 ints in coordinates.
+      const int dataSize = 1 + clusterLength + 8;
 
-      int tileDataIndex = 1;
+      byte[] data = new byte[dataSize];
+      int dataIndex = 0;
+      data[dataIndex++] = (byte)Type;
+
       for (int i = 0; i < clusterLength; ++i)
       {
-        byte b = (byte)tiles[i].Type;
-        int nCount = i;
-        
-        // Count the consecutive occurences.
-        while (tiles[nCount++].Type == (TileType)b && nCount < clusterLength) ;
-
-        // Consecutive occurences of the same tiletype.
-        int oCount = nCount - i;
-        i += oCount - 1;
-
-        // Tiledata is always 5 bytes, 1 byte for the type, 4 for the int counter.
-        byte[] tileData = new byte[5];
-        
-        // Set the type
-        tileData[0] = b;
-        
-        for (int k = 0; k < 4; ++k)
-          tileData[k + 1] = BitConverter.GetBytes(oCount)[k];
-
-        // Resize the data array so the tiledata will fit.
-        Array.Resize<byte>(ref data, data.Length + tileData.Length);
-        
-        // Insert tile data.
-        for (int k = 0; k < tileData.Length; ++k)
-        {
-          data[tileDataIndex++] = tileData[k];
-        }
-        
+        data[dataIndex++] = (byte)tiles[i].Type;
       }
-      // Resize array to fit a coordinates object.
-      Array.Resize<byte>(ref data, data.Length + Marshal.SizeOf(Coordinates));
 
       byte[] coordBytes = new byte[8];
       for (int i = 0; i < 4; ++i)
@@ -287,10 +247,12 @@ namespace Teamcollab.Engine.WorldManagement
 
       for (int i = 0; i < coordBytes.Length; ++i)
       {
-        data[tileDataIndex++] = coordBytes[i];
+        data[dataIndex++] = coordBytes[i];
       }
 
-      return data;
+      return CompressionHelper.Compress(data);
     }
+
+    
   }
 }
