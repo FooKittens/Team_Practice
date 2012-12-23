@@ -26,13 +26,11 @@ namespace Teamcollab.Engine.DataManagement
     volatile object locker = new object();
 
     #region Members
-    BinaryFormatter serializer;
     #endregion
 
     public ClusterDatabase(string filepath)
       :base(filepath)
     {
-      serializer = new BinaryFormatter();
     }
 
     public virtual Cluster Find(long hashcode)

@@ -32,8 +32,6 @@ namespace Teamcollab.Engine.DataManagement
     #region Members
     List<Cluster> unloadList;
     List<Coordinates> loadList;
-    Thread unloadThread;
-    Thread loadThread;
 
     BackgroundWorker databaseWorker;
 
@@ -42,21 +40,14 @@ namespace Teamcollab.Engine.DataManagement
 
     public AsyncClusterManager()
     {
-      //loadThread = new Thread(AsyncLoader);
-      //unloadThread = new Thread(AsyncUnloader);
       clusterDb = new ClusterDatabase("ClusterData.s3db");
       unloadList = new List<Cluster>();
       loadList = new List<Coordinates>();
       databaseWorker = new BackgroundWorker();
+
       databaseWorker.DoWork += AsyncLoader;
       databaseWorker.DoWork += AsyncUnloader;
       databaseWorker.RunWorkerCompleted += WorkCompletedHandler;
-    }
-
-    public void Abort()
-    {
-      unloadThread.Abort();
-      loadThread.Abort();
     }
 
     public void UnloadCluster(Cluster cluster)

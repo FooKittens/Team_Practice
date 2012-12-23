@@ -113,6 +113,7 @@ namespace Teamcollab.Engine.Helpers
     }
 
     #endregion
+
     public static string KeyToChar(Keys key)
     {
       string inputChar = "";

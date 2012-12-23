@@ -84,16 +84,16 @@ namespace Teamcollab.Engine.WorldManagement
           {
             currentType = (TileType)(rand.Next() % 2 + 1);
           }
-          //if ((x == 0 || x == Constants.ClusterWidth - 1) ||
-          //   (y == 0 || y == Constants.ClusterHeight - 1))
-          //{
-          //  t.Type = TileType.Grass;
-          //}
-          //else
-          //{
-          //  t.Type = TileType.Water;
-          //}
-          t.Type = currentType;
+          if ((x == 0 || x == Constants.ClusterWidth - 1) ||
+             (y == 0 || y == Constants.ClusterHeight - 1))
+          {
+            t.Type = TileType.Grass;
+          }
+          else
+          {
+            t.Type = TileType.Water;
+          }
+          //t.Type = currentType;
           cluster.SetTileAt(x, y, t);
         }
       }
