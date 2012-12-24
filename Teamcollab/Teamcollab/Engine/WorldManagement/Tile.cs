@@ -46,9 +46,10 @@ namespace Teamcollab.Engine.WorldManagement
         case TileType.Undefined:
           throw new ArgumentException("Undefined tiletype requested.");
         case TileType.Grass:
-          created.Solid = true;
+          
           break;
         case TileType.Water:
+          
           break;
         case TileType.Mountain:
 

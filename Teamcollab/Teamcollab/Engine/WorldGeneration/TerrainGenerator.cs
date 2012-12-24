@@ -68,7 +68,7 @@ namespace Teamcollab.Engine.WorldGeneration
       {
         type = TileType.Mountain;
       }
-      else if (noise >= -0.25f)
+      else if (noise >= -0.55f)
       {
         type = TileType.Grass;
       }
