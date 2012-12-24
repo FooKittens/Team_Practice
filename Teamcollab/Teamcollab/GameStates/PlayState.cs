@@ -77,6 +77,30 @@ namespace Teamcollab.GameStates
       Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(change));
     }
 
+    private void MoveCameraOneTile(Direction dir)
+    {
+      Coordinates change = Coordinates.Zero;
+      switch (dir)
+      {
+        case Direction.Up:
+          change.Y = -1;
+          break;
+        case Direction.Down:
+          change.Y = 1;
+          break;
+        case Direction.Left:
+          change.X = -1;
+          break;
+        case Direction.Right:
+          change.X = 1;
+          break;
+      }
+      Vector2 camTile = WorldManager.TransformScreenToTile(Camera2D.TargetPosition);
+      change.X += Convert.ToInt32(camTile.X);
+      change.Y += Convert.ToInt32(camTile.Y);
+      Camera2D.SetTargetPosition(WorldManager.GetTileScreenPosition(change));
+    }
+
     public override void Update(GameTime gameTime)
     {
       Camera2D.Update(gameTime);
@@ -95,19 +119,47 @@ namespace Teamcollab.GameStates
 
       if (InputManager.KeyNewDown(Keys.W))
       {
-        MoveCameraOneCluster(Direction.Up);
+        if (InputManager.KeyDown(Keys.LeftShift))
+        {
+          MoveCameraOneCluster(Direction.Up);
+        }
+        else
+        {
+          MoveCameraOneTile(Direction.Up);
+        }
       }
       else if (InputManager.KeyNewDown(Keys.A))
       {
-        MoveCameraOneCluster(Direction.Left);
+        if (InputManager.KeyDown(Keys.LeftShift))
+        {
+          MoveCameraOneCluster(Direction.Left);
+        }
+        else
+        {
+          MoveCameraOneTile(Direction.Left);
+        }
       }
       else if (InputManager.KeyNewDown(Keys.S))
       {
-        MoveCameraOneCluster(Direction.Down);
+        if (InputManager.KeyDown(Keys.LeftShift))
+        {
+          MoveCameraOneCluster(Direction.Down);
+        }
+        else
+        {
+          MoveCameraOneTile(Direction.Down);
+        }
       }
       else if (InputManager.KeyNewDown(Keys.D))
       {
-        MoveCameraOneCluster(Direction.Right);
+        if (InputManager.KeyDown(Keys.LeftShift))
+        {
+          MoveCameraOneCluster(Direction.Right);
+        }
+        else
+        {
+          MoveCameraOneTile(Direction.Right);
+        }
       }
 
       float deltaScroll = InputManager.MouseWheelChange();

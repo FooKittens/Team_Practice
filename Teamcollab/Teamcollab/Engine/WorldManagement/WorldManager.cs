@@ -110,6 +110,14 @@ namespace Teamcollab.Engine.WorldManagement
       );
     }
 
+    public static Vector2 TransformScreenToTile(Vector2 screenCoordinates)
+    {
+      return Vector2.Transform(
+        screenCoordinates,
+        ScreenTileTransform
+      );
+    }
+
     #endregion
 
     // DEBUG TEST CONSTANTS

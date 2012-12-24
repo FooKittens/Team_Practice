@@ -9,6 +9,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Data.SQLite;
 using System.ComponentModel;
+using Teamcollab.Engine.WorldGeneration;
 
 namespace Teamcollab.Engine.DataManagement
 {
@@ -34,6 +35,7 @@ namespace Teamcollab.Engine.DataManagement
     List<Coordinates> loadList;
 
     BackgroundWorker databaseWorker;
+
 
     ClusterDatabase clusterDb;
     #endregion
@@ -113,14 +115,13 @@ namespace Teamcollab.Engine.DataManagement
           cluster = clusterDb.Find(coords.X, coords.Y);
         }
 
-        if (cluster == null && ClusterNotLoaded != null)
+        // If no cluster is found, generate a new one.
+        if (cluster == null)
         {
-          ClusterNotLoaded(coords);
+          cluster = TerrainGenerator.CreateCluster(coords);
         }
-        else if (ClusterLoaded != null)
-        {
-          ClusterLoaded(cluster);
-        }
+
+         ClusterLoaded(cluster);
       }
     }
 
