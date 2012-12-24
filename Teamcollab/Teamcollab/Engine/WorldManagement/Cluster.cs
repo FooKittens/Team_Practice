@@ -96,6 +96,8 @@ namespace Teamcollab.Engine.WorldManagement
     // TODO REMOVE
     Resource<Texture2D> squareRes;
     Resource<Texture2D> grassRes;
+    Resource<Texture2D> waterRes;
+    Resource<Texture2D> stoneRes;
     public void Draw(SpriteBatch spriteBatch)
     {
       // TODO REMOVE
@@ -103,6 +105,8 @@ namespace Teamcollab.Engine.WorldManagement
       {
         squareRes = tileTextures.Query("Square");
         grassRes = tileTextures.Query("Grass");
+        waterRes = tileTextures.Query("Water");
+        stoneRes = tileTextures.Query("Stone");
       }
 
       for (int y = 0; y < Constants.ClusterHeight; ++y)
@@ -119,7 +123,22 @@ namespace Teamcollab.Engine.WorldManagement
           Vector2 drawPos = WorldManager.TransformByCluster(tilePos, Coordinates);
           drawPos = WorldManager.GetTileScreenPosition(drawPos);
 
-          Resource<Texture2D> texture = tile.Type == TileType.Water ? grassRes : squareRes;
+          Resource<Texture2D> texture;
+          switch (tile.Type)
+          {
+            case TileType.Grass:
+              texture = grassRes;
+              break;
+            case TileType.Water:
+              texture = waterRes;
+              break;
+            case TileType.Mountain:
+              texture = stoneRes;
+              break;
+            default:
+              texture = squareRes;
+              break;
+          }
 
           spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
         }

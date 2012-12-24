@@ -94,6 +94,8 @@
     <Compile Include="Engine\Helpers\ImmediateDrawer.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
     <Compile Include="Engine\Helpers\TextHelper.cs" />
+    <Compile Include="Engine\WorldGeneration\PerlinGenerator.cs" />
+    <Compile Include="Engine\WorldGeneration\TerrainGenerator.cs" />
     <Compile Include="Engine\WorldManagement\World.cs" />
     <Compile Include="Engine\WorldManagement\WorldManager.cs" />
     <Compile Include="Engine\WorldManagement\Cluster.cs" />
@@ -158,7 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Items\" />
-    <Folder Include="Engine\WorldGeneration\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -25,6 +25,8 @@ namespace Teamcollab.Resources
 
       TileTextureBank.Add("Square", content.Load<Texture2D>("Art\\square"));
       TileTextureBank.Add("Grass", content.Load<Texture2D>("Art\\grass32x32"));
+      TileTextureBank.Add("Water", content.Load<Texture2D>("Art\\WaterTile"));
+      TileTextureBank.Add("Stone", content.Load<Texture2D>("Art\\stone"));
     }
   }
 }
