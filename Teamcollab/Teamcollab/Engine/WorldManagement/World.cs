@@ -10,6 +10,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Data;
+using Teamcollab.Engine.WorldGeneration;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -58,7 +59,7 @@ namespace Teamcollab.Engine.WorldManagement
 
     private void ClusterNotLoadedHandler(Coordinates coords)
     {
-      loadedClusters.Push(CreateCluster(coords));
+      loadedClusters.Push(TerrainGenerator.CreateCluster(coords));
     }
 
     static Random rand = new Random();

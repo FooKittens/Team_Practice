@@ -26,7 +26,7 @@ namespace Teamcollab.DataSerialization
       appSettings.ScreenHeight = 768;
       appSettings.MultiThreading = true;
       appSettings.DevConsoleKey = Keys.OemPipe;
-      appSettings.DayNightCycleOn = true;
+      appSettings.DayNightCycleOn = false;
       return appSettings;
     }
   }
