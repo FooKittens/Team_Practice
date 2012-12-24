@@ -101,17 +101,18 @@ namespace Teamcollab.Engine.WorldGeneration
 
     private static float InterpolateNoise2D(Noise2D noiseFunc, float x, float y)
     {
-      float iX, iY;
+      int iX = (int)Math.Floor(x);
+      int iY = (int)Math.Floor(y);
 
-      float v1 = SmoothNoise2D(noiseFunc, (int)x, (int)y, 1);
-      float v2 = SmoothNoise2D(noiseFunc, (int)x + 1, (int)y, 1);
-      float v3 = SmoothNoise2D(noiseFunc, (int)x, (int)y + 1, 1);
-      float v4 = SmoothNoise2D(noiseFunc, (int)x + 1, (int)y + 1, 1);
+      float v1 = SmoothNoise2D(noiseFunc, iX, iY, 1);
+      float v2 = SmoothNoise2D(noiseFunc, iX + 1, iY, 1);
+      float v3 = SmoothNoise2D(noiseFunc, iX, iY + 1, 1);
+      float v4 = SmoothNoise2D(noiseFunc, iX + 1, iY + 1, 1);
 
-      iX = Lerp(v1, v2, x - (int)x);
-      iY = Lerp(v3, v4, x - (int)x);
+      float lX = Lerp(v1, v2, x - iX);
+      float lY = Lerp(v3, v4, x - iX);
 
-      return Lerp(iX, iY, y - (int)y);
+      return Lerp(lX, lY, y - iY);
     }
 
     private static float Lerp(float a, float b, float weight)
