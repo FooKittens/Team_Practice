@@ -41,6 +41,14 @@ namespace Teamcollab.GameStates
     public override void Update(GameTime gameTime)
     {
       gManager.Update(gameTime);
+
+      if (InputManager.KeyRelease(Keys.Escape))
+      {
+        if (StateChangeRequested != null)
+        {
+          StateChangeRequested(ApplicationState.Menu);
+        }
+      }
     }
 
     public override void Draw()
