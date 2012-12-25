@@ -16,8 +16,8 @@ namespace Teamcollab.GameObjects
     #region Members
     #endregion
 
-    public DrawableEntity(Vector2 positionInCluster)
-      :base(positionInCluster)
+    public DrawableEntity(Vector2 worldPosition)
+      :base(worldPosition)
     {
     }
 

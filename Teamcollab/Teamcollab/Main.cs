@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.DataSerialization;
 using Teamcollab.Engine.Helpers;
-using Teamcollab.Managers;
 using Teamcollab.Resources;
 using System;
 using Teamcollab.Engine;
 using Microsoft.Xna.Framework.Input;
+using Teamcollab.GameStates;
 
 namespace Teamcollab
 {

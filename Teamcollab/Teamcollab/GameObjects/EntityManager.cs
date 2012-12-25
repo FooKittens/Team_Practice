@@ -7,38 +7,29 @@ using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.GameObjects
 {
-  class EntityManager
+  public sealed class EntityManager
   {
     #region Properties
-    Cluster parent;
     #endregion
 
     #region Members
+    private static EntityManager singleton;
     List<Entity> entities;
     #endregion
 
-    #region Events
-    public event ObjectOutOfBoundsHandler ObjectOutOfBoundsEvent;
-    #endregion
-
-    public delegate void ObjectOutOfBoundsHandler(Entity entity); // TODO(Martin): Move to world manager
-
-    public EntityManager(Cluster cluster)
+    public static EntityManager GetInstance()
     {
-      parent = cluster;
-      entities = new List<Entity>();
+      if (singleton == null)
+      {
+        singleton = new EntityManager();
+      }
+
+      return singleton;
     }
 
-    private void BoundsCheck(Entity entity)
+    private EntityManager()
     {
-      Vector2 pos = entity.PositionInCluster;
-      if (pos.X < Constants.ClusterWidth / 2 &&
-        pos.X > -Constants.ClusterWidth / 2 &&
-        pos.Y < Constants.ClusterHeight / 2 &&
-        pos.Y > -Constants.ClusterHeight / 2)
-      {
-        ObjectOutOfBoundsEvent(entity);
-      }
+      entities = new List<Entity>();
     }
 
     public void Update(GameTime gameTime)
