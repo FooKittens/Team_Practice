@@ -8,7 +8,7 @@ namespace Teamcollab.GameObjects
   /// <summary>
   /// Holds all entity types
   /// </summary>
-  enum EntityType
+  public enum EntityType
   {
     Undefined = 0,
 

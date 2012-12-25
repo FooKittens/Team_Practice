@@ -1,24 +1,23 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine;
-using Microsoft.Xna.Framework.Input;
-using Teamcollab.Engine.Helpers;
 using Teamcollab.Engine.WorldManagement;
+using Microsoft.Xna.Framework;
+using Teamcollab.Engine.Helpers;
 using Teamcollab.GUI;
+using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab.GameStates
 {
-  /// <summary>
-  /// Handles the in-game logic
-  /// </summary>
-  sealed class PlayState : GameState
+  class GameManager
   {
     #region Properties
-    #endregion
-
-    #region Events
-    public override event StateChangeRequestHandler StateChangeRequested;
+    /// <summary>
+    /// A reference to the game object that uses the state.
+    /// </summary>
+    protected Game Game { get; set; }
     #endregion
 
     #region Members
@@ -30,11 +29,11 @@ namespace Teamcollab.GameStates
 
     Effect testShader;
 
-    public PlayState(Game game)
-      :base(game, ApplicationState.Play)
+    public GameManager(Game game)
     {
       // Initialize the gamestate.
       Initialize();
+      Game = game;
 
       testShader = game.Content.Load<Effect>("BasicShader");
     }
@@ -48,6 +47,8 @@ namespace Teamcollab.GameStates
     float inten = 0f;
     float t;
 
+
+    #region Camera utils
     [Flags]
     enum Direction
     {
@@ -111,6 +112,7 @@ namespace Teamcollab.GameStates
       change.Y += Convert.ToInt32(camTile.Y);
       Camera2D.SetTargetPosition(WorldManager.GetTileScreenPosition(change));
     }
+    #endregion
 
     public override void Update(GameTime gameTime)
     {
@@ -127,6 +129,7 @@ namespace Teamcollab.GameStates
         inten = 1f;
       }
 
+      #region Camera
       Direction currentDirection = (Direction)0;
 
       if (InputManager.KeyDown(Keys.W))
@@ -158,6 +161,7 @@ namespace Teamcollab.GameStates
       }
 
       previousDirection = currentDirection;
+      #endregion
 
       float deltaScroll = InputManager.MouseWheelChange();
 
@@ -172,35 +176,18 @@ namespace Teamcollab.GameStates
       {
         Camera2D.SetTargetScale(2.5f);
       }
-
-      if (InputManager.KeyRelease(Keys.Escape))
-      {
-        if (StateChangeRequested != null)
-        {
-          StateChangeRequested(ApplicationState.Menu);
-        }
-      }
     }
 
     public override void Draw()
     {
-      Game.GraphicsDevice.Clear(Color.DimGray);  
+      Game.GraphicsDevice.Clear(Color.DimGray);
 
       testShader.Parameters["AmbientIntensity"].SetValue(inten);
-
       testShader.Parameters["World"].SetValue(Matrix.Identity);
-
-      
-
       testShader.Parameters["View"].SetValue(Camera2D.View);
-
       testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
-      RasterizerState rs = new RasterizerState();
-      rs.FillMode = FillMode.WireFrame;
-
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
-      //spriteBatch.Begin();
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, testShader);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }

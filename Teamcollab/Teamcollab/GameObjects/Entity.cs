@@ -17,22 +17,22 @@ namespace Teamcollab.GameObjects
   /// <summary>
   /// A blueprint for entities
   /// </summary>
-  abstract class Entity
+  public abstract class Entity
   {
     #region Properties
-    public Vector2 PositionInCluster { get { return positionInCluster; } }
+    public Vector2 WorldPosition { get { return worldPosition; } }
     public abstract EntityType EntityType { get; }
     public bool NeedsUpdate { get; protected set; }
     #endregion
 
     #region Members
     protected bool isDead;
-    protected Vector2 positionInCluster;
+    protected Vector2 worldPosition;
     #endregion
 
-    public Entity(Vector2 positionInCluster)
+    public Entity(Vector2 worldPosition)
     {
-      this.positionInCluster = positionInCluster;
+      this.worldPosition = worldPosition;
     }
 
     /// <summary>
@@ -66,15 +66,15 @@ namespace Teamcollab.GameObjects
     /// Changes the entity's cluster, and moves its
     /// position relative to the new cluster
     /// </summary>
-    /// <param name="newClusterPosition">
-    /// The new position, relative to the new cluster
+    /// <param name="newWorldPosition">
+    /// The new world relative position
     /// </param>
     /// <param name="worldManager">
     /// Used to ensure that it is the world manager that calls the method
     /// </param>
-    public void ChangeCluster(Vector2 newClusterPosition, WorldManager worldManager)
+    public void ChangeCluster(Vector2 newWorldPosition, WorldManager worldManager)
     {
-      positionInCluster = newClusterPosition;
+      worldPosition = newWorldPosition;
     }
   }
 }

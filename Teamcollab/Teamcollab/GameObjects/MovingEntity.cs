@@ -8,12 +8,12 @@ namespace Teamcollab.GameObjects
 {
   abstract class MovingEntity : DrawableEntity
   {
-    public MovingEntity(Vector2 positionInCluster)
-      : base(positionInCluster)
+    public MovingEntity(Vector2 worldPosition)
+      : base(worldPosition)
     {
     }
 
-    public override void  Update(Microsoft.Xna.Framework.GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
       UpdateInput();
       UpdateMovement();

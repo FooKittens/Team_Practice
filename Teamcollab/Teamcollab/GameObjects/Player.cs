@@ -22,8 +22,8 @@ namespace Teamcollab.GameObjects
 
     #endregion
 
-    public Player(Vector2 positionInCluster)
-      : base(positionInCluster)
+    public Player(Vector2 worldPosition)
+      : base(worldPosition)
     {
     }
 
@@ -36,29 +36,30 @@ namespace Teamcollab.GameObjects
     {
       if (InputManager.KeyDown(Keys.Down))
       {
-        positionInCluster.Y -= 1f;
+        worldPosition.Y -= 1f;
       }
       if (InputManager.KeyDown(Keys.Up))
       {
-        positionInCluster.Y -= 1f;
+        worldPosition.Y -= 1f;
       }
       if (InputManager.KeyDown(Keys.Left))
       {
-        positionInCluster.X -= 1f;
+        worldPosition.X -= 1f;
       }
       if (InputManager.KeyDown(Keys.Right))
       {
-        positionInCluster.X -= 1f;
+        worldPosition.X -= 1f;
       }
     }
 
     protected override void UpdateMovement()
     {
-      
+
     }
 
     protected override void UpdateAnimation()
     {
+
     }
 
     protected override void UpdateState()
@@ -73,7 +74,7 @@ namespace Teamcollab.GameObjects
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-      spriteBatch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), PositionInCluster, Color.White);
+      spriteBatch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), WorldPosition, Color.White);
     }
   }
 }

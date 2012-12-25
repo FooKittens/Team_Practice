@@ -8,7 +8,7 @@ using Teamcollab.GameStates;
 using Teamcollab.Engine;
 using Microsoft.Xna.Framework.Input;
 
-namespace Teamcollab.Managers
+namespace Teamcollab.GameStates
 {
   sealed class StateManager
   {
