@@ -142,14 +142,22 @@ namespace Teamcollab.Engine.WorldManagement
     private bool TestClusterRange(Cluster cluster)
     {
       Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.Position);
+      camCluster = Vector2.Transform(camCluster, WorldManager.IsometricTransform);
 
-      if (Convert.ToInt32(Math.Abs(cluster.Coordinates.X - camCluster.X)) > 2 ||
-          Convert.ToInt32(Math.Abs(cluster.Coordinates.Y - camCluster.Y)) > 2)
+      if (IsInView(cluster))
       {
-        return false;
+        return true;
       }
 
-      return true;
+      //if (Convert.ToInt32(Math.Abs(cluster.Coordinates.X - camCluster.X)) > 2 ||
+      //    Convert.ToInt32(Math.Abs(cluster.Coordinates.Y - camCluster.Y)) > 2)
+      //{
+      //  return false;
+      //}
+      //
+      //return true;
+
+      return false;
     }
 
     private void CheckClusterLoading()
@@ -223,14 +231,27 @@ namespace Teamcollab.Engine.WorldManagement
       Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
       Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
 
-      topLeft = WorldManager.TransformScreenToCluster(topLeft);
-      bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
+      //topLeft = Vector2.Transform(topLeft, WorldManager.IsometricTransform);
+      //bottomRight = Vector2.Transform(bottomRight, WorldManager.IsometricTransform);
+
+      //topLeft = WorldManager.TransformScreenToCluster(topLeft);
+      //bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
+
+      Vector2 centerOfCluster = WorldManager.GetClusterScreenCenter(clusterCoordinates);
+      centerOfCluster = Vector2.Transform(centerOfCluster, WorldManager.IsometricTransform);
+      //centerOfCluster = WorldManager.TransformScreenToCluster(centerOfCluster);
+
+      ImmediateDrawer.GetInstance().DrawString(
+        string.Format("TopLeft: {0}\nBottomRight: {1}\nCluster: {2}",
+          topLeft.ToString(), bottomRight.ToString(), centerOfCluster.ToString()
+        ), Vector2.Zero
+      );
 
       // Offsets are in cluster coordinates.
-      if (clusterCoordinates.X + 0.5f >= topLeft.X &&
-          clusterCoordinates.X - 0.5f <= bottomRight.X &&
-          clusterCoordinates.Y - 0.5f <= bottomRight.Y &&
-          clusterCoordinates.Y + 0.5f >= topLeft.Y)
+      if (centerOfCluster.X + 0.5f >= topLeft.X &&
+          centerOfCluster.X - 0.5f <= bottomRight.X &&
+          centerOfCluster.Y - 0.5f <= bottomRight.Y &&
+          centerOfCluster.Y + 0.5f >= topLeft.Y)
       {
         return true;
       }

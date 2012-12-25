@@ -189,6 +189,9 @@ namespace Teamcollab.GameStates
 
       spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
       worldManager.Draw(spriteBatch);
+      spriteBatch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), // TODO(Martin) remove this line
+        Camera2D.TranslatePositionByCamera(InputManager.MousePosition()),
+        Color.White);
       spriteBatch.End();
     }
   }

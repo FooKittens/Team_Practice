@@ -34,13 +34,8 @@ namespace Teamcollab.Engine.Helpers
       font = game.Content.Load<SpriteFont>("Fonts\\ImmediateDrawerFont");
     }
 
-    public static ImmediateDrawer GetInstance(Game game)
+    public static ImmediateDrawer GetInstance()
     {
-      if (singleton == null)
-      {
-        singleton = new ImmediateDrawer(game);
-      }
-
       return singleton;
     }
 
@@ -77,6 +72,11 @@ namespace Teamcollab.Engine.Helpers
     public void DrawString(string text, Vector2 position)
     {
       drawStrings.Add(new Tuple<string, Vector2>(text, position));
+    }
+
+    internal static void Initialize(Game game)
+    {
+      singleton = new ImmediateDrawer(game);
     }
   }
 }

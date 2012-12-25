@@ -34,6 +34,7 @@ namespace Teamcollab
       ResourceManager.Initialize(Content);
       DevConsole.Initialize(this);
       stateManager = new StateManager(this);
+      ImmediateDrawer.Initialize(this);
 			base.Initialize();
 		}
 
@@ -77,7 +78,7 @@ namespace Teamcollab
 
       stateManager.Draw();
 
-      ImmediateDrawer.GetInstance(this).Draw();
+      ImmediateDrawer.GetInstance().Draw();
       DevConsole.Draw();
 			base.Draw(gameTime);
 		}
