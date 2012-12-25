@@ -187,13 +187,11 @@ namespace Teamcollab.GameStates
 
     public override void Draw()
     {
-      Game.GraphicsDevice.Clear(Color.DimGray);
-
-      Matrix iso = Matrix.Identity;      
+      Game.GraphicsDevice.Clear(Color.DimGray);  
 
       testShader.Parameters["AmbientIntensity"].SetValue(inten);
 
-      testShader.Parameters["World"].SetValue(iso);
+      testShader.Parameters["World"].SetValue(Matrix.Identity);
 
       
 
@@ -204,7 +202,7 @@ namespace Teamcollab.GameStates
       RasterizerState rs = new RasterizerState();
       rs.FillMode = FillMode.WireFrame;
 
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, testShader);
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
       //spriteBatch.Begin();
       worldManager.Draw(spriteBatch);
       spriteBatch.End();

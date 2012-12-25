@@ -15,7 +15,7 @@ namespace Teamcollab.Engine.WorldGeneration
     #endregion
 
     const float GenPersistance2D = 0.75f;
-    const int GenOctaves = 6;
+    const int GenOctaves = 5;
 
     #region Members
     static  PerlinGenerator gen;
@@ -48,14 +48,6 @@ namespace Teamcollab.Engine.WorldGeneration
           float noise = GenerateTileNoise(noisePos.X, noisePos.Y);
           TileType type = TileFromNoise(noise);
           Tile t = Tile.Create(type);
-          if (noise < 0)
-          {
-            t.Layer = 0;
-          }
-          else
-          {
-            t.Layer = (int)(noise * 2.5);
-          }
           
           t.Coordinates = new Coordinates((int)tileWorldPos.X, (int)tileWorldPos.Y);
           cluster.SetTileAt(x, y, t);
@@ -73,11 +65,7 @@ namespace Teamcollab.Engine.WorldGeneration
     private static TileType TileFromNoise(float noise)
     {
       TileType type;
-      if (noise >= 1.05f)
-      {
-        type = TileType.Mountain;
-      }
-      else if (noise >= -0.55f)
+      if (noise >= -0.55f)
       {
         type = TileType.Grass;
       }

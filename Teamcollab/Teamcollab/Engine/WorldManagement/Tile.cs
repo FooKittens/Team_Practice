@@ -29,7 +29,6 @@ namespace Teamcollab.Engine.WorldManagement
     #region Members
     public TileType Type;
     public Coordinates Coordinates;
-    public int Layer;
     #endregion
 
     public Tile(TileType type)

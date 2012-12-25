@@ -11,7 +11,7 @@ namespace Teamcollab
 
     #region World Constants
     public const int TileWidth = 64;
-    public const int TileHeight = 32;
+    public const int TileHeight = 64;
 
     public const int TileMod = 6;
     public const float WorldPixelRatio = 32;
