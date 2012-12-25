@@ -59,7 +59,7 @@ namespace Teamcollab.GameStates
     }
     private void MoveCameraOneCluster(Direction dir)
     {
-      Coordinates change = Coordinates.Zero;
+      Vector2 change = Coordinates.Zero;
       if (((int)dir & 1) == 1)
       {
         change.Y -= 1;
@@ -82,7 +82,7 @@ namespace Teamcollab.GameStates
       );
       change.X += Convert.ToInt32(camCluster.X);
       change.Y += Convert.ToInt32(camCluster.Y);
-      Camera2D.SetTargetPosition(WorldManager.GetClusterScreenCenter(change));
+      Camera2D.SetPosition(WorldManager.GetClusterScreenCenter(change));
     }
 
     private void MoveCameraOneTile(Direction dir)

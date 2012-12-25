@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Resources;
 using Microsoft.Xna.Framework;
 using Teamcollab.Engine.WorldManagement;
+using Teamcollab.Engine.Helpers;
 
 namespace Teamcollab.GameObjects
 {
@@ -21,7 +22,7 @@ namespace Teamcollab.GameObjects
   {
     #region Properties
     public Vector2 WorldPosition { get { return worldPosition; } }
-    public abstract EntityType EntityType { get; }
+    public EntityType EntityType { get; protected set; }
     public bool NeedsUpdate { get; protected set; }
     #endregion
 
@@ -30,9 +31,10 @@ namespace Teamcollab.GameObjects
     protected Vector2 worldPosition;
     #endregion
 
-    public Entity(Vector2 worldPosition)
+    public Entity(EntityType type, Vector2 worldPosition)
     {
       this.worldPosition = worldPosition;
+      this.EntityType = type;
     }
 
     /// <summary>
@@ -42,6 +44,11 @@ namespace Teamcollab.GameObjects
     public virtual void Update(GameTime gameTime)
     {
       UpdateState();
+    }
+
+    public virtual void Draw(IsoBatch batch)
+    {
+
     }
 
     protected abstract void UpdateState();
@@ -61,20 +68,5 @@ namespace Teamcollab.GameObjects
     /// (martingronlund@live.se)
     /// </returns>
     public abstract object GetData();
-
-    /// <summary>
-    /// Changes the entity's cluster, and moves its
-    /// position relative to the new cluster
-    /// </summary>
-    /// <param name="newWorldPosition">
-    /// The new world relative position
-    /// </param>
-    /// <param name="worldManager">
-    /// Used to ensure that it is the world manager that calls the method
-    /// </param>
-    public void ChangeCluster(Vector2 newWorldPosition, WorldManager worldManager)
-    {
-      worldPosition = newWorldPosition;
-    }
   }
 }

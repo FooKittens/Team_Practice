@@ -13,5 +13,6 @@ namespace Teamcollab.GameObjects
     Undefined = 0,
 
     Player,
+    Tree,
   }
 }

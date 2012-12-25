@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework;
 
 namespace Teamcollab.GameObjects
 {
-  abstract class MovingEntity : DrawableEntity
+  abstract class MovingEntity : Entity
   {
-    public MovingEntity(Vector2 worldPosition)
-      : base(worldPosition)
+    public MovingEntity(EntityType type, Vector2 worldPosition)
+      : base(type, worldPosition)
     {
     }
 

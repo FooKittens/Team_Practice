@@ -6,6 +6,8 @@ using Teamcollab.Resources;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
 using Teamcollab.Engine.DataManagement;
+using System.Collections.Generic;
+using Teamcollab.GameObjects;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -42,6 +44,7 @@ namespace Teamcollab.Engine.WorldManagement
     #region Members
     private Tile[] tiles;
     public Coordinates Coordinates;
+    List<Entity> staticObjects;
     #endregion
 
     static ResourceCollection<Texture2D> tileTextures;
@@ -59,20 +62,15 @@ namespace Teamcollab.Engine.WorldManagement
       Active = false;
       Coordinates = new Coordinates(x, y);
       HashCode = GetHashCode();
+      staticObjects = new List<Entity>();
     }
 
     public Cluster(ClusterType type, Coordinates coordinates)
       :this(type, coordinates.X, coordinates.Y) { }
 
     public Cluster(ClusterData data)
-    {
-      Type = data.Type;
-      tiles = data.Tiles;
-      Coordinates = data.Coordinates;
-
-      SetHashCode();
-      Active = false;
-    }
+      :this(data.Type, data.Coordinates.X, data.Coordinates.Y)
+    { }
 
     public void Unload()
     {
@@ -114,14 +112,14 @@ namespace Teamcollab.Engine.WorldManagement
         for (int x = 0; x < Constants.ClusterWidth; ++x)
         {
           Tile tile = GetTileAt(x, y);
+          if (tile == null) continue;
 
           Vector2 tilePos = new Vector2(
-            tile.Coordinates.X,
-            tile.Coordinates.Y
+            x - Constants.ClusterWidth / 2,
+            y - Constants.ClusterHeight / 2
           );
 
-          //Vector2 drawPos = WorldManager.TransformIsometric(tilePos);
-          //drawPos = WorldManager.TransformWorldToScreen(drawPos);
+          tilePos = WorldManager.TransformByCluster(tilePos, Coordinates);
 
           Resource<Texture2D> texture;
           switch (tile.Type)
@@ -142,6 +140,11 @@ namespace Teamcollab.Engine.WorldManagement
 
           spriteBatch.Draw(texture, tilePos, null, Color.White, 0f, new Vector2(32, 16), 1f, SpriteEffects.None, 0f);
         }
+      }
+
+      foreach (Entity ent in staticObjects)
+      {
+        ent.Draw(spriteBatch);
       }
     }
 
@@ -191,6 +194,11 @@ namespace Teamcollab.Engine.WorldManagement
     public void SetTileAt(Coordinates coord, Tile newTile)
     {
       SetTileAt(coord.X, coord.Y, newTile);
+    }
+
+    public void AddStaticEntity(Entity entity)
+    {
+      staticObjects.Add(entity);
     }
 
     /// <summary>

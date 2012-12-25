@@ -5,6 +5,7 @@ using System.Text;
 using Teamcollab.Engine.WorldManagement;
 using Teamcollab.Engine.Helpers;
 using Microsoft.Xna.Framework;
+using Teamcollab.GameObjects;
 
 namespace Teamcollab.Engine.WorldGeneration
 {
@@ -51,6 +52,11 @@ namespace Teamcollab.Engine.WorldGeneration
           
           t.Coordinates = new Coordinates((int)tileWorldPos.X, (int)tileWorldPos.Y);
           cluster.SetTileAt(x, y, t);
+
+          if (noise > 2 && x % 3 == 0 && y % 4 == 0)
+          {
+            cluster.AddStaticEntity(new StaticEntity(EntityType.Tree, tileWorldPos));
+          }
         }
       }
 

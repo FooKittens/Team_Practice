@@ -12,19 +12,17 @@ namespace Teamcollab.GameObjects
   class Player : MovingEntity
   {
     #region Properties
-    public override EntityType EntityType
-    {
-      get { return GameObjects.EntityType.Player; }
-    }
+
     #endregion
 
     #region Members
 
     #endregion
 
-    public Player(Vector2 worldPosition)
-      : base(worldPosition)
+    public Player(EntityType type, Vector2 worldPosition)
+      : base(type, worldPosition)
     {
+      base.EntityType = EntityType.Player;
     }
 
     public override void Update(GameTime gameTime)
@@ -57,11 +55,6 @@ namespace Teamcollab.GameObjects
 
     }
 
-    protected override void UpdateAnimation()
-    {
-
-    }
-
     protected override void UpdateState()
     {
       
@@ -72,9 +65,9 @@ namespace Teamcollab.GameObjects
       throw new NotImplementedException();
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(IsoBatch batch)
     {
-      spriteBatch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), WorldPosition, Color.White);
+      batch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), WorldPosition, Color.White);
     }
   }
 }

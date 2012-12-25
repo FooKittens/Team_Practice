@@ -11,6 +11,7 @@ namespace Teamcollab.Resources
   {
     #region Properties
     public static ResourceCollection<Texture2D> TileTextureBank { get; private set; }
+    public static ResourceCollection<Texture2D> SpriteTextureBank { get; private set; }
 
     #endregion
 
@@ -26,6 +27,9 @@ namespace Teamcollab.Resources
       TileTextureBank.Add("Grass", content.Load<Texture2D>("Art\\grassIso"));
       TileTextureBank.Add("Water", content.Load<Texture2D>("Art\\waterIso"));
       TileTextureBank.Add("Stone", content.Load<Texture2D>("Art\\stoneIso"));
+
+      SpriteTextureBank = new ResourceCollection<Texture2D>();
+      SpriteTextureBank.Add("Pine", content.Load<Texture2D>("Art\\IHASTREE"));
     }
   }
 }

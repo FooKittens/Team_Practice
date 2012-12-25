@@ -157,7 +157,7 @@ namespace Teamcollab.Engine.WorldManagement
       int removedCount = 0;
       for (int i = 0; i < clusters.Length; ++i)
       {
-        if (clusters[i] != null && TestClusterRange(clusters[i]) == false)
+        if (clusters[i] != null && IsInView(clusters[i]) == false)
         {
           DevConsole.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
           asyncManager.UnloadCluster(clusters[i]);
@@ -172,13 +172,20 @@ namespace Teamcollab.Engine.WorldManagement
         TrimClusters();
       }
 
-      Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.Position);
+      Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
+      Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
+
+      topLeft = WorldManager.TransformScreenToCluster(topLeft);
+      bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
+
+      topLeft = WorldManager.TransformIsometric(topLeft);
+      bottomRight = WorldManager.TransformIsometric(bottomRight);
 
       Rectangle rect = new Rectangle(
-        Convert.ToInt32(camCluster.X - 2),
-        Convert.ToInt32(camCluster.Y - 2),
-        4,
-        4
+        Convert.ToInt32(topLeft.X - 2),
+        Convert.ToInt32(topLeft.Y - 2),
+        Convert.ToInt32(bottomRight.X - topLeft.X),
+        Convert.ToInt32(bottomRight.Y - topLeft.Y)
       );
 
       for (int y = rect.Top; y <= rect.Bottom; ++y)
@@ -186,7 +193,7 @@ namespace Teamcollab.Engine.WorldManagement
         for (int x = rect.Left; x <= rect.Right; ++x)
         {
           if (GetCluster(x, y) != null) continue;
-          
+
           asyncManager.LoadCluster(new Coordinates(x, y));
         }
       }
@@ -223,14 +230,23 @@ namespace Teamcollab.Engine.WorldManagement
       Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
       Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
 
+      Vector2 cpCoords = WorldManager.TransformIsometric(clusterCoordinates);
+      clusterCoordinates = new Coordinates(
+        Convert.ToInt32(cpCoords.X),
+        Convert.ToInt32(cpCoords.Y)
+      );
+
       topLeft = WorldManager.TransformScreenToCluster(topLeft);
       bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
 
+      topLeft = WorldManager.TransformIsometric(topLeft);
+      bottomRight = WorldManager.TransformIsometric(bottomRight);
+
       // Offsets are in cluster coordinates.
-      if (clusterCoordinates.X + 0.5f >= topLeft.X &&
-          clusterCoordinates.X - 0.5f <= bottomRight.X &&
-          clusterCoordinates.Y - 0.5f <= bottomRight.Y &&
-          clusterCoordinates.Y + 0.5f >= topLeft.Y)
+      if (clusterCoordinates.X + 1.0f >= topLeft.X &&
+          clusterCoordinates.X - 1.0f <= bottomRight.X &&
+          clusterCoordinates.Y - 1.0f <= bottomRight.Y &&
+          clusterCoordinates.Y + 1.0f >= topLeft.Y)
       {
         return true;
       }

@@ -101,12 +101,12 @@
     <Compile Include="Engine\WorldManagement\WorldManager.cs" />
     <Compile Include="Engine\WorldManagement\Cluster.cs" />
     <Compile Include="Engine\WorldManagement\Tile.cs" />
-    <Compile Include="GameObjects\DrawableEntity.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />
     <Compile Include="GameObjects\EntityType.cs" />
     <Compile Include="GameObjects\MovingEntity.cs" />
     <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GameObjects\StaticEntity.cs" />
     <Compile Include="GameStates\GameManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\MenuState.cs" />
