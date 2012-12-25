@@ -164,7 +164,12 @@ namespace Teamcollab.GUI
     /// <returns>World coordinate</returns>
     static public Vector2 TranslatePositionByCamera(Vector2 camCoord)
     {
+      camCoord = Vector2.Transform(camCoord, Isometric);
       return Vector2.Transform(camCoord, translationMatrix);
     }
+
+    static Matrix Isometric =
+    Matrix.CreateRotationZ(MathHelper.PiOver4) *
+    Matrix.CreateScale((float)Math.Sqrt(2f) / 2.0f, (float)Math.Sqrt(2f) / 4.0f, 1);
   }
 }
