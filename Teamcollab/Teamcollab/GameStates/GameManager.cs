@@ -180,7 +180,7 @@ namespace Teamcollab.GameStates
 
     public void Draw()
     {
-      Game.GraphicsDevice.Clear(Color.DimGray);
+      Game.GraphicsDevice.Clear(Color.Black);
 
       testShader.Parameters["AmbientIntensity"].SetValue(inten);
       testShader.Parameters["World"].SetValue(Matrix.Identity);
