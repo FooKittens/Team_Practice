@@ -221,6 +221,7 @@ namespace Teamcollab.Engine
         Vector2[] vectors = TextHelper.ParseVector2(command);
         if (vectors.Length > 0)
         {
+          Vector2 trans = WorldManager.TransformIsometric(vectors[0]);
           Camera2D.SetPosition(
             WorldManager.GetClusterScreenCenter(vectors[0])
           );

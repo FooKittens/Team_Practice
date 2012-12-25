@@ -93,6 +93,7 @@
     <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\ImmediateDrawer.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
+    <Compile Include="Engine\Helpers\IsoBatch.cs" />
     <Compile Include="Engine\Helpers\TextHelper.cs" />
     <Compile Include="Engine\WorldGeneration\PerlinGenerator.cs" />
     <Compile Include="Engine\WorldGeneration\TerrainGenerator.cs" />

@@ -192,7 +192,7 @@ namespace Teamcollab.Engine.WorldManagement
       }
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(IsoBatch spriteBatch)
     {
       foreach (Cluster cluster in clusters)
       {

@@ -59,7 +59,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     private static Matrix TilePositionTransform { get; set; }
 
-    private static Matrix IsometricTransform { get; set; }
+    public static Matrix IsometricTransform { get; set; }
 
     public static Matrix WorldPixelTransform { get; set;}
 
@@ -210,7 +210,7 @@ namespace Teamcollab.Engine.WorldManagement
       currentWorld.Update(gameTime);
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(IsoBatch spriteBatch)
     {
 
       currentWorld.Draw(spriteBatch);

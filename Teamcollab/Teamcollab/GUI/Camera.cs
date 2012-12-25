@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.GUI
 {
@@ -135,15 +136,14 @@ namespace Teamcollab.GUI
     /// </summary>
     static private void UpdateMatrices()
     {
-      View =
+      View = 
         Matrix.CreateLookAt(
           new Vector3(position.X, position.Y, -8),
           new Vector3(position.X, position.Y, 0),
           -Vector3.UnitY
         );
 
-      Projection =
-        Matrix.CreateOrthographicOffCenter(
+      Projection = Matrix.CreateOrthographicOffCenter(
           -Settings.ScreenWidth / (2 * Scale),
           Settings.ScreenWidth / (2 * Scale),
           -Settings.ScreenHeight / (2 * Scale),
@@ -151,6 +151,7 @@ namespace Teamcollab.GUI
           0,
           10
         );
+      
       translationMatrix = Matrix.CreateScale(1 / Scale) *
       Matrix.CreateTranslation(-Origin.X, -Origin.Y, 0) *
       Matrix.CreateTranslation(Position.X, Position.Y, 0);

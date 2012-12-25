@@ -21,7 +21,7 @@ namespace Teamcollab.GameStates
     #endregion
 
     #region Members
-    SpriteBatch spriteBatch;
+    IsoBatch spriteBatch;
     WorldManager worldManager;
 
     Direction previousDirection;
@@ -32,15 +32,15 @@ namespace Teamcollab.GameStates
     public GameManager(Game game)
     {
       // Initialize the gamestate.
+      Game = game; 
       Initialize();
-      Game = game;
 
       testShader = game.Content.Load<Effect>("BasicShader");
     }
 
-    protected override void Initialize()
+    protected void Initialize()
     {
-      spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+      spriteBatch = new IsoBatch(Game.GraphicsDevice);
       worldManager = WorldManager.GetInstance(Game);
     }
 
@@ -114,7 +114,7 @@ namespace Teamcollab.GameStates
     }
     #endregion
 
-    public override void Update(GameTime gameTime)
+    public void Update(GameTime gameTime)
     {
       Camera2D.Update(gameTime);
       worldManager.Update(gameTime);
@@ -178,7 +178,7 @@ namespace Teamcollab.GameStates
       }
     }
 
-    public override void Draw()
+    public void Draw()
     {
       Game.GraphicsDevice.Clear(Color.DimGray);
 
@@ -187,7 +187,7 @@ namespace Teamcollab.GameStates
       testShader.Parameters["View"].SetValue(Camera2D.View);
       testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, testShader);
+      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }

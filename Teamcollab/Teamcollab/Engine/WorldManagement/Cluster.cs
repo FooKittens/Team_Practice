@@ -98,7 +98,7 @@ namespace Teamcollab.Engine.WorldManagement
     Resource<Texture2D> grassRes;
     Resource<Texture2D> waterRes;
     Resource<Texture2D> stoneRes;
-    public void Draw(SpriteBatch spriteBatch)
+    public void Draw(IsoBatch spriteBatch)
     {
       // TODO REMOVE
       if (squareRes == null)
@@ -120,8 +120,8 @@ namespace Teamcollab.Engine.WorldManagement
             tile.Coordinates.Y
           );
 
-          Vector2 drawPos = WorldManager.TransformIsometric(tilePos);
-          drawPos = WorldManager.TransformWorldToScreen(drawPos);
+          //Vector2 drawPos = WorldManager.TransformIsometric(tilePos);
+          //drawPos = WorldManager.TransformWorldToScreen(drawPos);
 
           Resource<Texture2D> texture;
           switch (tile.Type)
@@ -140,7 +140,7 @@ namespace Teamcollab.Engine.WorldManagement
               break;
           }
 
-          spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, new Vector2(32, 16), 1f, SpriteEffects.None, 0f);
+          spriteBatch.Draw(texture, tilePos, null, Color.White, 0f, new Vector2(32, 16), 1f, SpriteEffects.None, 0f);
         }
       }
     }
