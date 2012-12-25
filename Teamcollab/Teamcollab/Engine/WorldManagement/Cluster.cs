@@ -109,40 +109,116 @@ namespace Teamcollab.Engine.WorldManagement
         stoneRes = tileTextures.Query("Stone");
       }
 
-      for (int y = 0; y < Constants.ClusterHeight; ++y)
+      Tile[,] layers = new Tile[14, Constants.ClusterWidth * Constants.ClusterHeight];
+      for (int i = 0; i < tiles.Length; ++i)
       {
-        for (int x = 0; x < Constants.ClusterWidth; ++x)
-        {
-          Tile tile = GetTileAt(x, y);
-
-          Vector2 tilePos = new Vector2(
-            x - Constants.ClusterWidth / 2,
-            y - Constants.ClusterHeight / 2
-          );
-
-          Vector2 drawPos = WorldManager.TransformByCluster(tilePos, Coordinates);
-          drawPos = WorldManager.GetTileScreenPosition(drawPos);
-
-          Resource<Texture2D> texture;
-          switch (tile.Type)
-          {
-            case TileType.Grass:
-              texture = grassRes;
-              break;
-            case TileType.Water:
-              texture = waterRes;
-              break;
-            case TileType.Mountain:
-              texture = stoneRes;
-              break;
-            default:
-              texture = squareRes;
-              break;
-          }
-
-          spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, new Vector2(16, 16), 1f, SpriteEffects.None, 0f);
-        }
+        layers[tiles[i].Layer, i] = tiles[i];
       }
+
+      //for (int i = 0; i < layers.GetLength(0); ++i)
+      //{
+        for (int y = 0; y < Constants.ClusterHeight; ++y)
+        {
+          for (int x = 0; x < Constants.ClusterWidth; ++x)
+          {
+            //if (layers[i, y * Constants.ClusterWidth + x] != null)
+            //{
+
+
+              Tile tile = GetTileAt(x, y);
+              Vector2 tilePos = new Vector2(
+                x - Constants.ClusterWidth / 2,
+                y - Constants.ClusterHeight / 2
+              );
+
+              //tilePos = WorldManager.TransformByCluster(tilePos, Coordinates);
+
+              Matrix iso = Matrix.Identity;
+
+
+              //iso *= Matrix.CreateTranslation(2, 1, 0);
+              iso *= Matrix.CreateRotationZ(MathHelper.PiOver4);  
+              iso *= Matrix.CreateScale(0.75f, 0.75f, 1);
+              iso *= Matrix.CreateScale(Constants.TileWidth, Constants.TileHeight, 1f);
+              
+              
+              //iso *= Matrix.CreateScale(.75f, .5f, 1f);  
+              
+
+              //Vector2 drawPos = WorldManager.TransformByCluster(tilePos, Coordinates);
+              //Vector2 drawPos = WorldManager.GetTileScreenPosition(tilePos);
+
+              Vector2 drawPos = Vector2.Transform(tilePos, iso);
+              //drawPos = Vector2.Transform(drawPos, Matrix.CreateScale(48, 32, 1f));
+
+
+              Resource<Texture2D> texture;
+              switch (tile.Type)
+              {
+                case TileType.Grass:
+                  texture = grassRes;
+                  break;
+                case TileType.Water:
+                  texture = waterRes;
+                  break;
+                case TileType.Mountain:
+                  texture = stoneRes;
+                  break;
+                default:
+                  texture = squareRes;
+                  break;
+              }
+
+              spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, new Vector2(32, 16), 1f, SpriteEffects.None, 0f);
+            //}
+          }
+        //}
+      }
+
+      //for (int y = 0; y < Constants.ClusterHeight; ++y)
+      //{
+      //  for (int x = 0; x < Constants.ClusterWidth; ++x)
+      //  {
+      //    Matrix iso = Matrix.Identity;
+      //    //iso *= Matrix.CreateTranslation(32f, 64f, 0f);
+      //    iso *= Matrix.CreateRotationZ((float)Math.PI / 4);
+      //    iso *= Matrix.CreateScale(0.5f, 0.25f, 1f);
+      //    iso *= Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+          
+      //    Tile tile = GetTileAt(x, y);
+      //    Vector2 tilePos = new Vector2(
+      //      x - Constants.ClusterWidth / 2,
+      //      y - Constants.ClusterHeight / 2 - tile.Layer
+      //    );
+
+      //    //Vector2 tilePos = new Vector2(x, y - tile.Layer);
+
+      //    Vector2 drawPos = WorldManager.TransformByCluster(tilePos, Coordinates);
+      //    drawPos = WorldManager.GetTileScreenPosition(tilePos);
+          
+      //    drawPos = Vector2.Transform(drawPos, iso);
+          
+
+      //    Resource<Texture2D> texture;
+      //    switch (tile.Type)
+      //    {
+      //      case TileType.Grass:
+      //        texture = grassRes;
+      //        break;
+      //      case TileType.Water:
+      //        texture = waterRes;
+      //        break;
+      //      case TileType.Mountain:
+      //        texture = stoneRes;
+      //        break;
+      //      default:
+      //        texture = squareRes;
+      //        break;
+      //    }
+
+      //    spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, new Vector2(32, 32), 1f, SpriteEffects.None, 0f);
+      //  }
+      //}
     }
 
     /// <summary>

@@ -10,10 +10,10 @@ namespace Teamcollab
     public const string SettingsPath = "Settings.Xml";
 
     #region World Constants
-    public const int TileWidth = 32;
+    public const int TileWidth = 64;
     public const int TileHeight = 32;
 
-    public const int TileMod = 5;
+    public const int TileMod = 6;
     public const float WorldPixelRatio = 32;
 
     public const int ClusterWidth = 128;

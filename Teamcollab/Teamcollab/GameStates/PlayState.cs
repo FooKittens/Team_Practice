@@ -189,9 +189,13 @@ namespace Teamcollab.GameStates
     {
       Game.GraphicsDevice.Clear(Color.DimGray);
 
+      Matrix iso = Matrix.Identity;      
+
       testShader.Parameters["AmbientIntensity"].SetValue(inten);
 
-      testShader.Parameters["World"].SetValue(Matrix.Identity);
+      testShader.Parameters["World"].SetValue(iso);
+
+      
 
       testShader.Parameters["View"].SetValue(Camera2D.View);
 
@@ -201,6 +205,7 @@ namespace Teamcollab.GameStates
       rs.FillMode = FillMode.WireFrame;
 
       spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, testShader);
+      //spriteBatch.Begin();
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }

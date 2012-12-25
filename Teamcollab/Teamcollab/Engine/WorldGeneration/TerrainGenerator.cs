@@ -48,6 +48,15 @@ namespace Teamcollab.Engine.WorldGeneration
           float noise = GenerateTileNoise(noisePos.X, noisePos.Y);
           TileType type = TileFromNoise(noise);
           Tile t = Tile.Create(type);
+          if (noise < 0)
+          {
+            t.Layer = 0;
+          }
+          else
+          {
+            t.Layer = (int)(noise * 2.5);
+          }
+          
           t.Coordinates = new Coordinates((int)tileWorldPos.X, (int)tileWorldPos.Y);
           cluster.SetTileAt(x, y, t);
         }
