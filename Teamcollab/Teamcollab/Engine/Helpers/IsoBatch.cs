@@ -48,7 +48,7 @@ namespace Teamcollab.Engine.Helpers
       float scale, SpriteEffects effects, float layer)
     {
       pos = WorldManager.TransformIsometric(pos);
-      pos = WorldManager.GetTileScreenPosition(pos);
+      pos = WorldManager.TransformWorldToScreen(pos);
       base.Draw(tex, pos, source, color, rot, origin, scale, effects, layer);
     }
     #endregion
