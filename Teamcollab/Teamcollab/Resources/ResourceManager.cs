@@ -24,8 +24,8 @@ namespace Teamcollab.Resources
       ResourceManager.content = content;
       TileTextureBank = new ResourceCollection<Texture2D>();
 
-      TileTextureBank.Add("Grass", content.Load<Texture2D>("Art\\grassIso2"));
-      TileTextureBank.Add("Water", content.Load<Texture2D>("Art\\waterIso2"));
+      TileTextureBank.Add("Grass", content.Load<Texture2D>("Art\\grassIso"));
+      TileTextureBank.Add("Water", content.Load<Texture2D>("Art\\waterIso"));
       TileTextureBank.Add("Stone", content.Load<Texture2D>("Art\\stoneIso"));
 
       SpriteTextureBank = new ResourceCollection<Texture2D>();

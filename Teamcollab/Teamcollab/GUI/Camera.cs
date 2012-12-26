@@ -96,14 +96,20 @@ namespace Teamcollab.GUI
       float sqtwo = (float)Math.Sqrt(2f);
    
       Vector2 camPos = Position;
+      Vector2 camTile = WorldManager.TransformScreenToTile(camPos);
+      camTile = WorldManager.TransformInvIsometric(camTile);
 
 
       camPos = WorldManager.TransformScreenToCluster(camPos);
+      
       camPos = WorldManager.TransformInvIsometric(camPos);
 
       camPos = new Vector2(Convert.ToInt32(camPos.X), Convert.ToInt32(camPos.Y));
 
-      ImmediateDrawer.GetInstance(null).DrawString(camPos.ToString(), Vector2.Zero);
+      ImmediateDrawer.GetInstance(null).DrawString(
+        "Cluster: " + camPos.ToString() +  "\nTile: " + camTile.ToString(),
+        Vector2.Zero
+      );
     }
 
     /// <summary>

@@ -150,7 +150,7 @@ namespace Teamcollab.Engine.DataManagement
         }
         
         // Tell the cluster to unload its resources.
-        cluster.Unload();
+        //cluster.Unload();
         Thread.Yield();
       }
     }

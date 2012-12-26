@@ -21,13 +21,13 @@ namespace Teamcollab.Engine.WorldManagement
     private bool isSorted;
     private int insertIndex;
 
-    Stack<Cluster> loadedClusters;
+    List<Cluster> loadedClusters;
 
     AsyncClusterManager asyncManager;
 
     public World(int startSize = 10)
     {
-      loadedClusters = new Stack<Cluster>();
+      loadedClusters = new List<Cluster>();
       clusters = new Cluster[startSize];
       isSorted = true;
       insertIndex = 0;
@@ -44,7 +44,7 @@ namespace Teamcollab.Engine.WorldManagement
 
       if (BinaryClusterSearch(clusters, 0, insertIndex, cluster.HashCode) == null)
       {
-        loadedClusters.Push(cluster);
+        loadedClusters.Add(cluster);
       }
       
     }
@@ -53,58 +53,13 @@ namespace Teamcollab.Engine.WorldManagement
     {
       if (GetCluster(cluster.Coordinates.X, cluster.Coordinates.Y) != null)
       {
-        return;
+        DevConsole.WriteLine("Unload failed for: {0} ?", cluster.ToString());
       }
     }
 
     private void ClusterNotLoadedHandler(Coordinates coords)
     {
-      loadedClusters.Push(TerrainGenerator.CreateCluster(coords));
-    }
-
-    static Random rand = new Random();
-
-    public Cluster CreateCluster(int clusterX, int clusterY)
-    {
-      Cluster cluster = new Cluster(ClusterType.Evergreen, clusterX, clusterY);
-
-      TileType currentType = 0;
-
-      for (int y = 0; y < Constants.ClusterHeight; ++y)
-      {
-        for (int x = 0; x < Constants.ClusterWidth; ++x)
-        {
-          Vector2 tilePos = new Vector2(
-            x - Constants.ClusterWidth / 2,
-            y - Constants.ClusterHeight / 2
-          );
-
-          Tile t = cluster.GetTileAt(x, y);
-
-          if (x % 5 == 0)
-          {
-            currentType = (TileType)(rand.Next() % 2 + 1);
-          }
-          if ((x == 0 || x == Constants.ClusterWidth - 1) ||
-             (y == 0 || y == Constants.ClusterHeight - 1))
-          {
-            t.Type = TileType.Grass;
-          }
-          else
-          {
-            t.Type = TileType.Water;
-          }
-          //t.Type = currentType;
-          cluster.SetTileAt(x, y, t);
-        }
-      }
-
-      return cluster;
-    }
-
-    public Cluster CreateCluster(Coordinates coordinates)
-    {
-      return CreateCluster(coordinates.X, coordinates.Y);
+      loadedClusters.Add(TerrainGenerator.CreateCluster(coords));
     }
 
     public void Update(GameTime gameTime)
@@ -113,7 +68,8 @@ namespace Teamcollab.Engine.WorldManagement
 
       while(loadedClusters.Count > 0)
       {
-        Cluster c = loadedClusters.Pop();
+        Cluster c = loadedClusters[0];
+        loadedClusters.RemoveAt(0);
         if (GetCluster(c.Coordinates.X, c.Coordinates.Y) == null)
         {
           AddCluster(c);
@@ -128,11 +84,13 @@ namespace Teamcollab.Engine.WorldManagement
       for (int i = 0; i < clusters.Length; ++i)
       {
         insertIndex = clusters[i] == null ? insertIndex : i;
-        if (firstNull == -1 && clusters[i] == null)
+        if (clusters[i] == null)
         {
           firstNull = i;
+          break;
         }
       }
+
 
       Array.Resize<Cluster>(ref clusters, firstNull + 1);
       insertIndex = clusters.Length - 1;
@@ -160,11 +118,11 @@ namespace Teamcollab.Engine.WorldManagement
       {
         if (clusters[i] != null && IsInView(clusters[i]) == false)
         {
-          //DevConsole.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
-          //asyncManager.UnloadCluster(clusters[i]);
-          //clusters[i] = null;
-          //removedCount++;
-          //isSorted = false;
+          DevConsole.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
+          asyncManager.UnloadCluster(clusters[i]);
+          clusters[i] = null;
+          removedCount++;
+          isSorted = false;
         }
       }
 
@@ -184,7 +142,7 @@ namespace Teamcollab.Engine.WorldManagement
       {
         for (int x = camX - 1; x <= camX + 1; x++)
         {
-          if (GetCluster(x, y) == null)
+          if (GetCluster(x, y) == null && IsLoaded(x, y) == false && IsInView(new Coordinates(x, y)))
           {
             asyncManager.LoadCluster(new Coordinates(x, y));
           }
@@ -216,6 +174,14 @@ namespace Teamcollab.Engine.WorldManagement
         }
       }
       
+    }
+
+    private bool IsLoaded(int x, int y)
+    {
+      return loadedClusters.Exists(delegate(Cluster cluster)
+      {
+        return cluster.Coordinates.X == x && cluster.Coordinates.Y == y;
+      });
     }
 
     /// <summary>
@@ -405,7 +371,8 @@ namespace Teamcollab.Engine.WorldManagement
       int center = start + length / 2;
 
       // Not found condition.
-      if (length == 0 || (clusters[center].HashCode != hashkey && length == 1))
+      if (clusters[center] == null ||
+         (clusters[center].HashCode != hashkey && length == 1))
       {
         return null;
       }

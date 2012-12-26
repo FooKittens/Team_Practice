@@ -47,6 +47,12 @@ namespace Teamcollab.Engine.WorldManagement
     List<Entity> staticObjects;
     #endregion
 
+    // TODO REMOVE
+    Resource<Texture2D> squareRes;
+    Resource<Texture2D> grassRes;
+    Resource<Texture2D> waterRes;
+    Resource<Texture2D> stoneRes;
+
     static ResourceCollection<Texture2D> tileTextures;
 
     // Static Constructor for loading tiletextures initially.
@@ -70,7 +76,10 @@ namespace Teamcollab.Engine.WorldManagement
 
     public Cluster(ClusterData data)
       :this(data.Type, data.Coordinates.X, data.Coordinates.Y)
-    { }
+    {
+      tiles = data.Tiles;
+      SetTileCoords();
+    }
 
     public void Unload()
     {
@@ -79,23 +88,6 @@ namespace Teamcollab.Engine.WorldManagement
       squareRes = null;
     }
 
-    public void Load(ClusterData data)
-    {
-      if (HashCode != GetHashFromXY(data.Coordinates.X, data.Coordinates.Y))
-      {
-        throw new Exception("Data does not match the cluster");
-      }
-      squareRes = ResourceManager.TileTextureBank.Query("Grass");
-      tiles = data.Tiles;
-
-      SetHashCode();
-    }
-
-    // TODO REMOVE
-    Resource<Texture2D> squareRes;
-    Resource<Texture2D> grassRes;
-    Resource<Texture2D> waterRes;
-    Resource<Texture2D> stoneRes;
     public void Draw(IsoBatch spriteBatch)
     {
       // TODO REMOVE
@@ -114,12 +106,12 @@ namespace Teamcollab.Engine.WorldManagement
           Tile tile = GetTileAt(x, y);
           if (tile == null) continue;
 
-          Vector2 tilePos = new Vector2(
-            x - Constants.ClusterWidth / 2,
-            y - Constants.ClusterHeight / 2
-          );
+          //Vector2 tilePos = new Vector2(
+          //  x - Constants.ClusterWidth / 2,
+          //  y - Constants.ClusterHeight / 2
+          //);
 
-          tilePos = WorldManager.TransformByCluster(tilePos, Coordinates);
+          //tilePos = WorldManager.TransformByCluster(tilePos, Coordinates);
 
           Resource<Texture2D> texture;
           switch (tile.Type)
@@ -138,7 +130,7 @@ namespace Teamcollab.Engine.WorldManagement
               break;
           }
 
-          spriteBatch.Draw(texture, tilePos, null, Color.White, 0f, new Vector2(32, 16), 1f, SpriteEffects.None, 0f);
+          spriteBatch.Draw(texture, tile.Coordinates, null, Color.White, 0f, new Vector2(32, 32), 1f, SpriteEffects.None, 0f);
         }
       }
 
@@ -218,7 +210,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// Retrieves the tile at the input coordinates relative
     /// to the cluster.
     /// </summary>
-    private Tile GetTileAt(Coordinates coord)
+    public Tile GetTileAt(Coordinates coord)
     {
       return GetTileAt(coord.X, coord.Y);
     }
@@ -284,6 +276,32 @@ namespace Teamcollab.Engine.WorldManagement
       return CompressionHelper.Compress(data);
     }
 
+    private void SetTileCoords()
+    {
+      for(int y = 0; y < Constants.ClusterHeight; ++y)
+      {
+        for(int x = 0; x < Constants.ClusterWidth; ++x)
+        {
+
+          if (GetTileAt(x, y) == null)
+          {
+            throw new NullReferenceException("Missing tile in cluster: " + ToString());
+          }
+
+          Vector2 tPos = new Vector2(
+            x - Constants.ClusterWidth / 2,
+            y - Constants.ClusterHeight / 2
+          );
+
+          tPos = WorldManager.TransformByCluster(tPos, Coordinates);
+
+          GetTileAt(x, y).Coordinates = new Coordinates(
+            (int)tPos.X,
+            (int)tPos.Y
+          );
+        }
+      }
+    }
     
   }
 }

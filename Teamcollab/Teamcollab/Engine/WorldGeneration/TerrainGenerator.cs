@@ -55,7 +55,7 @@ namespace Teamcollab.Engine.WorldGeneration
 
           if (noise > 2 && x % 3 == 0 && y % 4 == 0)
           {
-            //cluster.AddStaticEntity(new StaticEntity(EntityType.Tree, tileWorldPos));
+            cluster.AddStaticEntity(new StaticEntity(EntityType.Tree, tileWorldPos));
           }
         }
       }
@@ -71,7 +71,7 @@ namespace Teamcollab.Engine.WorldGeneration
     private static TileType TileFromNoise(float noise)
     {
       TileType type;
-      if (noise >= -0.55f)
+      if (noise >= -0.95f)
       {
         type = TileType.Grass;
       }
@@ -86,7 +86,7 @@ namespace Teamcollab.Engine.WorldGeneration
     private static float GenerateTileNoise(float worldX, float worldY)
     {
       // Div by 128f is a resolution factor for testing.
-      return gen.Perlin2D(worldX / 128f, worldY / 128f, GenPersistance2D, GenOctaves);
+      return gen.Perlin2D(worldX / 32f, worldY / 32f, GenPersistance2D, GenOctaves);
     }
   }
 }

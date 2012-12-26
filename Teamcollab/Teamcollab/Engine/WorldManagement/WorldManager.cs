@@ -23,45 +23,45 @@ namespace Teamcollab.Engine.WorldManagement
     /// Transforms cluster coordinates into tile coordinates.
     /// Example: Cluster(-1, 0) becomes (-1 * ClusterWidth, 0 * ClusterHeight).
     /// </summary>
-    private static Matrix ClusterTileTransform { get; set; }
+    private static Matrix clusterTileTransform;
 
     /// <summary>
     /// Transforms TileCoordinates to ScreenCoordinates.
     /// TileCoordinates should be cluster relative.
     /// Example: Tile(-10, 0) becomes (-10 * TileWidth, 0 * TileHeight).
     /// </summary>
-    private static Matrix TileScreenTransform { get; set; }
+    private static Matrix tileScreenTransform;
 
     /// <summary>
     /// Transforms TileCoordinates into ClusterCoordinates.
     /// TileCoordinates should be world relative.
     /// Example: Tile(-512, 0) becomes (-512 / ClusterWidth, 0 / ClusterHeight)
     /// </summary>
-    private static Matrix TileClusterTransform { get; set; }
+    private static Matrix tileClusterTransform;
 
     /// <summary>
     /// Transforms ScreenCoordinates into TileSpace.
     /// ScreenCoordinates should be transformed by a view matrix(camera).
     /// Example: Screen(-100, 0) becomes (-100 / TileWidth, 0)
     /// </summary>
-    private static Matrix ScreenTileTransform { get; set; }
+    private static Matrix screenTileTransform;
 
     /// <summary>
     /// Transforms ScreenCordinates into ClusterSpace.
     /// ScreenCoordinates should be transformed by a view matrix(camera).
     /// Example: Screen(-100, 0) becomes((-100 / TileWidth) / ClusterWidth, 0). 
     /// </summary>
-    private static Matrix ScreenClusterTransform { get; set; }
+    private static Matrix screenClusterTransform;
 
     /// <summary>
     /// Offsets a TilePosition in TileCoordinates by half a tile.
     /// Example: Tile(0, 0) becomes (0.5, 0.5)
     /// </summary>
-    private static Matrix TilePositionTransform { get; set; }
+    private static Matrix tilePositionTransform;
 
-    private static Matrix IsometricTransform { get; set; }
+    private static Matrix isometricTransform;
 
-    private static Matrix InvIsometricTransform { get; set; }
+    private static Matrix invIsometricTransform;
 
     public static Matrix WorldPixelTransform { get; set;}
 
@@ -79,7 +79,7 @@ namespace Teamcollab.Engine.WorldManagement
     #region Static Methods
     public static Vector2 GetTileScreenPosition(Vector2 tilePosition)
     {
-      return Vector2.Transform(tilePosition, TileScreenTransform);
+      return Vector2.Transform(tilePosition, tileScreenTransform);
     }
 
     public static Vector2 TransformByCluster(Vector2 tilePosition,
@@ -87,12 +87,12 @@ namespace Teamcollab.Engine.WorldManagement
     {
       Vector2 cTranslate = Vector2.Transform(
         clusterPosition,
-        ClusterTileTransform
+        clusterTileTransform
       );
 
       Vector2 res =  Vector2.Transform(
         tilePosition + cTranslate,
-        TilePositionTransform
+        tilePositionTransform
       );
 
       return res;
@@ -102,7 +102,7 @@ namespace Teamcollab.Engine.WorldManagement
     {
       return Vector2.Transform(
         clusterCoordinates,
-        ClusterTileTransform * TileScreenTransform
+        clusterTileTransform * tileScreenTransform
       );
     }
 
@@ -110,7 +110,7 @@ namespace Teamcollab.Engine.WorldManagement
     {
       return Vector2.Transform(
         screenCoordinates,
-        ScreenClusterTransform
+        screenClusterTransform
       );
     }
 
@@ -118,23 +118,23 @@ namespace Teamcollab.Engine.WorldManagement
     {
       return Vector2.Transform(
         screenCoordinates,
-        ScreenTileTransform
+        screenTileTransform
       );
     }
 
     public static Vector2 TransformIsometric(Vector2 screenCoordinates)
     {
-      return Vector2.Transform(screenCoordinates, IsometricTransform);
+      return Vector2.Transform(screenCoordinates, isometricTransform);
     }
 
     public static Vector2 TransformInvIsometric(Vector2 isoCoords)
     {
-      return Vector2.Transform(isoCoords, InvIsometricTransform);
+      return Vector2.Transform(isoCoords, invIsometricTransform);
     }
 
     public static Vector2 TransformWorldToScreen(Vector2 worldCoords)
     {
-      return Vector2.Transform(worldCoords, TileScreenTransform);
+      return Vector2.Transform(worldCoords, tileScreenTransform);
     }
     #endregion
 
@@ -229,45 +229,45 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     private static void CreateMatrices()
     {
-      ClusterTileTransform = Matrix.CreateScale(
+      clusterTileTransform = Matrix.CreateScale(
         Constants.ClusterWidth,
         Constants.ClusterHeight,
         1
       );
 
-      TileScreenTransform = Matrix.CreateScale(
+      tileScreenTransform = Matrix.CreateScale(
         Constants.TileWidth,
         Constants.TileHeight,
         1
       );
 
-      TileClusterTransform = Matrix.CreateScale(
+      tileClusterTransform = Matrix.CreateScale(
         1f / Constants.ClusterWidth,
         1f / Constants.ClusterHeight,
         1
       );
 
-      ScreenTileTransform = Matrix.CreateScale(
+      screenTileTransform = Matrix.CreateScale(
         1f / Constants.TileWidth,
         1f / Constants.TileHeight,
         1
       );
 
-      TilePositionTransform =
+      tilePositionTransform =
       Matrix.CreateTranslation(new Vector3(0.5f, 0.5f, 0));
 
-      ScreenClusterTransform =
-        ScreenTileTransform *
+      screenClusterTransform =
+        screenTileTransform *
         /*TilePositionTransform **/
-        TileClusterTransform;
+        tileClusterTransform;
 
       float sqTwo = (float)Math.Sqrt(2);
 
-      IsometricTransform =
+      isometricTransform =
         Matrix.CreateRotationZ(MathHelper.PiOver4) *
         Matrix.CreateScale(sqTwo / 2.0f, sqTwo / 2.0f, 1);
 
-      InvIsometricTransform =
+      invIsometricTransform =
         Matrix.CreateRotationZ(-MathHelper.PiOver4) *
         Matrix.CreateScale(sqTwo, sqTwo, 1f);
 
@@ -287,9 +287,9 @@ namespace Teamcollab.Engine.WorldManagement
 
       Matrix tileTranslate = 
         /*TilePositionTransform **/
-        TileClusterTransform *
+        tileClusterTransform *
         clusterOffset *
-        ClusterTileTransform
+        clusterTileTransform
         ;
 
       for (int y = 0; y < Constants.ClusterHeight; ++y)
