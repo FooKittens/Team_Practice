@@ -84,34 +84,35 @@ namespace Teamcollab
       return;
       #endif
 
-      bool error = false;
+      // Use all that's beneath later
+      //bool error = false;
 
-      SettingsData data;
-      try
-      {
-        data = DataSerializer.DeSerializeXml<SettingsData>(
-          Constants.SettingsPath
-        );
-      }
-      catch (FileNotFoundException)
-      {
-        #if DEBUG
-        // Obtain a default object to initialize settings with.
-        data = SettingsData.GetDefault();
+      //SettingsData data;
+      //try
+      //{
+      //  data = DataSerializer.DeSerializeXml<SettingsData>(
+      //    Constants.SettingsPath
+      //  );
+      //}
+      //catch (FileNotFoundException)
+      //{
+      //  #if DEBUG
+      //  // Obtain a default object to initialize settings with.
+      //  data = SettingsData.GetDefault();
 
-        // Serialize the new data to avoid file missing next time.
-        DataSerializer.SerializeXml<SettingsData>(
-          data,
-          Constants.SettingsPath,
-          FileMode.Create
-        );
-        #else
-        // We want to notice problems in the release build.
-        throw;
-        #endif
-      }
+      //  // Serialize the new data to avoid file missing next time.
+      //  DataSerializer.SerializeXml<SettingsData>(
+      //    data,
+      //    Constants.SettingsPath,
+      //    FileMode.Create
+      //  );
+      //  #else
+      //  // We want to notice problems in the release build.
+      //  throw;
+      //  #endif
+      //}
 
-      Settings.Initialize(data);
+      //Settings.Initialize(data);
     }
 	}
 }

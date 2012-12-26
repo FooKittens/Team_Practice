@@ -22,7 +22,7 @@ namespace Teamcollab.Engine.Helpers
     static readonly string Vector2Match = @"((?<X>[0-9]*[.]?[0-9]*)\s*,\s*(?<Y>[0-9]*[.]?[0-9]*))";
 
     static readonly string[] FloatMatches = { "[0-9*].[0-9*]", "[0-9*]", ".[0-9*]" };
-    static readonly string IntMatch = "[0-9*]";
+    //static readonly string IntMatch = "[0-9*]"; //TODO(Martin): Use this at all?
     #endregion
 
     #region Parsers
