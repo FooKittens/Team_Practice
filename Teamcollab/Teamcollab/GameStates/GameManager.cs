@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Teamcollab.Engine.Helpers;
 using Teamcollab.Engine.WorldManagement;
 using Teamcollab.GUI;
+using Teamcollab.GameObjects;
 
 namespace Teamcollab.GameStates
 {
@@ -18,10 +19,16 @@ namespace Teamcollab.GameStates
     #endregion
 
     #region Members
+    // Utils
     IsoBatch spriteBatch;
     WorldManager worldManager;
 
+    // Cam
     Direction previousDirection;
+
+    // Time
+    float inten = 0f;
+    float t;
     #endregion
 
     Effect testShader;
@@ -31,6 +38,7 @@ namespace Teamcollab.GameStates
       // Initialize the gamestate.
       Game = game; 
       Initialize();
+      EntityManager.GetInstance().AddObject(new Player(Vector2.Zero));
 
       testShader = game.Content.Load<Effect>("BasicShader");
     }
@@ -40,10 +48,6 @@ namespace Teamcollab.GameStates
       spriteBatch = new IsoBatch(Game.GraphicsDevice);
       worldManager = WorldManager.GetInstance(Game);
     }
-
-    float inten = 0f;
-    float t;
-
 
     #region Camera utils
     [Flags]
@@ -173,6 +177,9 @@ namespace Teamcollab.GameStates
       {
         Camera2D.SetTargetScale(2.5f);
       }
+
+      // TODO(Martin): move player
+      EntityManager.GetInstance().Update(gameTime);
     }
 
     public void Draw()
@@ -188,6 +195,9 @@ namespace Teamcollab.GameStates
         null, SamplerState.PointClamp, null, null, testShader
       );
       worldManager.Draw(spriteBatch);
+
+      // TODO(Martin): move player
+      EntityManager.GetInstance().Draw(spriteBatch);
       spriteBatch.End();
     }
   }

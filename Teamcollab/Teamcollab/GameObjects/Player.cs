@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Teamcollab.Engine.Helpers;
+using Teamcollab.GUI;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.GameObjects
 {
@@ -12,13 +14,14 @@ namespace Teamcollab.GameObjects
     #endregion
 
     #region Members
-
+    Vector2 targetPosition;
+    const float Speed = 5f;
     #endregion
 
-    public Player(EntityType type, Vector2 worldPosition)
-      : base(type, worldPosition)
+    public Player(Vector2 worldPosition)
+      : base(EntityType.Player, worldPosition)
     {
-      base.EntityType = EntityType.Player;
+      NeedsUpdate = true;
     }
 
     public override void Update(GameTime gameTime)
@@ -28,27 +31,29 @@ namespace Teamcollab.GameObjects
 
     protected override void UpdateInput()
     {
-      if (InputManager.KeyDown(Keys.Down))
+      if (InputManager.MouseLeftDown())
       {
-        worldPosition.Y -= 1f;
-      }
-      if (InputManager.KeyDown(Keys.Up))
-      {
-        worldPosition.Y -= 1f;
-      }
-      if (InputManager.KeyDown(Keys.Left))
-      {
-        worldPosition.X -= 1f;
-      }
-      if (InputManager.KeyDown(Keys.Right))
-      {
-        worldPosition.X -= 1f;
+        targetPosition = Camera2D.TranslatePositionByCamera(
+          InputManager.MousePosition()
+        );
       }
     }
 
     protected override void UpdateMovement()
     {
-
+      Vector2 diff = targetPosition - worldPosition;
+      diff.Y *= 2f; // Check for double Y because Y-speed is half X-speed
+      if (diff.Length() < Speed)
+      {
+        worldPosition = targetPosition;
+      }
+      else
+      {
+        diff.Normalize();
+        diff.X *= Speed;
+        diff.Y *= Speed / 2f; // Halve Y-speed
+        worldPosition += diff;
+      }
     }
 
     protected override void UpdateState()
