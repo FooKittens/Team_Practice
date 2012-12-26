@@ -152,7 +152,7 @@ namespace Teamcollab.Engine.WorldManagement
     /// Retrieves the bounding rectangle for a cluster in pixels.
     /// </summary>
     /// <param name="cluster">Cluster to get bounds from.</param>
-    public static Rectangle GetClusterBounds(Cluster cluster)
+    public static Rectangle GetClusterBounds(Coordinates clusterCoordinates)
     {
       // Creates cluster edges with clockwise winding.
       Vector2[] vertices = new[] {
@@ -169,8 +169,14 @@ namespace Teamcollab.Engine.WorldManagement
        * into pixel coordinates. */
       for (int i = 0; i < vertices.Length; ++i)
       {
-        vertices[i] += cluster.Coordinates;
-        vertices[i] = WorldManager.GetClusterScreenCenter(vertices[i]);
+        vertices[i] += clusterCoordinates;
+        vertices[i] = WorldManager.TransformIsometric(vertices[i]);
+        vertices[i] = Vector2.Transform(
+          vertices[i],
+          Matrix.CreateScale(Constants.ClusterWidth, Constants.ClusterWidth, 1f) *
+          Matrix.CreateScale(Constants.TileWidth, Constants.TileHeight, 1f)
+        );
+        
 
         //vertices[i] = Vector2.Transform(vertices[i], mat);
       }

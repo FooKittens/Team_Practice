@@ -24,7 +24,7 @@ namespace Teamcollab.Engine.Helpers
     static Texture2D pixel;
     static SpriteFont font;
 
-    private ImmediateDrawer(Game game)
+    private ImmediateDrawer(Game game = null)
     {
       spriteBatch = new SpriteBatch(game.GraphicsDevice);
       drawRects = new List<Tuple<Rectangle, Color>>();

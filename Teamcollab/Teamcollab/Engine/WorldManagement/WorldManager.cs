@@ -59,7 +59,9 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     private static Matrix TilePositionTransform { get; set; }
 
-    public static Matrix IsometricTransform { get; set; }
+    private static Matrix IsometricTransform { get; set; }
+
+    private static Matrix InvIsometricTransform { get; set; }
 
     public static Matrix WorldPixelTransform { get; set;}
 
@@ -123,6 +125,11 @@ namespace Teamcollab.Engine.WorldManagement
     public static Vector2 TransformIsometric(Vector2 screenCoordinates)
     {
       return Vector2.Transform(screenCoordinates, IsometricTransform);
+    }
+
+    public static Vector2 TransformInvIsometric(Vector2 isoCoords)
+    {
+      return Vector2.Transform(isoCoords, InvIsometricTransform);
     }
 
     public static Vector2 TransformWorldToScreen(Vector2 worldCoords)
@@ -251,15 +258,18 @@ namespace Teamcollab.Engine.WorldManagement
 
       ScreenClusterTransform =
         ScreenTileTransform *
-        TilePositionTransform *
+        /*TilePositionTransform **/
         TileClusterTransform;
 
       float sqTwo = (float)Math.Sqrt(2);
 
       IsometricTransform =
         Matrix.CreateRotationZ(MathHelper.PiOver4) *
-        Matrix.CreateScale(sqTwo / 2.0f, sqTwo / 4.0f, 1); 
+        Matrix.CreateScale(sqTwo / 2.0f, sqTwo / 2.0f, 1);
 
+      InvIsometricTransform =
+        Matrix.CreateRotationZ(-MathHelper.PiOver4) *
+        Matrix.CreateScale(sqTwo, sqTwo, 1f);
 
       PixelWorldTransform = Matrix.CreateScale(1f / Constants.WorldPixelRatio);
       WorldPixelTransform = Matrix.CreateScale(Constants.WorldPixelRatio);

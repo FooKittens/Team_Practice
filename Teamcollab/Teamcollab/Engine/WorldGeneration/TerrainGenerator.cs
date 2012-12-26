@@ -55,7 +55,7 @@ namespace Teamcollab.Engine.WorldGeneration
 
           if (noise > 2 && x % 3 == 0 && y % 4 == 0)
           {
-            cluster.AddStaticEntity(new StaticEntity(EntityType.Tree, tileWorldPos));
+            //cluster.AddStaticEntity(new StaticEntity(EntityType.Tree, tileWorldPos));
           }
         }
       }

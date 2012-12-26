@@ -142,6 +142,7 @@ namespace Teamcollab.Engine.WorldManagement
     private bool TestClusterRange(Cluster cluster)
     {
       Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.Position);
+      camCluster = WorldManager.TransformInvIsometric(camCluster);
 
       if (Convert.ToInt32(Math.Abs(cluster.Coordinates.X - camCluster.X)) > 2 ||
           Convert.ToInt32(Math.Abs(cluster.Coordinates.Y - camCluster.Y)) > 2)
@@ -159,11 +160,11 @@ namespace Teamcollab.Engine.WorldManagement
       {
         if (clusters[i] != null && IsInView(clusters[i]) == false)
         {
-          DevConsole.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
-          asyncManager.UnloadCluster(clusters[i]);
-          clusters[i] = null;
-          removedCount++;
-          isSorted = false;
+          //DevConsole.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
+          //asyncManager.UnloadCluster(clusters[i]);
+          //clusters[i] = null;
+          //removedCount++;
+          //isSorted = false;
         }
       }
 
@@ -172,31 +173,34 @@ namespace Teamcollab.Engine.WorldManagement
         TrimClusters();
       }
 
-      Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
-      Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
+      Vector2 camPos = Camera2D.Position;
+      camPos = WorldManager.TransformScreenToCluster(camPos);
+      camPos = WorldManager.TransformInvIsometric(camPos);
 
-      topLeft = WorldManager.TransformScreenToCluster(topLeft);
-      bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
+      int camX = Convert.ToInt32(camPos.X);
+      int camY = Convert.ToInt32(camPos.Y);
 
-      topLeft = WorldManager.TransformIsometric(topLeft);
-      bottomRight = WorldManager.TransformIsometric(bottomRight);
+      Cluster test = GetCluster(camX, camY);
 
-      Rectangle rect = new Rectangle(
-        Convert.ToInt32(topLeft.X - 2),
-        Convert.ToInt32(topLeft.Y - 2),
-        Convert.ToInt32(bottomRight.X - topLeft.X),
-        Convert.ToInt32(bottomRight.Y - topLeft.Y)
-      );
-
-      for (int y = rect.Top; y <= rect.Bottom; ++y)
+      for (int y = camY - 1; y <= camY + 1; y++)
       {
-        for (int x = rect.Left; x <= rect.Right; ++x)
+        for (int x = camX - 1; x <= camX + 1; x++)
         {
-          if (GetCluster(x, y) != null) continue;
-
-          asyncManager.LoadCluster(new Coordinates(x, y));
+          if (GetCluster(x, y) == null)
+          {
+            asyncManager.LoadCluster(new Coordinates(x, y));
+          }
         }
       }
+
+      //if (GetCluster(camX, camY) == null)
+      //{
+      //  asyncManager.LoadCluster(new Coordinates(camX, camY));
+      //}
+      //asyncManager.LoadCluster(new Coordinates(camX - 1, camY));
+      //asyncManager.LoadCluster(new Coordinates(camX + 1, camY));
+      //asyncManager.LoadCluster(new Coordinates(camX, camY - 1));
+      //asyncManager.LoadCluster(new Coordinates(camX, camY + 1));
     }
 
     public void Draw(IsoBatch spriteBatch)
@@ -230,25 +234,50 @@ namespace Teamcollab.Engine.WorldManagement
       Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
       Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
 
-      Vector2 cpCoords = WorldManager.TransformIsometric(clusterCoordinates);
-      clusterCoordinates = new Coordinates(
-        Convert.ToInt32(cpCoords.X),
-        Convert.ToInt32(cpCoords.Y)
-      );
 
       topLeft = WorldManager.TransformScreenToCluster(topLeft);
       bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
 
-      topLeft = WorldManager.TransformIsometric(topLeft);
-      bottomRight = WorldManager.TransformIsometric(bottomRight);
+      topLeft = WorldManager.TransformInvIsometric(topLeft);
+      bottomRight = WorldManager.TransformInvIsometric(bottomRight);
 
-      // Offsets are in cluster coordinates.
-      if (clusterCoordinates.X + 1.0f >= topLeft.X &&
-          clusterCoordinates.X - 1.0f <= bottomRight.X &&
-          clusterCoordinates.Y - 1.0f <= bottomRight.Y &&
-          clusterCoordinates.Y + 1.0f >= topLeft.Y)
+      //// Offsets are in cluster coordinates.
+      //if (clusterCoordinates.X + 1.0f >= topLeft.X &&
+      //    clusterCoordinates.X - 1.0f <= bottomRight.X &&
+      //    clusterCoordinates.Y - 1.0f <= bottomRight.Y &&
+      //    clusterCoordinates.Y + 1.0f >= topLeft.Y)
+      //{
+      //  return true;
+      //}
+
+
+      Rectangle camBounds = Camera2D.Bounds;/*new Rectangle(
+        Convert.ToInt32(WorldManager.TransformIsometric(Camera2D.Position).X - 640),
+        Convert.ToInt32(WorldManager.TransformIsometric(Camera2D.Position).Y - 384),
+        1280,
+        720
+        );*/
+
+      Rectangle cBounds = Cluster.GetClusterBounds(clusterCoordinates);
+      Vector2[] vertices = new Vector2[4];
+
+      // All bounds.
+      vertices[0] = new Vector2(cBounds.Left, cBounds.Top);
+      vertices[1] = new Vector2(cBounds.Left, cBounds.Bottom);
+      vertices[2] = new Vector2(cBounds.Right, cBounds.Top);
+      vertices[3] = new Vector2(cBounds.Right, cBounds.Bottom);
+
+      for (int i = 0; i < 4; ++i)
       {
-        return true;
+        // vertices[i] = WorldManager.TransformIsometric(vertices[i]);
+        Point p = new Point(
+          Convert.ToInt32(vertices[i].X),
+          Convert.ToInt32(vertices[i].Y)
+        );
+        if (camBounds.Contains(p))
+        {
+          return true;
+        }
       }
 
       return false;

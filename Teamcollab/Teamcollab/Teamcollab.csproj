@@ -106,7 +106,6 @@
     <Compile Include="GameObjects\EntityType.cs" />
     <Compile Include="GameObjects\MovingEntity.cs" />
     <Compile Include="GameObjects\Player.cs" />
-    <Compile Include="GameObjects\StaticEntity.cs" />
     <Compile Include="GameStates\GameManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\MenuState.cs" />

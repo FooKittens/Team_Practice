@@ -223,7 +223,7 @@ namespace Teamcollab.Engine
         {
           Vector2 trans = WorldManager.TransformIsometric(vectors[0]);
           Camera2D.SetPosition(
-            WorldManager.GetClusterScreenCenter(vectors[0])
+            WorldManager.GetClusterScreenCenter(trans)
           );
         }
         else

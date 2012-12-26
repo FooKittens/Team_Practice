@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using Teamcollab.Engine.WorldManagement;
+using Teamcollab.Engine.Helpers;
 
 namespace Teamcollab.GUI
 {
@@ -91,6 +92,18 @@ namespace Teamcollab.GUI
       AutoPan(gameTime);
       AutoZoom(gameTime);
       UpdateMatrices();
+
+      float sqtwo = (float)Math.Sqrt(2f);
+   
+      Vector2 camPos = Position;
+
+
+      camPos = WorldManager.TransformScreenToCluster(camPos);
+      camPos = WorldManager.TransformInvIsometric(camPos);
+
+      camPos = new Vector2(Convert.ToInt32(camPos.X), Convert.ToInt32(camPos.Y));
+
+      ImmediateDrawer.GetInstance(null).DrawString(camPos.ToString(), Vector2.Zero);
     }
 
     /// <summary>
