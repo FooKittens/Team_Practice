@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Resources;
-using Microsoft.Xna.Framework;
-using Teamcollab.Engine.WorldManagement;
+﻿using Microsoft.Xna.Framework;
 using Teamcollab.Engine.Helpers;
 
 namespace Teamcollab.GameObjects
@@ -64,9 +57,6 @@ namespace Teamcollab.GameObjects
     /// <summary>
     /// Supposed to return a struct of data, cast to object
     /// </summary>
-    /// <returns>Tell me if you see this and in what context
-    /// (martingronlund@live.se)
-    /// </returns>
     public abstract object GetData();
   }
 }

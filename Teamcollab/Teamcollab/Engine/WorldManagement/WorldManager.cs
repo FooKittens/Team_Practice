@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Engine.Helpers;
 using Teamcollab.Resources;
-using Microsoft.Xna.Framework.Input;
-using Teamcollab.GUI;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -73,10 +68,10 @@ namespace Teamcollab.Engine.WorldManagement
     private static WorldManager singleton;
 
     World currentWorld;
-    ResourceCollection<Texture2D> tileTextures;
     #endregion
 
     #region Static Methods
+    //TODO(Martin): Remove as many matrices as possible!
     public static Vector2 GetTileScreenPosition(Vector2 tilePosition)
     {
       return Vector2.Transform(tilePosition, tileScreenTransform);
@@ -258,7 +253,6 @@ namespace Teamcollab.Engine.WorldManagement
 
       screenClusterTransform =
         screenTileTransform *
-        /*TilePositionTransform **/
         tileClusterTransform;
 
       float sqTwo = (float)Math.Sqrt(2);
@@ -283,10 +277,11 @@ namespace Teamcollab.Engine.WorldManagement
     {
       Cluster cluster = new Cluster(ClusterType.Evergreen, clusterCoordinates);
 
-      Matrix clusterOffset = Matrix.CreateTranslation(new Vector3(-0.5f, -0.5f, 0));
+      Matrix clusterOffset = Matrix.CreateTranslation(
+        new Vector3(-0.5f, -0.5f, 0)
+      );
 
       Matrix tileTranslate = 
-        /*TilePositionTransform **/
         tileClusterTransform *
         clusterOffset *
         clusterTileTransform
@@ -296,7 +291,9 @@ namespace Teamcollab.Engine.WorldManagement
       {
         for (int x = 0; x < Constants.ClusterWidth; ++x)
         {
-          Vector2 tilePos = Vector2.Transform(new Vector2(x, y), tileTranslate);          
+          Vector2 tilePos = Vector2.Transform(
+            new Vector2(x, y), tileTranslate
+          );
 
           Tile t = cluster.GetTileAt(x, y);
           t.Type = TileType.Grass;

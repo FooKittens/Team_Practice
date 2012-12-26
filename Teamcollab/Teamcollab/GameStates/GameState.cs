@@ -30,7 +30,6 @@ namespace Teamcollab.GameStates
     /// A reference to the game object that uses the state.
     /// </summary>
     protected Game Game { get; set; }
-
     #endregion
 
     #region Delegates
@@ -38,7 +37,7 @@ namespace Teamcollab.GameStates
     #endregion
 
     #region Events
-    public virtual event StateChangeRequestHandler StateChangeRequested;
+    public abstract event StateChangeRequestHandler StateChangeRequested;
     #endregion
 
     public GameState(Game game, ApplicationState thisState)

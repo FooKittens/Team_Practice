@@ -1,13 +1,12 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.DataSerialization;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Resources;
-using System;
-using Teamcollab.Engine;
 using Microsoft.Xna.Framework.Input;
+using Teamcollab.DataSerialization;
+using Teamcollab.Engine;
+using Teamcollab.Engine.Helpers;
 using Teamcollab.GameStates;
+using Teamcollab.Resources;
 
 namespace Teamcollab
 {
@@ -46,19 +45,9 @@ namespace Teamcollab
       InputManager.Update();
       stateManager.Update(gameTime);
 
-      // Dev Console test code
       if (InputManager.KeyNewDown(Settings.DevConsoleKey))
       {
         DevConsole.Visible = !DevConsole.Visible;
-
-        //if (DevConsole.Visible)
-        //{
-        //  DevConsole.Hide();
-        //}
-        //else
-        //{
-        //  DevConsole.Show();
-        //}
       }
 
       if (InputManager.KeyNewDown(Keys.F4))

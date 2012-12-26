@@ -104,7 +104,9 @@ namespace Teamcollab.GUI
       
       camPos = WorldManager.TransformInvIsometric(camPos);
 
-      camPos = new Vector2(Convert.ToInt32(camPos.X), Convert.ToInt32(camPos.Y));
+      camPos = new Vector2(Convert.ToInt32(camPos.X),
+        Convert.ToInt32(camPos.Y)
+      );
 
       ImmediateDrawer.GetInstance(null).DrawString(
         "Cluster: " + camPos.ToString() +  "\nTile: " + camTile.ToString(),
@@ -146,7 +148,8 @@ namespace Teamcollab.GUI
       {
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
         Vector2 acc = diff * 320; // TODO (Martin): 320? Random working value...
-        position = (acc * (float)Math.Pow(time, 2) + (acc * (float)Math.Pow(time, 2)) / 2 + position);
+        position = (acc * (float)Math.Pow(time, 2) +
+          (acc * (float)Math.Pow(time, 2)) / 2 + position);
       }
     }
 
@@ -183,12 +186,7 @@ namespace Teamcollab.GUI
     /// <returns>World coordinate</returns>
     static public Vector2 TranslatePositionByCamera(Vector2 camCoord)
     {
-      camCoord = Vector2.Transform(camCoord, Isometric);
       return Vector2.Transform(camCoord, translationMatrix);
     }
-
-    static Matrix Isometric =
-    Matrix.CreateRotationZ(MathHelper.PiOver4) *
-    Matrix.CreateScale((float)Math.Sqrt(2f) / 2.0f, (float)Math.Sqrt(2f) / 4.0f, 1);
   }
 }

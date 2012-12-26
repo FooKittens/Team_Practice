@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teamcollab.Engine.WorldManagement;
+﻿using Microsoft.Xna.Framework;
 using Teamcollab.Engine.Helpers;
-using Microsoft.Xna.Framework;
+using Teamcollab.Engine.WorldManagement;
 using Teamcollab.GameObjects;
 
 namespace Teamcollab.Engine.WorldGeneration
@@ -41,7 +37,9 @@ namespace Teamcollab.Engine.WorldGeneration
             x - Constants.ClusterWidth / 2,
             y - Constants.ClusterHeight / 2
           );
-          tileWorldPos = WorldManager.TransformByCluster(tileWorldPos, vClusterPos);
+          tileWorldPos = WorldManager.TransformByCluster(
+            tileWorldPos, vClusterPos
+          );
 
           Vector2 noisePos = new Vector2(x, y);
           noisePos = WorldManager.TransformByCluster(noisePos, vClusterPos);
@@ -50,12 +48,16 @@ namespace Teamcollab.Engine.WorldGeneration
           TileType type = TileFromNoise(noise);
           Tile t = Tile.Create(type);
           
-          t.Coordinates = new Coordinates((int)tileWorldPos.X, (int)tileWorldPos.Y);
+          t.Coordinates = new Coordinates((int)tileWorldPos.X,
+            (int)tileWorldPos.Y)
+          ;
           cluster.SetTileAt(x, y, t);
 
           if (noise > 2 && x % 3 == 0 && y % 4 == 0)
           {
-            cluster.AddStaticEntity(new StaticEntity(EntityType.Tree, tileWorldPos));
+            cluster.AddStaticEntity(new StaticEntity(
+              EntityType.Tree, tileWorldPos)
+            );
           }
         }
       }
@@ -86,7 +88,9 @@ namespace Teamcollab.Engine.WorldGeneration
     private static float GenerateTileNoise(float worldX, float worldY)
     {
       // Div by 128f is a resolution factor for testing.
-      return gen.Perlin2D(worldX / 32f, worldY / 32f, GenPersistance2D, GenOctaves);
+      return gen.Perlin2D(worldX / 32f, worldY / 32f,
+        GenPersistance2D, GenOctaves
+      );
     }
   }
 }

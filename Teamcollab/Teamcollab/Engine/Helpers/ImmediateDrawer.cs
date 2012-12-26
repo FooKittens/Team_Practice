@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Teamcollab.Engine.Helpers
 {
@@ -19,7 +17,6 @@ namespace Teamcollab.Engine.Helpers
     List<Tuple<string, Vector2>> drawStrings;
     #endregion
 
-    // Singleton
     static ImmediateDrawer singleton;
     static Texture2D pixel;
     static SpriteFont font;
@@ -69,9 +66,9 @@ namespace Teamcollab.Engine.Helpers
       drawRects.Add(new Tuple<Rectangle, Color>(rectangle, color));
     }
 
-    public void DrawRectangle(int left, int right, int top, int bottom, Color color)
+    public void DrawRectangle(int left, int right, int top, int btm, Color clr)
     {
-      DrawRectangle(new Rectangle(left, top, right - left, bottom - top), color);
+      DrawRectangle(new Rectangle(left, top, right - left, btm - top), clr);
     }
 
     public void DrawString(string text, Vector2 position)

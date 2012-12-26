@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine.WorldManagement;
 using Microsoft.Xna.Framework;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.GUI;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Teamcollab.Engine.Helpers;
+using Teamcollab.Engine.WorldManagement;
+using Teamcollab.GUI;
 
 namespace Teamcollab.GameStates
 {
@@ -187,7 +184,9 @@ namespace Teamcollab.GameStates
       testShader.Parameters["View"].SetValue(Camera2D.View);
       testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
-      spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, testShader);
+      spriteBatch.Begin(SpriteSortMode.Deferred,
+        null, null, null, null, testShader
+      );
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
     }

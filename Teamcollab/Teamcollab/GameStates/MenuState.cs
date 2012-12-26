@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine;
 using Microsoft.Xna.Framework.Input;
-using Teamcollab.Resources;
-using Microsoft.Xna.Framework.Audio;
 using Teamcollab.Engine.Helpers;
+using Teamcollab.Resources;
 
 namespace Teamcollab.GameStates
 {
@@ -36,7 +30,6 @@ namespace Teamcollab.GameStates
 
     public override void Update(GameTime gameTime)
     {
-
       if (InputManager.KeyRelease(Keys.Escape))
       {
         if (StateChangeRequested != null)
@@ -65,7 +58,6 @@ namespace Teamcollab.GameStates
       spriteBatch = new SpriteBatch(Game.GraphicsDevice);
       textures.Add("Sun", Game.Content.Load<Texture2D>("sunbg"));
     }
-
 
     // TODO(Zerkish): Remove 
     private void UglyHackTestOfDoomPleaseKillMe()

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Teamcollab.Engine.WorldGeneration
 {
@@ -57,8 +55,8 @@ namespace Teamcollab.Engine.WorldGeneration
       {
         float frequency = (float)Math.Pow(2f, i);
         float amp = (float)Math.Pow(persistance, i);
-        //total += noise2DFunctions[i]((int)(x * frequency),(int)(y * frequency)) * amp;
-        total += InterpolateNoise2D(noise2DFunctions[i], x * frequency, y * frequency) * amp;
+        total += InterpolateNoise2D(noise2DFunctions[i],
+          x * frequency, y * frequency) * amp;
       }
 
       return total;

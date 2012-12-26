@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Globalization;
 
 namespace Teamcollab.Engine.Helpers
 {
@@ -20,16 +18,12 @@ namespace Teamcollab.Engine.Helpers
       new CultureInfo("en-US", false).NumberFormat;
 
     #region Regular Expressions
-
     // Regexes for Vector2's - Please kill me.
     static readonly string Vector2Match = @"((?<X>[0-9]*[.]?[0-9]*)\s*,\s*(?<Y>[0-9]*[.]?[0-9]*))";
 
     static readonly string[] FloatMatches = { "[0-9*].[0-9*]", "[0-9*]", ".[0-9*]" };
     static readonly string IntMatch = "[0-9*]";
-
-
     #endregion
-
 
     #region Parsers
     /// <summary>
@@ -111,7 +105,6 @@ namespace Teamcollab.Engine.Helpers
 
       return floats.ToArray();
     }
-
     #endregion
 
     public static string KeyToChar(Keys key)

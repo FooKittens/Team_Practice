@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab.DataSerialization
@@ -14,7 +11,6 @@ namespace Teamcollab.DataSerialization
     public bool MultiThreading;
     public Keys DevConsoleKey;
     public bool DayNightCycleOn;
-
 
     /// <summary>
     /// Obtain a default initialized ApplicationSettings object.

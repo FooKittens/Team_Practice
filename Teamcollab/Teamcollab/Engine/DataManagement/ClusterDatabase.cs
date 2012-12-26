@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data;
-using Teamcollab.Engine.WorldManagement;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Data.SQLite;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using Teamcollab.Engine.Helpers;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.Engine.DataManagement
 {
@@ -45,7 +38,9 @@ namespace Teamcollab.Engine.DataManagement
       }
       else if (table.Rows.Count > 1)
       {
-        throw new DataException("Multiple clusters found with the same hashcode!");
+        throw new DataException(
+          "Multiple clusters found with the same hashcode!"
+        );
       }
 
       System.Diagnostics.Debug.WriteLine("Found row:");
@@ -64,7 +59,10 @@ namespace Teamcollab.Engine.DataManagement
 
     public void InsertCluster(Cluster data)
     {
-      long hashcode = Cluster.GetHashFromXY(data.Coordinates.X, data.Coordinates.Y);
+      long hashcode = Cluster.GetHashFromXY(
+        data.Coordinates.X,
+        data.Coordinates.Y
+      );
 
       if (base.Select(string.Format(
         "SELECT hashcode FROM clusters WHERE hashcode={0};", hashcode
@@ -101,11 +99,6 @@ namespace Teamcollab.Engine.DataManagement
       
     }
 
-    //public void InsertCluster(Cluster cluster)
-    //{
-    //  InsertCluster(cluster);
-    //}
-
     private void GetClusterDataFromRow(DataRow row, out ClusterData data)
     {
       byte[] bytes = (byte[])row["data"];
@@ -116,7 +109,6 @@ namespace Teamcollab.Engine.DataManagement
       data = new ClusterData();
       data.Tiles = new Tile[clusterLength];
       
-
       data.Type = (ClusterType)bytes[0];
 
       for (int i = 1; i < clusterLength + 1; ++i)

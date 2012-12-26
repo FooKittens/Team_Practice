@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.SQLite;
+﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.IO;
 
 namespace Teamcollab.Engine.DataManagement
@@ -61,7 +58,8 @@ namespace Teamcollab.Engine.DataManagement
 
     /// <summary>
     /// Inserts into the database using the paramter query.
-    /// Example: "INSERT INTO |table|(|colname1|, |colname2|) VALUES(val1, val2)".
+    /// Example:
+    /// "INSERT INTO |table|(|colname1|, |colname2|) VALUES(val1, val2)".
     /// </summary>
     /// <param name="sql">SQL Language Query.</param>
     public virtual void Insert(string sql)
@@ -73,7 +71,6 @@ namespace Teamcollab.Engine.DataManagement
         cmd.ExecuteNonQuery();
       }
       connection.Close();
-      
   }
 
     public virtual int RunNonQuery(string sql)

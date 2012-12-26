@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework.Input;
 using Teamcollab.DataSerialization;
-using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab
 {
@@ -17,7 +13,6 @@ namespace Teamcollab
     public static bool MultiThreading { get; private set; }
     public static Keys DevConsoleKey { get; private set; }
     public static bool DayNightCycleOn { get; set; }
-
 
     /// <summary>
     /// Initializes the globally accessible Settings class with a data object.

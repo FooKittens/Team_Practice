@@ -1,13 +1,11 @@
-﻿using Teamcollab.Engine.Helpers;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Resources;
-using System.Runtime.InteropServices;
-using System.IO.Compression;
 using Teamcollab.Engine.DataManagement;
-using System.Collections.Generic;
+using Teamcollab.Engine.Helpers;
 using Teamcollab.GameObjects;
+using Teamcollab.Resources;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -38,7 +36,6 @@ namespace Teamcollab.Engine.WorldManagement
     public ClusterType Type { get; private set; }
     public bool Active { get; private set; }
     public bool Loaded { get; private set; }
-    
     #endregion
 
     #region Members
@@ -106,13 +103,6 @@ namespace Teamcollab.Engine.WorldManagement
           Tile tile = GetTileAt(x, y);
           if (tile == null) continue;
 
-          //Vector2 tilePos = new Vector2(
-          //  x - Constants.ClusterWidth / 2,
-          //  y - Constants.ClusterHeight / 2
-          //);
-
-          //tilePos = WorldManager.TransformByCluster(tilePos, Coordinates);
-
           Resource<Texture2D> texture;
           switch (tile.Type)
           {
@@ -130,7 +120,9 @@ namespace Teamcollab.Engine.WorldManagement
               break;
           }
 
-          spriteBatch.Draw(texture, tile.Coordinates, null, Color.White, 0f, new Vector2(32, 32), 1f, SpriteEffects.None, 0f);
+          spriteBatch.Draw(texture, tile.Coordinates, null, Color.White,
+            0f, new Vector2(32, 32), 1f, SpriteEffects.None, 0f
+          );
         }
       }
 
@@ -160,15 +152,13 @@ namespace Teamcollab.Engine.WorldManagement
       {
         vertices[i] += clusterCoordinates;
         vertices[i] = WorldManager.TransformIsometric(vertices[i]);
-        //vertices[i] = WorldManager.GetClusterScreenCenter(vertices[i]);
         vertices[i] = Vector2.Transform(
           vertices[i],
-          Matrix.CreateScale(Constants.ClusterWidth, Constants.ClusterWidth, 1f) *
-          Matrix.CreateScale(Constants.TileWidth, Constants.TileHeight, 1f)
+          Matrix.CreateScale(Constants.ClusterWidth,
+            Constants.ClusterWidth, 1f) *
+          Matrix.CreateScale(Constants.TileWidth,
+            Constants.TileHeight, 1f)
         );
-        
-
-        //vertices[i] = Vector2.Transform(vertices[i], mat);
       }
 
       // Bounding Rectangle.
@@ -244,7 +234,9 @@ namespace Teamcollab.Engine.WorldManagement
     /// </summary>
     public byte[] GetData()
     {
-      const int clusterLength = Constants.ClusterWidth * Constants.ClusterHeight;
+      const int clusterLength = Constants.ClusterWidth *
+        Constants.ClusterHeight
+      ;
 
       // 1 for cluster type, 8 for 2 ints in coordinates.
       const int dataSize = 1 + clusterLength + 8;
@@ -282,7 +274,6 @@ namespace Teamcollab.Engine.WorldManagement
       {
         for(int x = 0; x < Constants.ClusterWidth; ++x)
         {
-
           if (GetTileAt(x, y) == null)
           {
             throw new NullReferenceException("Missing tile in cluster: " + ToString());
@@ -302,6 +293,5 @@ namespace Teamcollab.Engine.WorldManagement
         }
       }
     }
-    
   }
 }

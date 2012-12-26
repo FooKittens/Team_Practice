@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Teamcollab.Engine.Helpers;
 using Microsoft.Xna.Framework.Graphics;
+using Teamcollab.Engine.Helpers;
 using Teamcollab.Resources;
 
 namespace Teamcollab.GameObjects
@@ -27,7 +24,8 @@ namespace Teamcollab.GameObjects
 
     public override void Draw(IsoBatch batch)
     {
-      batch.Draw(texture, WorldPosition, null, Color.White, 0f, new Vector2(64, 64), 1f, SpriteEffects.None, 0f);
+      batch.Draw(texture, WorldPosition, null, Color.White,
+        0f, new Vector2(64, 64), 1f, SpriteEffects.None, 0f);
     }
 
     public static Resource<Texture2D> GetResource(EntityType type)

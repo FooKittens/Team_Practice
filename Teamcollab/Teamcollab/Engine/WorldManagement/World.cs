@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
-using Teamcollab.Engine.Helpers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.GUI;
 using Teamcollab.Engine.DataManagement;
-using System.Threading;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Data;
+using Teamcollab.Engine.Helpers;
 using Teamcollab.Engine.WorldGeneration;
+using Teamcollab.GUI;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -41,12 +35,10 @@ namespace Teamcollab.Engine.WorldManagement
 
     private void ClusterLoadedHandler(Cluster cluster)
     {
-
       if (BinaryClusterSearch(clusters, 0, insertIndex, cluster.HashCode) == null)
       {
         loadedClusters.Add(cluster);
       }
-      
     }
 
     private void ClusterUnloadedHandler(Cluster cluster)
@@ -90,7 +82,6 @@ namespace Teamcollab.Engine.WorldManagement
           break;
         }
       }
-
 
       Array.Resize<Cluster>(ref clusters, firstNull + 1);
       insertIndex = clusters.Length - 1;
@@ -142,12 +133,15 @@ namespace Teamcollab.Engine.WorldManagement
       {
         for (int x = camX - 1; x <= camX + 1; x++)
         {
-          if (GetCluster(x, y) == null && IsLoaded(x, y) == false && IsInView(new Coordinates(x, y)))
+          if (GetCluster(x, y) == null && IsLoaded(x, y) == false &&
+            IsInView(new Coordinates(x, y)))
           {
             asyncManager.LoadCluster(new Coordinates(x, y));
           }
         }
       }
+
+      //TODO(Martin): Use this, Peter?
 
       //if (GetCluster(camX, camY) == null)
       //{
@@ -211,7 +205,8 @@ namespace Teamcollab.Engine.WorldManagement
         vertices[i] = WorldManager.TransformIsometric(vertices[i]);
         vertices[i] = Vector2.Transform(
           vertices[i],
-          Matrix.CreateScale(Constants.ClusterWidth, Constants.ClusterWidth, 1f) *
+          Matrix.CreateScale(Constants.ClusterWidth,
+            Constants.ClusterWidth, 1f) *
           Matrix.CreateScale(Constants.TileWidth, Constants.TileHeight, 1f)
         );
       }
@@ -270,7 +265,9 @@ namespace Teamcollab.Engine.WorldManagement
       }
       
       // Search the array between 0 and the last inserted cluster.
-      return BinaryClusterSearch(clusters, 0, insertIndex, Cluster.GetHashFromXY(x, y));
+      return BinaryClusterSearch(clusters, 0,
+        insertIndex, Cluster.GetHashFromXY(x, y)
+      );
     }
 
     public static void GrowClusterBuffer(ref Cluster[] clusters, int amount)

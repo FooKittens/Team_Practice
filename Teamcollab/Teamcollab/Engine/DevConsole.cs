@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Teamcollab.Engine.Helpers;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Text.RegularExpressions;
-using Teamcollab.GUI;
-using Teamcollab.Engine.WorldManagement;
 using Teamcollab.DataSerialization;
+using Teamcollab.Engine.Helpers;
+using Teamcollab.Engine.WorldManagement;
+using Teamcollab.GUI;
 
 namespace Teamcollab.Engine
 {
@@ -22,7 +19,6 @@ namespace Teamcollab.Engine
 
     #region Member
     static Game game;
-    static bool initialized;
     static SpriteFont devFont;
     static SpriteBatch spriteBatch;
     static Texture2D pixel;
@@ -64,9 +60,6 @@ namespace Teamcollab.Engine
       IsCheckingForKeys = false;
       inputLineY = (ConsoleMaxLines - 1) * devFont.LineSpacing;
       startRowOffset = 0;
-
-      // Set when all members are initialized.
-      initialized = true;
     }
 
     public static void Update(GameTime gameTime)
@@ -77,7 +70,6 @@ namespace Teamcollab.Engine
 
         currentWrittenLine += GetInputString();
 
-        // Handles all input.
         HandleInput();
 
         IsCheckingForKeys = false;
@@ -124,7 +116,8 @@ namespace Teamcollab.Engine
 
       // Now accounts for row offset from scrolling.
       int startRow = textRows.Count + startRowOffset < ConsoleMaxLines ?
-        0 : textRows.Count + startRowOffset - ConsoleMaxLines + 1 // + 1 for write line
+        0 : textRows.Count + startRowOffset - ConsoleMaxLines + 1
+        // + 1 for write line
       ;
 
       // End row with scrolling calculated.
@@ -283,65 +276,6 @@ namespace Teamcollab.Engine
         input += TextHelper.KeyToChar(k);
       }
 
-      #region Martins Input Code
-      //if (InputManager.KeyNewDown(Keys.A))
-      //  input = "a";
-      //else if (InputManager.KeyNewDown(Keys.B))
-      //  input = "b";
-      //else if (InputManager.KeyNewDown(Keys.C))
-      //  input = "c";
-      //else if (InputManager.KeyNewDown(Keys.D))
-      //  input = "d";
-      //else if (InputManager.KeyNewDown(Keys.E))
-      //  input = "e";
-      //else if (InputManager.KeyNewDown(Keys.F))
-      //  input = "f";
-      //else if (InputManager.KeyNewDown(Keys.G))
-      //  input = "g";
-      //else if (InputManager.KeyNewDown(Keys.H))
-      //  input = "h";
-      //else if (InputManager.KeyNewDown(Keys.I))
-      //  input = "i";
-      //else if (InputManager.KeyNewDown(Keys.J))
-      //  input = "j";
-      //else if (InputManager.KeyNewDown(Keys.K))
-      //  input = "k";
-      //else if (InputManager.KeyNewDown(Keys.L))
-      //  input = "l";
-      //else if (InputManager.KeyNewDown(Keys.M))
-      //  input = "m";
-      //else if (InputManager.KeyNewDown(Keys.N))
-      //  input = "n";
-      //else if (InputManager.KeyNewDown(Keys.O))
-      //  input = "o";
-      //else if (InputManager.KeyNewDown(Keys.P))
-      //  input = "p";
-      //else if (InputManager.KeyNewDown(Keys.Q))
-      //  input = "q";
-      //else if (InputManager.KeyNewDown(Keys.R))
-      //  input = "r";
-      //else if (InputManager.KeyNewDown(Keys.S))
-      //  input = "s";
-      //else if (InputManager.KeyNewDown(Keys.T))
-      //  input = "t";
-      //else if (InputManager.KeyNewDown(Keys.U))
-      //  input = "u";
-      //else if (InputManager.KeyNewDown(Keys.V))
-      //  input = "v";
-      //else if (InputManager.KeyNewDown(Keys.W))
-      //  input = "w";
-      //else if (InputManager.KeyNewDown(Keys.X))
-      //  input = "x";
-      //else if (InputManager.KeyNewDown(Keys.Y))
-      //  input = "y";
-      //else if (InputManager.KeyNewDown(Keys.Z))
-      //  input = "z";
-      //else if (InputManager.KeyNewDown(Keys.Space))
-      //  input = " ";
-      //else if (InputManager.KeyNewDown(Keys.OemEnlW))
-      //  input = "'";
-      #endregion
-
       if (InputManager.KeyDown(Keys.LeftShift) ||
         InputManager.KeyDown(Keys.RightShift))
       {
@@ -358,9 +292,6 @@ namespace Teamcollab.Engine
         new Rectangle(0, inputLineY, Settings.ScreenWidth, devFont.LineSpacing),
         DefaultInputBarColor
       );
-
-      // Separator line
-      //spriteBatch.Draw(pixel, new Rectangle(0, inputLineY, Settings.ScreenWidth, 2), Color.Red);
 
       spriteBatch.DrawString(
         devFont,
@@ -382,16 +313,6 @@ namespace Teamcollab.Engine
     private static void HandleInput()
     {
       #region Slash, Enter, Back, Escape
-
-      // Slash code handled by TextHelper.KeyToChar
-
-      //if ((InputManager.KeyDown(Keys.LeftShift) ||
-      //     InputManager.KeyDown(Keys.RightShift)) &&
-      //    InputManager.KeyRelease(Keys.D7))
-      //{
-      //  currentWrittenLine += '/';
-      //}
-
       if (InputManager.KeyNewDown(Keys.Enter))
       {
         // Input gets validated in SendCommand.
@@ -429,7 +350,6 @@ namespace Teamcollab.Engine
       {
         Visible = false;
       }
-
       #endregion
 
       if (InputManager.KeyNewDown(Keys.PageUp))

@@ -1,11 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Teamcollab.Engine.Helpers;
-using Teamcollab.Engine.WorldManagement;
-using Teamcollab.GUI;
 
 namespace Teamcollab.GameStates
 {

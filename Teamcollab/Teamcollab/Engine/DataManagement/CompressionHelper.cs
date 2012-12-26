@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.IO.Compression;
-using System.IO;
 
 namespace Teamcollab.Engine.DataManagement
 {
-  
-
   static class CompressionHelper
   {
     static object compLocker = new object();
@@ -16,7 +10,8 @@ namespace Teamcollab.Engine.DataManagement
     public static byte[] Compress(byte[] data)
     {
       using (MemoryStream stream = new MemoryStream())
-      using (GZipStream zipStream = new GZipStream(stream, CompressionMode.Compress, false))
+      using (GZipStream zipStream = new GZipStream(stream,
+        CompressionMode.Compress, false))
       {
         zipStream.Write(data, 0, data.Length);
         zipStream.Close();
@@ -26,12 +21,11 @@ namespace Teamcollab.Engine.DataManagement
 
     public static byte[] Decompress(byte[] compressedData)
     {
-
-      using (GZipStream zipStream = new GZipStream(new MemoryStream(compressedData), CompressionMode.Decompress))
+      using (GZipStream zipStream = new GZipStream(
+        new MemoryStream(compressedData), CompressionMode.Decompress))
       {
         using (MemoryStream memStream = new MemoryStream())
         {
-
           const int bSize = 4096;
 
           byte[] buffer = new byte[bSize];
@@ -51,10 +45,8 @@ namespace Teamcollab.Engine.DataManagement
           } while (bytesRead > 0);
 
           return memStream.ToArray();
-
         }
       }
-      
     }
   }
 }

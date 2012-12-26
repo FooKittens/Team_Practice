@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Engine.Helpers;
 
 namespace Teamcollab.Engine.WorldManagement
@@ -60,8 +55,5 @@ namespace Teamcollab.Engine.WorldManagement
 
       return created;
     }
-
-   
-
   }
 }

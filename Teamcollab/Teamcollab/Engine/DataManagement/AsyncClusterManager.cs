@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using Teamcollab.Engine.WorldManagement;
-using Teamcollab.Engine.Helpers;
-using System.Data;
-using System.Diagnostics;
-using System.Data.SQLite;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SQLite;
+using System.Threading;
+using Teamcollab.Engine.Helpers;
 using Teamcollab.Engine.WorldGeneration;
+using Teamcollab.Engine.WorldManagement;
 
 namespace Teamcollab.Engine.DataManagement
 {
@@ -60,7 +57,8 @@ namespace Teamcollab.Engine.DataManagement
       }
 
       unloadList.Add(cluster);
-      if (loadList.Exists(delegate(Coordinates c) { return c == cluster.Coordinates; }))
+      if (loadList.Exists(
+        delegate(Coordinates c) { return c == cluster.Coordinates; }))
       {
         loadList.Remove(cluster.Coordinates);
       }
@@ -81,7 +79,9 @@ namespace Teamcollab.Engine.DataManagement
       }))
         return;
 
-      DevConsole.WriteLine(string.Format("Loading ({0}, {1}).", coordinates.X, coordinates.Y));
+      DevConsole.WriteLine(string.Format("Loading ({0}, {1}).",
+        coordinates.X, coordinates.Y)
+      );
       loadList.Add(coordinates);
 
       if (databaseWorker.IsBusy == false)
@@ -100,7 +100,6 @@ namespace Teamcollab.Engine.DataManagement
       DevConsole.WriteLine("Backgroundworker done.");
     }
 
-
     private void AsyncLoader(object obj, DoWorkEventArgs args)
     {
       while (loadList.Count > 0)
@@ -109,7 +108,8 @@ namespace Teamcollab.Engine.DataManagement
         loadList.RemoveAt(0);
         Cluster cluster;
 
-        // Lock the database lock to prevent the unloader from trying to connect.
+        /* Lock the database lock to prevent 
+         * the unloader from trying to connect. */
         lock (databaseLock)
         {
           cluster = clusterDb.Find(coords.X, coords.Y);
@@ -121,7 +121,7 @@ namespace Teamcollab.Engine.DataManagement
           cluster = TerrainGenerator.CreateCluster(coords);
         }
 
-         ClusterLoaded(cluster);
+        ClusterLoaded(cluster);
       }
     }
 
@@ -149,6 +149,8 @@ namespace Teamcollab.Engine.DataManagement
           DevConsole.WriteLine("EXCEPTION: " + sqlex.Message);
         }
         
+        //TODO(Martin): wat?
+
         // Tell the cluster to unload its resources.
         //cluster.Unload();
         Thread.Yield();

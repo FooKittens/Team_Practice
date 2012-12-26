@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Teamcollab.GameStates;
-using Teamcollab.Engine;
-using Microsoft.Xna.Framework.Input;
 
 namespace Teamcollab.GameStates
 {
@@ -84,6 +77,5 @@ namespace Teamcollab.GameStates
       playState = new PlayState(game);
       playState.StateChangeRequested += StateChangeRequestHandler;
     }
-
   }
 }

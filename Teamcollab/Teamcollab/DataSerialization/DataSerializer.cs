@@ -1,6 +1,5 @@
-﻿using System.Xml.Serialization;
-using System.IO;
-using System;
+﻿using System.IO;
+using System.Xml.Serialization;
 
 namespace Teamcollab.DataSerialization
 {
@@ -20,16 +19,16 @@ namespace Teamcollab.DataSerialization
     /// </summary>
     /// <typeparam name="T">Any serializable object</typeparam>
     /// <param name="data">The object to serialize.</param>
-    /// <param name="filePath">Relative path to write to</param>
+    /// <param name="path">Relative path to write to</param>
     /// <param name="fileMode">How to open the file</param>
-    public static void SerializeXml<T>(T data, string filePath, FileMode fileMode)
+    public static void SerializeXml<T>(T data, string path, FileMode fileMode)
     {
       // Creates a global namespace to serialize to.
       XmlSerializerNamespaces nm = new XmlSerializerNamespaces();
       nm.Add("", "");
 
       XmlSerializer serializer = new XmlSerializer(typeof(T));
-      using (FileStream stream = new FileStream(filePath, fileMode))
+      using (FileStream stream = new FileStream(path, fileMode))
       {
         serializer.Serialize(stream, data, nm);
       }
