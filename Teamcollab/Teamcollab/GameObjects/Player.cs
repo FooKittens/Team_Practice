@@ -15,7 +15,7 @@ namespace Teamcollab.GameObjects
 
     #region Members
     Vector2 targetPosition;
-    const float Speed = 5f;
+    const float Speed = 0.2f;
     #endregion
 
     public Player(Vector2 worldPosition)
@@ -34,15 +34,13 @@ namespace Teamcollab.GameObjects
       if (InputManager.MouseLeftDown())
       {
         targetPosition = Camera2D.TranslatePositionByCamera(
-          InputManager.MousePosition()
-        );
+          InputManager.MousePosition());
       }
     }
 
     protected override void UpdateMovement()
     {
       Vector2 diff = targetPosition - worldPosition;
-      diff.Y *= 2f; // Check for double Y because Y-speed is half X-speed
       if (diff.Length() < Speed)
       {
         worldPosition = targetPosition;
@@ -50,8 +48,7 @@ namespace Teamcollab.GameObjects
       else
       {
         diff.Normalize();
-        diff.X *= Speed;
-        diff.Y *= Speed / 2f; // Halve Y-speed
+        diff *= Speed;
         worldPosition += diff;
       }
     }
@@ -68,7 +65,7 @@ namespace Teamcollab.GameObjects
 
     public override void Draw(IsoBatch batch)
     {
-      batch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), WorldPosition, Color.White);
+      batch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), WorldPosition);
     }
   }
 }
