@@ -141,7 +141,7 @@ namespace Teamcollab.Engine.WorldManagement
         }
       }
 
-      //TODO(Martin): Use this, Peter?
+      //TODO(Martin): Remove if still uncommented 1 Jan 2013
 
       //if (GetCluster(camX, camY) == null)
       //{
@@ -192,7 +192,9 @@ namespace Teamcollab.Engine.WorldManagement
         new Vector2(-0.5f, 0.5f), // Bottom Left
       };
 
-      // TODO(Peter): Create Enum ?
+      /* TODO(Peter): Create Enum ?
+       * No, overhead's the same and there's no switch / Martin
+       * http://www.codeproject.com/Articles/4354/Enum-vs-Const */
       const int TopLeft = 0;
       const int TopRight = 1;
       const int BottomRight = 2;
@@ -210,7 +212,6 @@ namespace Teamcollab.Engine.WorldManagement
           Matrix.CreateScale(Constants.TileWidth, Constants.TileHeight, 1f)
         );
       }
-
 
       // Creates an Axis-Aligned BoundingBox that fits the whole cluster.
       Rectangle cAABB = new Rectangle(

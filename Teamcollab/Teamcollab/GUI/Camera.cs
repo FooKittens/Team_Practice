@@ -17,14 +17,17 @@ namespace Teamcollab.GUI
     static public Matrix View { get; private set; }
     static public Matrix Projection { get; private set; }
     static public float Scale { get; private set; }
+    /// <summary>
+    /// The bounds of the camera, in screen(!) coordinates
+    /// </summary>
     static public Rectangle Bounds
     {
       get
       {
         Vector2 topLeft = Vector2.Zero;
         Vector2 btmRight = halfScreenSize * 2;
-        topLeft = TranslatePositionByCamera(topLeft);
-        btmRight = TranslatePositionByCamera(btmRight);
+        topLeft = TranlatePositionToScreen(topLeft);
+        btmRight = TranlatePositionToScreen(btmRight);
         Rectangle result = new Rectangle(
           (int)topLeft.X,
           (int)topLeft.Y,
@@ -185,6 +188,13 @@ namespace Teamcollab.GUI
     /// <param name="camCoord">Camera coordinate</param>
     /// <returns>World coordinate</returns>
     static public Vector2 TranslatePositionByCamera(Vector2 camCoord)
+    {
+      camCoord = Vector2.Transform(camCoord, translationMatrix);
+      camCoord = WorldManager.TransformScreenToTile(camCoord);
+      return WorldManager.TransformInvIsometric(camCoord);
+    }
+
+    static private Vector2 TranlatePositionToScreen(Vector2 camCoord)
     {
       return Vector2.Transform(camCoord, translationMatrix);
     }

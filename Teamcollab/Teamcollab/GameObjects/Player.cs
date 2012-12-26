@@ -35,8 +35,6 @@ namespace Teamcollab.GameObjects
       {
         targetPosition = Camera2D.TranslatePositionByCamera(
           InputManager.MousePosition());
-        targetPosition = WorldManager.TransformScreenToTile(targetPosition);
-        targetPosition = WorldManager.TransformInvIsometric(targetPosition);
       }
     }
 
