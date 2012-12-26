@@ -72,11 +72,6 @@ namespace Teamcollab.Engine.WorldManagement
 
     #region Static Methods
     //TODO(Martin): Remove as many matrices as possible!
-    public static Vector2 GetTileScreenPosition(Vector2 tilePosition)
-    {
-      return Vector2.Transform(tilePosition, tileScreenTransform);
-    }
-
     public static Vector2 TransformByCluster(Vector2 tilePosition,
       Vector2 clusterPosition)
     {
@@ -109,14 +104,6 @@ namespace Teamcollab.Engine.WorldManagement
       );
     }
 
-    public static Vector2 TransformScreenToTile(Vector2 screenCoordinates)
-    {
-      return Vector2.Transform(
-        screenCoordinates,
-        screenTileTransform
-      );
-    }
-
     public static Vector2 TransformIsometric(Vector2 screenCoordinates)
     {
       return Vector2.Transform(screenCoordinates, isometricTransform);
@@ -131,6 +118,15 @@ namespace Teamcollab.Engine.WorldManagement
     {
       return Vector2.Transform(worldCoords, tileScreenTransform);
     }
+
+    public static Vector2 TransformScreenToWorld(Vector2 screenCoordinates)
+    {
+      return Vector2.Transform(
+        screenCoordinates,
+        screenTileTransform
+      );
+    }
+
     #endregion
 
     // DEBUG TEST CONSTANTS

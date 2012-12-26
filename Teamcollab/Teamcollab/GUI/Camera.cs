@@ -96,7 +96,7 @@ namespace Teamcollab.GUI
       float sqtwo = (float)Math.Sqrt(2f);
    
       Vector2 camPos = Position;
-      Vector2 camTile = WorldManager.TransformScreenToTile(camPos);
+      Vector2 camTile = WorldManager.TransformScreenToWorld(camPos);
       camTile = WorldManager.TransformInvIsometric(camTile);
 
 

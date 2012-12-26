@@ -102,12 +102,12 @@ namespace Teamcollab.GameStates
         change.X += 1;
       }
 
-      Vector2 camTile = WorldManager.TransformScreenToTile(
+      Vector2 camTile = WorldManager.TransformScreenToWorld(
         Camera2D.TargetPosition
       );
       change.X += Convert.ToInt32(camTile.X);
       change.Y += Convert.ToInt32(camTile.Y);
-      Camera2D.SetTargetPosition(WorldManager.GetTileScreenPosition(change));
+      Camera2D.SetTargetPosition(WorldManager.TransformWorldToScreen(change));
     }
     #endregion
 
@@ -185,7 +185,7 @@ namespace Teamcollab.GameStates
       testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
       spriteBatch.Begin(SpriteSortMode.Deferred,
-        null, null, null, null, testShader
+        null, SamplerState.PointClamp, null, null, testShader
       );
       worldManager.Draw(spriteBatch);
       spriteBatch.End();
