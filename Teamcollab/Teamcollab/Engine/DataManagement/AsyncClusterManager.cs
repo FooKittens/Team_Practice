@@ -24,9 +24,9 @@ namespace Teamcollab.Engine.DataManagement
     public delegate void ClusterUnloadedHandler(Cluster cluster);
     public delegate void ClusterNotInDatabaseHandler(Coordinates coords);
 
-    public event ClusterUnloadedHandler ClusterUnloaded;
+    //public event ClusterUnloadedHandler ClusterUnloaded;
     public event ClusterLoadedHandler ClusterLoaded;
-    public event ClusterNotInDatabaseHandler ClusterNotLoaded;
+    //public event ClusterNotInDatabaseHandler ClusterNotLoaded;
 
     object databaseLock = new object();
     

@@ -33,9 +33,9 @@ namespace Teamcollab.Engine.WorldManagement
       insertIndex = 0;
 
       asyncManager = new AsyncClusterManager();
-      asyncManager.ClusterUnloaded += ClusterUnloadedHandler;
+      //asyncManager.ClusterUnloaded += ClusterUnloadedHandler;
       asyncManager.ClusterLoaded += ClusterLoadedHandler;
-      asyncManager.ClusterNotLoaded += ClusterNotLoadedHandler;
+      //asyncManager.ClusterNotLoaded += ClusterNotLoadedHandler;
       asyncManager.UnloadWaitLimit = 1;
     }
 
