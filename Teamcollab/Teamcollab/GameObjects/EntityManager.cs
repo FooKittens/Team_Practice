@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Teamcollab.Engine.Helpers;
 
 namespace Teamcollab.GameObjects
 {
@@ -36,6 +37,14 @@ namespace Teamcollab.GameObjects
         {
           entity.Update(gameTime);
         }
+      }
+    }
+
+    public void Draw(IsoBatch isoBatch)
+    {
+      foreach (Entity entity in entities)
+      {
+        entity.Draw(isoBatch);
       }
     }
 
