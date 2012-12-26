@@ -162,15 +162,13 @@ namespace Teamcollab.Engine.WorldManagement
         new Vector2(-0.5f, 0.5f) // Bottom Left
       };
 
-      // Matrix for translating into tilespace and then scaling to screen.
-      // Matrix mat = ClusterTileTransform * TileScreenTransform;
-
       /* Translate all vertices to the correct cluster and transform
        * into pixel coordinates. */
       for (int i = 0; i < vertices.Length; ++i)
       {
         vertices[i] += clusterCoordinates;
         vertices[i] = WorldManager.TransformIsometric(vertices[i]);
+        //vertices[i] = WorldManager.GetClusterScreenCenter(vertices[i]);
         vertices[i] = Vector2.Transform(
           vertices[i],
           Matrix.CreateScale(Constants.ClusterWidth, Constants.ClusterWidth, 1f) *

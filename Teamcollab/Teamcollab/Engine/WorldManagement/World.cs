@@ -180,8 +180,6 @@ namespace Teamcollab.Engine.WorldManagement
       int camX = Convert.ToInt32(camPos.X);
       int camY = Convert.ToInt32(camPos.Y);
 
-      Cluster test = GetCluster(camX, camY);
-
       for (int y = camY - 1; y <= camY + 1; y++)
       {
         for (int x = camX - 1; x <= camX + 1; x++)
@@ -195,7 +193,7 @@ namespace Teamcollab.Engine.WorldManagement
 
       //if (GetCluster(camX, camY) == null)
       //{
-      //  asyncManager.LoadCluster(new Coordinates(camX, camY));
+        //asyncManager.LoadCluster(new Coordinates(camX, camY));
       //}
       //asyncManager.LoadCluster(new Coordinates(camX - 1, camY));
       //asyncManager.LoadCluster(new Coordinates(camX + 1, camY));
@@ -223,71 +221,65 @@ namespace Teamcollab.Engine.WorldManagement
     /// <summary>
     /// Determines if a given cluster is in view.
     /// </summary>
-    /// <param name="cluster">The cluster to investigate.</param>
-    private bool IsInView(Cluster cluster)
-    {
-      return IsInView(cluster.Coordinates);
-    }
-
+    /// <param name="clusterCoordinates">The coordinates of the cluster.</param>
     private bool IsInView(Coordinates clusterCoordinates)
     {
-      Vector2 topLeft = new Vector2(Camera2D.Bounds.Left, Camera2D.Bounds.Top);
-      Vector2 bottomRight = new Vector2(Camera2D.Bounds.Right, Camera2D.Bounds.Bottom);
+      // Creates cluster edges with clockwise winding.
+      Vector2[] vertices = new[] {
+        new Vector2(-0.5f, -0.5f), // Top Left
+        new Vector2(0.5f, -0.5f), // Top Right
+        new Vector2(0.5f, 0.5f), // Bottom Right
+        new Vector2(-0.5f, 0.5f), // Bottom Left
+      };
 
+      // TODO(Peter): Create Enum ?
+      const int TopLeft = 0;
+      const int TopRight = 1;
+      const int BottomRight = 2;
+      const int BottomLeft = 3;
 
-      topLeft = WorldManager.TransformScreenToCluster(topLeft);
-      bottomRight = WorldManager.TransformScreenToCluster(bottomRight);
-
-      topLeft = WorldManager.TransformInvIsometric(topLeft);
-      bottomRight = WorldManager.TransformInvIsometric(bottomRight);
-
-      //// Offsets are in cluster coordinates.
-      //if (clusterCoordinates.X + 1.0f >= topLeft.X &&
-      //    clusterCoordinates.X - 1.0f <= bottomRight.X &&
-      //    clusterCoordinates.Y - 1.0f <= bottomRight.Y &&
-      //    clusterCoordinates.Y + 1.0f >= topLeft.Y)
-      //{
-      //  return true;
-      //}
-
-
-      Rectangle camBounds = Camera2D.Bounds;/*new Rectangle(
-        Convert.ToInt32(WorldManager.TransformIsometric(Camera2D.Position).X - 640),
-        Convert.ToInt32(WorldManager.TransformIsometric(Camera2D.Position).Y - 384),
-        1280,
-        720
-        );*/
-
-      Rectangle cBounds = Cluster.GetClusterBounds(clusterCoordinates);
-      Vector2[] vertices = new Vector2[4];
-
-      // All bounds.
-      vertices[0] = new Vector2(cBounds.Left, cBounds.Top);
-      vertices[1] = new Vector2(cBounds.Left, cBounds.Bottom);
-      vertices[2] = new Vector2(cBounds.Right, cBounds.Top);
-      vertices[3] = new Vector2(cBounds.Right, cBounds.Bottom);
-
+      // Transform all vertices to fit the cluster.
       for (int i = 0; i < 4; ++i)
       {
-        // vertices[i] = WorldManager.TransformIsometric(vertices[i]);
-        Point p = new Point(
-          Convert.ToInt32(vertices[i].X),
-          Convert.ToInt32(vertices[i].Y)
+        vertices[i] += clusterCoordinates;
+        vertices[i] = WorldManager.TransformIsometric(vertices[i]);
+        vertices[i] = Vector2.Transform(
+          vertices[i],
+          Matrix.CreateScale(Constants.ClusterWidth, Constants.ClusterWidth, 1f) *
+          Matrix.CreateScale(Constants.TileWidth, Constants.TileHeight, 1f)
         );
-        if (camBounds.Contains(p))
-        {
-          return true;
-        }
+      }
+
+
+      // Creates an Axis-Aligned BoundingBox that fits the whole cluster.
+      Rectangle cAABB = new Rectangle(
+        Convert.ToInt32(vertices[BottomLeft].X),
+        Convert.ToInt32(vertices[TopLeft].Y),
+        Convert.ToInt32(vertices[TopRight].X - vertices[BottomLeft].X),
+        Convert.ToInt32(vertices[BottomRight].Y - vertices[TopLeft].Y)
+      );
+
+      // Simplicity itself.
+      if (cAABB.Intersects(Camera2D.Bounds))
+      {
+        return true;
       }
 
       return false;
     }
 
     /// <summary>
-    /// Adds a cluster to the Worlds cluster list and sorts the list.
+    /// Determines if a given cluster is in view.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="cluster">The cluster to investigate.</param>
+    private bool IsInView(Cluster cluster)
+    {
+      return IsInView(cluster.Coordinates);
+    }
+
+    /// <summary>
+    /// Adds a cluster to the Worlds cluster list.
+    /// </summary>
     public void AddCluster(Cluster cluster)
     {
       if (insertIndex == clusters.Length)
@@ -300,6 +292,9 @@ namespace Teamcollab.Engine.WorldManagement
       isSorted = false;
     }
 
+    /// <summary>
+    /// Returns the cluster at the specified coordinates, if it exists.
+    /// </summary>
     public Cluster GetCluster(int x, int y)
     {
       if (isSorted == false)
@@ -410,7 +405,7 @@ namespace Teamcollab.Engine.WorldManagement
       int center = start + length / 2;
 
       // Not found condition.
-      if (clusters[center] == null || clusters[center].HashCode != hashkey && length == 1)
+      if (length == 0 || (clusters[center].HashCode != hashkey && length == 1))
       {
         return null;
       }
