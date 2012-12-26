@@ -9,7 +9,10 @@ namespace Teamcollab.GameObjects
     #region Properties
     #endregion
 
+    static object addLocker = new object();
+
     #region Members
+    Queue<Entity> addQueue;
     private static EntityManager singleton;
     List<Entity> entities;
     #endregion
@@ -27,10 +30,13 @@ namespace Teamcollab.GameObjects
     private EntityManager()
     {
       entities = new List<Entity>();
+      addQueue = new Queue<Entity>();
     }
 
     public void Update(GameTime gameTime)
     {
+      EmptyAddQueue();
+
       foreach (Entity entity in entities)
       {
         if (entity.NeedsUpdate)
@@ -50,7 +56,21 @@ namespace Teamcollab.GameObjects
 
     public void AddObject(Entity entity)
     {
-      entities.Add(entity);
+      lock (addLocker)
+      {
+        addQueue.Enqueue(entity);
+      }
+    }
+
+    private void EmptyAddQueue()
+    {
+      lock (addLocker)
+      {
+        while (addQueue.Count > 0)
+        {
+          entities.Add(addQueue.Dequeue());
+        }
+      }
     }
   }
 }

@@ -29,6 +29,8 @@ namespace Teamcollab.Engine.WorldGeneration
 
       Vector2 vClusterPos = new Vector2(clusterX, clusterY);
 
+      EntityManager em = EntityManager.GetInstance();
+
       for (int y = 0; y < Constants.ClusterHeight; ++y)
       {
         for (int x = 0; x < Constants.ClusterWidth; ++x)
@@ -53,9 +55,9 @@ namespace Teamcollab.Engine.WorldGeneration
           ;
           cluster.SetTileAt(x, y, t);
 
-          if (noise > 2 && x % 3 == 0 && y % 4 == 0)
+          if (noise > 2)
           {
-            cluster.AddStaticEntity(new StaticEntity(
+            em.AddObject(new StaticEntity(
               EntityType.Tree, tileWorldPos)
             );
           }

@@ -30,6 +30,7 @@ namespace Teamcollab.Resources
 
       SpriteTextureBank = new ResourceCollection<Texture2D>();
       SpriteTextureBank.Add("Pine", content.Load<Texture2D>("Art\\IHASTREE"));
+      SpriteTextureBank.Add("Grassland", content.Load<Texture2D>("Art\\grassland_tiles"));
     }
   }
 }
