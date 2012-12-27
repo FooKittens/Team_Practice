@@ -23,6 +23,15 @@ namespace Teamcollab.GameObjects
     Texture2D texture;
     Vector2 origin;
     bool isMoving;
+    const int ColumnCount = 8;
+    const int RowCount = 8;
+    int currentColumn;
+    int currentRow;
+    int columnWidth;
+    int rowHeight;
+    int millisecondsPerFrame = 150;
+    int animationTimer = 150;
+    int DirectionsCount = 8;
     #endregion
 
     public Player(Vector2 worldPosition)
@@ -71,8 +80,8 @@ namespace Teamcollab.GameObjects
         isMoving = true;
         float direction = (float)Math.Atan2(diff.Y, diff.X);
         float percentualDir = direction / MathHelper.TwoPi + 0.5f;
-        int generalDirection = Convert.ToInt32(percentualDir *= 8);
-        currentRow = (generalDirection + 1) % 8;
+        int generalDirection = Convert.ToInt32(percentualDir *= DirectionsCount);
+        currentRow = (generalDirection + 1) % DirectionsCount;
 
         // Movement
         diff.Normalize();
@@ -86,9 +95,6 @@ namespace Teamcollab.GameObjects
       
     }
 
-    const int MillisecondsPerFrame = 100;
-    int animationTimer = MillisecondsPerFrame;
-
     protected virtual void UpdateAnimation(GameTime gameTime)
     {
       if (isMoving)
@@ -96,7 +102,7 @@ namespace Teamcollab.GameObjects
         animationTimer -= gameTime.ElapsedGameTime.Milliseconds;
         if (animationTimer < 0)
         {
-          animationTimer += MillisecondsPerFrame;
+          animationTimer += millisecondsPerFrame;
           currentColumn += 1;
           if (currentColumn == 4)
           {
@@ -114,13 +120,6 @@ namespace Teamcollab.GameObjects
     {
       throw new NotImplementedException();
     }
-
-    const int ColumnCount = 8;
-    const int RowCount = 8;
-    int currentColumn;
-    int currentRow;
-    int columnWidth;
-    int rowHeight;
 
     public override void Draw(IsoBatch batch)
     {
