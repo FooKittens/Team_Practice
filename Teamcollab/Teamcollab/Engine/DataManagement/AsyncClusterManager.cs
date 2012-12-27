@@ -31,7 +31,6 @@ namespace Teamcollab.Engine.DataManagement
     List<Cluster> unloadList;
     List<Coordinates> loadList;    
     BackgroundWorker databaseWorker;
-    ClusterDatabase clusterDb;
 
     // This reference should not change.
     readonly World world;
@@ -41,7 +40,6 @@ namespace Teamcollab.Engine.DataManagement
     public AsyncClusterManager(World world)
     {
       this.world = world;
-      clusterDb = new ClusterDatabase("ClusterData.s3db");
       unloadList = new List<Cluster>();
       loadList = new List<Coordinates>();
       databaseWorker = new BackgroundWorker();
