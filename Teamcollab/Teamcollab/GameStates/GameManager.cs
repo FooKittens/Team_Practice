@@ -25,6 +25,7 @@ namespace Teamcollab.GameStates
 
     // Cam
     Direction previousDirection;
+    bool lockCamToPlayer;
 
     // Time
     float inten = 0f;
@@ -60,7 +61,7 @@ namespace Teamcollab.GameStates
     }
     private void MoveCameraOneCluster(Direction dir)
     {
-      Vector2 change = Coordinates.Zero;
+      Vector2 change = Vector2.Zero;
       if (((int)dir & 1) == 1)
       {
         change.Y -= 1;
@@ -83,7 +84,8 @@ namespace Teamcollab.GameStates
       );
       change.X += Convert.ToInt32(camCluster.X);
       change.Y += Convert.ToInt32(camCluster.Y);
-      Camera2D.SetPosition(WorldManager.GetClusterScreenCenter(change));
+      change = WorldManager.GetClusterWorldCenter(change);
+      Camera2D.SetTargetPosition(WorldManager.TransformInvIsometric(change));
     }
 
     private void MoveCameraOneTile(Direction dir)
@@ -111,7 +113,7 @@ namespace Teamcollab.GameStates
       );
       change.X += Convert.ToInt32(camTile.X);
       change.Y += Convert.ToInt32(camTile.Y);
-      Camera2D.SetTargetPosition(WorldManager.TransformWorldToScreen(change));
+      Camera2D.SetTargetPosition(WorldManager.TransformInvIsometric(change));
     }
     #endregion
 
@@ -149,19 +151,36 @@ namespace Teamcollab.GameStates
       {
         currentDirection += (int)Direction.Right;
       }
-      if (InputManager.KeyDown(Keys.LeftShift))
+      if (currentDirection != 0) // Only move if there's input
       {
-        if (previousDirection != currentDirection)
+        if (InputManager.KeyDown(Keys.LeftShift))
         {
-          MoveCameraOneCluster(currentDirection);
+          if (previousDirection != currentDirection)
+          {
+            MoveCameraOneCluster(currentDirection);
+          }
         }
-      }
-      else
-      {
-        MoveCameraOneTile(currentDirection);
+        else
+        {
+          MoveCameraOneTile(currentDirection);
+        }
       }
 
       previousDirection = currentDirection;
+
+      if (InputManager.KeyNewDown(Keys.C))
+      {
+        lockCamToPlayer = !lockCamToPlayer;
+      }
+
+      if (lockCamToPlayer)
+      {
+        Camera2D.SetPosition(
+          EntityManager.GetInstance().GetFirstOccurencyOfType(
+            EntityType.Player
+          ).WorldPosition
+        );
+      }
       #endregion
 
       float deltaScroll = InputManager.MouseWheelChange();
@@ -169,16 +188,6 @@ namespace Teamcollab.GameStates
       deltaScroll = Math.Sign(InputManager.MouseWheelChange()) * 2.5f;
       Camera2D.SetTargetScale(Camera2D.Scale + deltaScroll);
 
-      if (InputManager.KeyDown(Keys.E))
-      {
-        Camera2D.SetTargetScale(1f);
-      }
-      else if (InputManager.KeyDown(Keys.R))
-      {
-        Camera2D.SetTargetScale(2.5f);
-      }
-
-      // TODO(Martin): move player
       EntityManager.GetInstance().Update(gameTime);
     }
 

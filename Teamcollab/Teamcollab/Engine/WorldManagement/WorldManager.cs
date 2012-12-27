@@ -88,6 +88,14 @@ namespace Teamcollab.Engine.WorldManagement
       return res;
     }
 
+    public static Vector2 GetClusterWorldCenter(Vector2 clusterCoordinates)
+    {
+      return Vector2.Transform(
+        clusterCoordinates,
+        clusterTileTransform
+      );
+    }
+
     public static Vector2 GetClusterScreenCenter(Vector2 clusterCoordinates)
     {
       return Vector2.Transform(

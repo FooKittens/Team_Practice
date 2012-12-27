@@ -33,7 +33,7 @@ namespace Teamcollab.GameObjects
     {
       if (InputManager.MouseLeftDown())
       {
-        targetPosition = Camera2D.TranslatePositionByCamera(
+        targetPosition = Camera2D.TranslateScreenToWorld(
           InputManager.MousePosition());
       }
     }
