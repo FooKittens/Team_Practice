@@ -14,6 +14,7 @@ namespace Teamcollab.GameObjects
     Slime,
     Zombie,
     Werewolf,
+
     Tree,
   }
 }

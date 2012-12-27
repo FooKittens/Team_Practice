@@ -23,7 +23,7 @@ namespace Teamcollab.GameObjects
     #endregion
 
     public Player(Vector2 worldPosition)
-      : base(EntityType.Slime, worldPosition)
+      : base(EntityType.Player, worldPosition)
     {
       NeedsUpdate = true;
       armed = false;
