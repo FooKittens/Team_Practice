@@ -3,13 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Teamcollab.Engine.Helpers;
 using Teamcollab.Resources;
+using Teamcollab.Engine.WorldGeneration;
+using Teamcollab.Engine.DataManagement;
 
 namespace Teamcollab.Engine.WorldManagement
 {
   public sealed class WorldManager
   {
     #region Properties
-    
+    public World CurrentWorld { get { return currentWorld; } }
     #endregion
     
     #region Matrices
@@ -136,6 +138,7 @@ namespace Teamcollab.Engine.WorldManagement
     static WorldManager()
     {
       CreateMatrices();
+      TerrainGenerator.Initialize(1337);
     }
 
     private WorldManager(Game game)
@@ -194,7 +197,13 @@ namespace Teamcollab.Engine.WorldManagement
 
       return singleton;
     }
-     
+
+
+    public static void Save()
+    {
+      DataManager.SaveWorld(GetInstance(null).CurrentWorld);
+    }
+
     /// <summary>
     /// Initializes the worldmanager instance.
     /// </summary>

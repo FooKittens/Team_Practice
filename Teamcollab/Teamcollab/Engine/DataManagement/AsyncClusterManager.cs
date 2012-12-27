@@ -29,16 +29,18 @@ namespace Teamcollab.Engine.DataManagement
     
     #region Members
     List<Cluster> unloadList;
-    List<Coordinates> loadList;
-
+    List<Coordinates> loadList;    
     BackgroundWorker databaseWorker;
-
-
     ClusterDatabase clusterDb;
+
+    // This reference should not change.
+    readonly World world;
+
     #endregion
 
-    public AsyncClusterManager()
+    public AsyncClusterManager(World world)
     {
+      this.world = world;
       clusterDb = new ClusterDatabase("ClusterData.s3db");
       unloadList = new List<Cluster>();
       loadList = new List<Coordinates>();
@@ -136,7 +138,8 @@ namespace Teamcollab.Engine.DataManagement
         {
           lock (databaseLock)
           {
-            clusterDb.InsertCluster(cluster);
+            //clusterDb.InsertCluster(cluster);
+            DataManager.SaveCluster(world, cluster);
             DevConsole.WriteLine("Inserted {0} into database", cluster);
           }
         }

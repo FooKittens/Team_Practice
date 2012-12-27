@@ -8,9 +8,15 @@ using Teamcollab.GUI;
 
 namespace Teamcollab.Engine.WorldManagement
 {
-  [Serializable]
   public class World
   {
+    public Cluster[] Clusters { get { return clusters; } }
+    public int Seed { get; private set; }
+    public string Name { get; private set; }
+    public long CreationTimeTicks { get; private set; }
+    public long LastPlayedTimeTicks { get; set; }
+    public long CurrentTimeTicks { get; set; }
+
     private Cluster[] clusters;
     private bool isSorted;
     private int insertIndex;
@@ -19,14 +25,16 @@ namespace Teamcollab.Engine.WorldManagement
 
     AsyncClusterManager asyncManager;
 
-    public World(int startSize = 10)
+    public World(int seed, string name = "test")
     {
+      Name = name;
+      Seed = seed;
       loadedClusters = new List<Cluster>();
-      clusters = new Cluster[startSize];
+      clusters = new Cluster[1];
       isSorted = true;
       insertIndex = 0;
 
-      asyncManager = new AsyncClusterManager();
+      asyncManager = new AsyncClusterManager(this);
       //asyncManager.ClusterUnloaded += ClusterUnloadedHandler;
       asyncManager.ClusterLoaded += ClusterLoadedHandler;
       //asyncManager.ClusterNotLoaded += ClusterNotLoadedHandler;
@@ -140,17 +148,6 @@ namespace Teamcollab.Engine.WorldManagement
           }
         }
       }
-
-      //TODO(Martin): Remove if still uncommented 1 Jan 2013
-
-      //if (GetCluster(camX, camY) == null)
-      //{
-        //asyncManager.LoadCluster(new Coordinates(camX, camY));
-      //}
-      //asyncManager.LoadCluster(new Coordinates(camX - 1, camY));
-      //asyncManager.LoadCluster(new Coordinates(camX + 1, camY));
-      //asyncManager.LoadCluster(new Coordinates(camX, camY - 1));
-      //asyncManager.LoadCluster(new Coordinates(camX, camY + 1));
     }
 
     public void Draw(IsoBatch spriteBatch)
@@ -192,9 +189,6 @@ namespace Teamcollab.Engine.WorldManagement
         new Vector2(-0.5f, 0.5f), // Bottom Left
       };
 
-      /* TODO(Peter): Create Enum ?
-       * No, overhead's the same and there's no switch / Martin
-       * http://www.codeproject.com/Articles/4354/Enum-vs-Const */
       const int TopLeft = 0;
       const int TopRight = 1;
       const int BottomRight = 2;

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teamcollab", "Teamcollab\Teamcollab\Teamcollab.csproj", "{222089C0-7692-4476-8BAA-901255363E55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Midgard", "Teamcollab\Teamcollab\Project Midgard.csproj", "{222089C0-7692-4476-8BAA-901255363E55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamcollabContent", "Teamcollab\TeamcollabContent\TeamcollabContent.contentproj", "{08950EA8-E170-4F0A-B61E-D74A66BA6941}"
 EndProject

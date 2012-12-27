@@ -190,7 +190,7 @@ namespace Teamcollab.GUI
     static public Vector2 TranslatePositionByCamera(Vector2 camCoord)
     {
       camCoord = Vector2.Transform(camCoord, translationMatrix);
-      camCoord = WorldManager.TransformScreenToTile(camCoord);
+      camCoord = WorldManager.TransformScreenToWorld(camCoord);
       return WorldManager.TransformInvIsometric(camCoord);
     }
 

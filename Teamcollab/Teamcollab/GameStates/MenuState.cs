@@ -56,7 +56,7 @@ namespace Teamcollab.GameStates
     {
       textures = new ResourceCollection<Texture2D>();
       spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-      textures.Add("Sun", Game.Content.Load<Texture2D>("sunbg"));
+      textures.Add("Viking", Game.Content.Load<Texture2D>("Art\\Vikingbg"));
     }
 
     // TODO(Zerkish): Remove 
@@ -64,7 +64,7 @@ namespace Teamcollab.GameStates
     {
       spriteBatch.Begin();
 
-      spriteBatch.Draw(textures.Query("Sun"), Vector2.Zero, Color.White);
+      spriteBatch.Draw(textures.Query("Viking"), Vector2.Zero, Color.White);
 
       spriteBatch.End();
     }

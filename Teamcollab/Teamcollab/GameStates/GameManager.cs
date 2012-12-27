@@ -178,6 +178,12 @@ namespace Teamcollab.GameStates
         Camera2D.SetTargetScale(2.5f);
       }
 
+      // Saving Testcode
+      if (InputManager.KeyNewDown(Keys.F1))
+      {
+        WorldManager.Save();
+      }
+
       // TODO(Martin): move player
       EntityManager.GetInstance().Update(gameTime);
     }

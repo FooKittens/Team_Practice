@@ -15,12 +15,19 @@ namespace Teamcollab.Engine.WorldGeneration
     const int GenOctaves = 5;
 
     #region Members
-    static  PerlinGenerator gen;
+    static  PerlinGenerator landGen;
+    static int seed;
     #endregion
 
     static TerrainGenerator()
     {
-      gen = new PerlinGenerator();
+      
+    }
+
+    public static void Initialize(int seed)
+    {
+      TerrainGenerator.seed = seed;
+      landGen = new PerlinGenerator(seed, GenOctaves, GenPersistance2D);
     }
 
     public static Cluster CreateCluster(int clusterX, int clusterY)
@@ -90,9 +97,7 @@ namespace Teamcollab.Engine.WorldGeneration
     private static float GenerateTileNoise(float worldX, float worldY)
     {
       // Div by 128f is a resolution factor for testing.
-      return gen.Perlin2D(worldX / 32f, worldY / 32f,
-        GenPersistance2D, GenOctaves
-      );
+      return landGen.Perlin2D(worldX / 32f, worldY / 32f);
     }
   }
 }

@@ -5,10 +5,9 @@ namespace Teamcollab.Engine.WorldGeneration
 {
   class PerlinGenerator
   {
-    private static readonly Random Rand = new Random();
-
     #region Properties
-
+    public int Octaves { get; set; }
+    public float Persistance { get; set; }
     #endregion
 
     public delegate float Noise1D(int input);
@@ -17,44 +16,48 @@ namespace Teamcollab.Engine.WorldGeneration
     #region Members
     List<Noise1D> noise1DFunctions;
     List<Noise2D> noise2DFunctions;
+    readonly Random rand;
     #endregion
 
-    public PerlinGenerator()
+    public PerlinGenerator(int seed, int octaves, float persistance)
     {
+      rand = new Random(seed);
       noise1DFunctions = new List<Noise1D>();
       noise2DFunctions = new List<Noise2D>();
+      Octaves = octaves;
+      Persistance = persistance;
     }
 
-    public float Perlin1D(float x, float persistance, int octaves)
+    public float Perlin1D(float x)
     {
-      while (noise1DFunctions.Count < octaves)
+      while (noise1DFunctions.Count < Octaves)
       {
         noise1DFunctions.Add(CreateNoise1DFunction());
       }
 
       float total = 0f;
-      for (int i = 0; i < octaves - 1; ++i)
+      for (int i = 0; i < Octaves - 1; ++i)
       {
         float frequency = (float)Math.Pow(2f, i);
-        float amp = (float)Math.Pow(persistance, i);
+        float amp = (float)Math.Pow(Persistance, i);
         total += noise1DFunctions[i]((int)(x * frequency)) * amp;
       }
 
       return total;
     }
 
-    public float Perlin2D(float x, float y, float persistance, int octaves)
+    public float Perlin2D(float x, float y)
     {
-      while (noise2DFunctions.Count < octaves)
+      while (noise2DFunctions.Count < Octaves)
       {
         noise2DFunctions.Add(CreateNoise2DFunction());
       }
 
       float total = 0f;
-      for (int i = 0; i < octaves - 1; ++i)
+      for (int i = 0; i < Octaves - 1; ++i)
       {
         float frequency = (float)Math.Pow(2f, i);
-        float amp = (float)Math.Pow(persistance, i);
+        float amp = (float)Math.Pow(Persistance, i);
         total += InterpolateNoise2D(noise2DFunctions[i],
           x * frequency, y * frequency) * amp;
       }
@@ -62,7 +65,7 @@ namespace Teamcollab.Engine.WorldGeneration
       return total;
     }
 
-    private static float SmoothNoise1D(Noise1D noiseFunc, float input, int factor)
+    private float SmoothNoise1D(Noise1D noiseFunc, float input, int factor)
     {
       int intInput = (int)input;
 
@@ -75,7 +78,7 @@ namespace Teamcollab.Engine.WorldGeneration
       return sNoise;
     }
 
-    private static float SmoothNoise2D(Noise2D noiseFunc, float x, float y, int factor)
+    private float SmoothNoise2D(Noise2D noiseFunc, float x, float y, int factor)
     {
       int iX = (int)x;
       int iY = (int)y;
@@ -97,7 +100,7 @@ namespace Teamcollab.Engine.WorldGeneration
       return corners + sides + center;
     }
 
-    private static float InterpolateNoise2D(Noise2D noiseFunc, float x, float y)
+    private float InterpolateNoise2D(Noise2D noiseFunc, float x, float y)
     {
       int iX = (int)Math.Floor(x);
       int iY = (int)Math.Floor(y);
@@ -113,24 +116,24 @@ namespace Teamcollab.Engine.WorldGeneration
       return Lerp(lX, lY, y - iY);
     }
 
-    private static float Lerp(float a, float b, float weight)
+    private float Lerp(float a, float b, float weight)
     {
       return a * (1 - weight) + b * weight;
     }
 
-    public static int GetRandomPrime(int min, int max)
+    public int GetRandomPrime(int min, int max)
     {
       int prime = 0;
 
       do
       {
-        prime = (int)(min + Rand.NextDouble() * max);
+        prime = (int)(min + rand.NextDouble() * max);
       } while (!IsPrime(prime));
 
       return prime;
     }
 
-    private static bool IsPrime(int l)
+    private bool IsPrime(int l)
     {
       int squared = (int)Math.Sqrt(l);
 
@@ -145,16 +148,16 @@ namespace Teamcollab.Engine.WorldGeneration
       return true;
     }
 
-    private static int[] GetThreeRandomPrimes()
+    private int[] GetThreeRandomPrimes()
     {
       int[] primes = new int[3];
-      primes[0] = GetRandomPrime(12000, 20000);
-      primes[1] = GetRandomPrime(600000, 1000000);
-      primes[2] = GetRandomPrime(100000000, 150000000);
+      primes[0] = GetRandomPrime(14500, 15500);
+      primes[1] = GetRandomPrime(750000, 800000);
+      primes[2] = GetRandomPrime(1300000000, 1350000000);
       return primes;
     }
 
-    private static Noise1D CreateNoise1DFunction()
+    private Noise1D CreateNoise1DFunction()
     {
       int[] primes = GetThreeRandomPrimes();
       Noise1D del = delegate(int n)
@@ -168,7 +171,7 @@ namespace Teamcollab.Engine.WorldGeneration
       return del;
     }
 
-    private static Noise2D CreateNoise2DFunction()
+    private Noise2D CreateNoise2DFunction()
     {
       int[] primes = GetThreeRandomPrimes();
       Noise2D del = delegate(int x, int y)
