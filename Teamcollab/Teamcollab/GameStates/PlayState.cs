@@ -18,6 +18,7 @@ namespace Teamcollab.GameStates
 
     #region Members
     GameManager gManager;
+    bool isPaused;
     #endregion
 
     public PlayState(Game game)
@@ -25,6 +26,7 @@ namespace Teamcollab.GameStates
     {
       // Initialize the gamestate.
       Initialize();
+      isPaused = false;
     }
 
     protected override void Initialize()
@@ -35,7 +37,10 @@ namespace Teamcollab.GameStates
     
     public override void Update(GameTime gameTime)
     {
-      gManager.Update(gameTime);
+      if (!isPaused)
+      {
+        gManager.Update(gameTime);
+      }
 
       if (InputManager.KeyRelease(Keys.Escape))
       {
@@ -43,6 +48,11 @@ namespace Teamcollab.GameStates
         {
           StateChangeRequested(ApplicationState.Menu);
         }
+      }
+
+      if (InputManager.KeyNewDown(Keys.P))
+      {
+        isPaused = !isPaused;
       }
     }
 

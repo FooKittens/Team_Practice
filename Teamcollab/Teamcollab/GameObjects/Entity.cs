@@ -39,10 +39,7 @@ namespace Teamcollab.GameObjects
       UpdateState();
     }
 
-    public virtual void Draw(IsoBatch batch)
-    {
-
-    }
+    public abstract void Draw(IsoBatch batch);
 
     protected abstract void UpdateState();
 

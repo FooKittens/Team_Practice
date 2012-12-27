@@ -62,6 +62,35 @@ namespace Teamcollab.GameObjects
       }
     }
 
+    public Entity[] GetAllEntitiesOfType(EntityType type)
+    {
+      List<Entity> typeMatches = new List<Entity>();
+      for (int i = 0; i < entities.Count; ++i)
+      {
+        if (entities[i].EntityType == type)
+        {
+          typeMatches.Add(entities[i]);
+        }
+      }
+      return typeMatches.ToArray();
+    }
+
+    /// <summary>
+    /// Returns null if no occurency was found
+    /// </summary>
+    /// <param name="type">EntityType to check for</param>
+    public Entity GetFirstOccurencyOfType(EntityType type)
+    {
+      for (int i = 0; i < entities.Count; ++i)
+      {
+        if (entities[i].EntityType == type)
+        {
+          return entities[i];
+        }
+      }
+      return null;
+    }
+
     private void EmptyAddQueue()
     {
       lock (addLocker)

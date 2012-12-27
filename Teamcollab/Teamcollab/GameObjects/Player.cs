@@ -4,24 +4,29 @@ using Microsoft.Xna.Framework.Input;
 using Teamcollab.Engine.Helpers;
 using Teamcollab.GUI;
 using Teamcollab.Engine.WorldManagement;
+using Microsoft.Xna.Framework.Graphics;
+using Teamcollab.Resources;
 
 namespace Teamcollab.GameObjects
 {
   class Player : MovingEntity
   {
     #region Properties
-
+    protected override float BaseSpeed
+    {
+      get { return 0.085f; }
+    }
     #endregion
 
     #region Members
-    Vector2 targetPosition;
-    const float Speed = 0.2f;
+    bool armed;
     #endregion
 
     public Player(Vector2 worldPosition)
       : base(EntityType.Player, worldPosition)
     {
       NeedsUpdate = true;
+      armed = false;
     }
 
     public override void Update(GameTime gameTime)
@@ -33,29 +38,18 @@ namespace Teamcollab.GameObjects
     {
       if (InputManager.MouseLeftDown())
       {
-        targetPosition = Camera2D.TranslatePositionByCamera(
+        targetPosition = Camera2D.TranslateScreenToWorld(
           InputManager.MousePosition());
       }
     }
 
-    protected override void UpdateMovement()
+    protected override void UpdateMovement(GameTime gameTime)
     {
-      Vector2 diff = targetPosition - worldPosition;
-      if (diff.Length() < Speed)
-      {
-        worldPosition = targetPosition;
-      }
-      else
-      {
-        diff.Normalize();
-        diff *= Speed;
-        worldPosition += diff;
-      }
+      base.UpdateMovement(gameTime);
     }
 
     protected override void UpdateState()
     {
-      
     }
 
     public override object GetData()
@@ -65,7 +59,12 @@ namespace Teamcollab.GameObjects
 
     public override void Draw(IsoBatch batch)
     {
-      batch.Draw(Resources.ResourceManager.TileTextureBank.Query("Grass"), WorldPosition);
+      base.Draw(batch);
+      if (armed)
+      {
+        batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, sourceRectangle, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+        batch.Draw(ResourceManager.SpriteTextureBank.Query("Sword"), WorldPosition, sourceRectangle, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+      }
     }
   }
 }
