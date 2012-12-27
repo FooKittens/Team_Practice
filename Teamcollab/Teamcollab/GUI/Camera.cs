@@ -74,7 +74,8 @@ namespace Teamcollab.GUI
     /// <param name="worldCoordinate">World coordinate</param>
     static public void SetTargetPosition(Vector2 worldCoordinate)
     {
-      targetPosition = worldCoordinate;
+      targetPosition = WorldManager.TransformIsometric(worldCoordinate);
+      targetPosition = WorldManager.TransformWorldToScreen(targetPosition);
     }
 
     /// <summary>
@@ -83,7 +84,8 @@ namespace Teamcollab.GUI
     /// <param name="worldCoordinate">World coordinate</param>
     static public void SetPosition(Vector2 worldCoordinate)
     {
-      position = worldCoordinate;
+      position = WorldManager.TransformIsometric(worldCoordinate);
+      position = WorldManager.TransformWorldToScreen(position);
       targetPosition = position;
     }
 
@@ -187,7 +189,7 @@ namespace Teamcollab.GUI
     /// </summary>
     /// <param name="camCoord">Camera coordinate</param>
     /// <returns>World coordinate</returns>
-    static public Vector2 TranslatePositionByCamera(Vector2 camCoord)
+    static public Vector2 TranslateScreenToWorld(Vector2 camCoord)
     {
       camCoord = Vector2.Transform(camCoord, translationMatrix);
       camCoord = WorldManager.TransformScreenToWorld(camCoord);

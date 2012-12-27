@@ -27,11 +27,10 @@ namespace Teamcollab.Resources
       TileTextureBank.Add("Grass", content.Load<Texture2D>("Art\\grassIso"));
       TileTextureBank.Add("Water", content.Load<Texture2D>("Art\\waterIso"));
       TileTextureBank.Add("Stone", content.Load<Texture2D>("Art\\stoneIso"));
-      TileTextureBank.Add("Grassland", content.Load<Texture2D>("Art\\grassland_tiles"));
 
       SpriteTextureBank = new ResourceCollection<Texture2D>();
       SpriteTextureBank.Add("Pine", content.Load<Texture2D>("Art\\IHASTREE"));
-      
+      //SpriteTextureBank.Add("Grassland", content.Load<Texture2D>("Art\\grassland_tiles"));
     }
   }
 }
