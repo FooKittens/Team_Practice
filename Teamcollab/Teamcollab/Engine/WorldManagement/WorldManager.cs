@@ -139,20 +139,16 @@ namespace Teamcollab.Engine.WorldManagement
     static WorldManager()
     {
       CreateMatrices();
-      TerrainGenerator.Initialize(1337);
     }
 
     private WorldManager(Game game)
     {
-      try
+      if (File.Exists("Saves\\test\\world.dat"))
       {
-        DataManager.LoadWorld("test");
+        Initialize(DataManager.LoadWorld("test"));
       }
-      catch (FileNotFoundException)
-      {
-        // Om nom nom
-      }
-      Initialize(WorldManager.CreateWorld(WorldWidth, WorldHeight));
+
+      Initialize(new World(1337, "test"));
     }
 
     /// <summary>

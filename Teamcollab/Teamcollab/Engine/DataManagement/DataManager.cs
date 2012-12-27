@@ -15,15 +15,32 @@ namespace Teamcollab.Engine.DataManagement
     {
       Undefined = 0,
 
+      // Version // TODO(Peter): Implement
+
+      #region world.dat
       Created,
       Seed,
       LastPlayed,
       Name,
       CurrentTime,
-      // Version // TODO(Peter): Implement
+      #endregion
+
       End,
+
+      #region cluster.dat
+      ClusterType,
+      ClusterX,
+      ClusterY,
+      TileData,
+
+           
+      #endregion
     }
 
+    const string clusterString = "{0}_{1}.dat";
+    const string savePath = "Saves\\{0}\\";
+    const string worldDatPath = "world.dat";
+    const string clustersPath = "clusters\\";
 
     #region Properties
 
@@ -36,44 +53,53 @@ namespace Teamcollab.Engine.DataManagement
     public static void SaveWorld(World world)
     {
       string path = string.Format(
-        @"Saves\{0}\", world.Name
+        savePath, world.Name
       );
 
-      string worldPath = path + "world.dat";
+      string worldPath = path + worldDatPath;
+      bool saveExists = false;
 
       if (Directory.Exists(path))
       {
         if (File.Exists(worldPath))
         {
-          // Saves an existing world by updating.
-          SaveExisting(world);
+          saveExists = true;
         }
       }
       else
       {
+        if (!Directory.Exists("Saves"))
+        {
+          Directory.CreateDirectory("Saves");
+        }
+        // Create sub folders.
         Directory.CreateDirectory(path);
-        File.Create(worldPath);
+        Directory.CreateDirectory(path + clustersPath);
       }
 
-      using (FileStream stream = File.Open(worldPath, FileMode.CreateNew))
+      using (FileStream stream = File.Open(worldPath, FileMode.OpenOrCreate))
       {
-        // Save the name.
-        SaveName(stream, world);
+        // Theres some data we wont need to change if the file exists.
+        if (!saveExists)
+        {
+          // Save the name.
+          SaveName(stream, world);
+
+          // Save the Creation time.
+          SaveLong(stream, world.CreationTimeTicks, SaveTag.Created);
+
+          // Save the seed.
+          stream.WriteByte((byte)SaveTag.Seed);
+          byte[] seedBytes = BitConverter.GetBytes(world.Seed);
+          stream.Write(BitConverter.GetBytes(seedBytes.Length), 0, sizeof(int));
+          stream.Write(seedBytes, 0, seedBytes.Length);
+        }
 
         // Save the last played date.
         SaveLong(stream, world.LastPlayedTimeTicks, SaveTag.LastPlayed);
 
-        // Save the Creation time.
-        SaveLong(stream, world.CreationTimeTicks, SaveTag.Created);
-
         // Save the in-game time.
         SaveLong(stream, world.CurrentTimeTicks, SaveTag.CurrentTime);
-
-        // Save the seed.
-        stream.WriteByte((byte)SaveTag.Seed);
-        byte[] seedBytes = BitConverter.GetBytes(world.Seed);
-        stream.Write(BitConverter.GetBytes(seedBytes.Length), 0, sizeof(int));
-        stream.Write(seedBytes, 0, seedBytes.Length);
 
         // Write the end tag 
         stream.WriteByte((byte)SaveTag.End);
@@ -149,15 +175,12 @@ namespace Teamcollab.Engine.DataManagement
       using (FileStream stream = File.Open(savePath, FileMode.Open))
       {
         SaveTag tag = 0;
+        byte[] data = null;
+        int length = 0;
+
         while (tag != SaveTag.End)
         {
-          // Read first byte to find what the next tag is.
-          tag = (SaveTag)stream.ReadByte();
-          byte[] lengthBytes = new byte[sizeof(int)];
-          stream.Read(lengthBytes, 0, sizeof(int));
-          int length = BitConverter.ToInt32(lengthBytes, 0);
-          byte[] data = new byte[length];
-          stream.Read(data, 0, length);
+          ReadNextDataBlock(stream, ref tag, ref data, ref length);
 
           switch (tag)
           {
@@ -171,11 +194,16 @@ namespace Teamcollab.Engine.DataManagement
               world.LastPlayedTimeTicks = BitConverter.ToInt64(data, 0);
               break;
             case SaveTag.Name:
+              // An array that fits the unicode chars(size 2 bytes usually).
               char[] chars = new char[(length / sizeof(char))];
+              
+              // Iterate through the array and assign the chars.
               for (int i = 0; i < chars.Length; ++i)
               {
-                chars[i] = BitConverter.ToChar(data, i * 2);
+                chars[i] = BitConverter.ToChar(data, i * sizeof(char));
               }
+
+              // Convert the char array to a string.
               world.Name = new string(chars, 0, chars.Length);
               break;
             case SaveTag.CurrentTime:
@@ -197,10 +225,153 @@ namespace Teamcollab.Engine.DataManagement
       return world;
     }
 
-
     public static void SaveCluster(World world, Cluster cluster)
     {
- 
+      string path = string.Format("Saves\\{0}\\clusters\\", world.Name);
+      string cPath = string.Format(
+        clusterString, cluster.Coordinates.X, cluster.Coordinates.Y
+      );
+
+      if (File.Exists(path + cPath))
+      {
+        throw new DataException(
+          string.Format(
+          "Cluster ({0}, {1}) already exists!",
+            cluster.Coordinates.X.ToString(),
+            cluster.Coordinates.Y.ToString()
+          )
+        );
+      }
+
+      byte[] clusterData;
+
+      using (MemoryStream memStream = new MemoryStream())
+      {
+        // Save the cluster type.
+        memStream.WriteByte((byte)SaveTag.ClusterType);
+        memStream.Write(BitConverter.GetBytes(sizeof(byte)), 0, sizeof(int));
+        memStream.WriteByte((byte)cluster.Type);
+
+        // Save Cluster X-Coordinate
+        memStream.WriteByte((byte)SaveTag.ClusterX);
+        memStream.Write(BitConverter.GetBytes(sizeof(int)), 0, sizeof(int));
+        memStream.Write(BitConverter.GetBytes(cluster.Coordinates.x), 0, sizeof(int));
+
+        // Save Cluster Y-Coordinate
+        memStream.WriteByte((byte)SaveTag.ClusterY);
+        memStream.Write(BitConverter.GetBytes(sizeof(int)), 0, sizeof(int));
+        memStream.Write(BitConverter.GetBytes(cluster.Coordinates.Y), 0, sizeof(int));
+
+        // Save TileData
+        int tilesLength = cluster.Tiles.Length;
+        memStream.WriteByte((byte)SaveTag.TileData);
+        memStream.Write(BitConverter.GetBytes(tilesLength), 0, sizeof(int));
+        for (int i = 0; i < tilesLength; ++i)
+        {
+          memStream.WriteByte((byte)cluster.Tiles[i].Type);
+        }
+
+        // Set the end tag.
+        memStream.WriteByte((byte)SaveTag.End);
+
+        // Retrieve the compressed version of the data from memstream.
+        clusterData = CompressionHelper.Compress(memStream.GetBuffer());
+      }
+
+      using (FileStream stream = File.Create(path + cPath))
+      {
+        stream.Write(clusterData, 0, clusterData.Length);
+      }
+    }
+
+    public static Cluster LoadCluster(World world, int x, int y)
+    {
+      string filePath = string.Format(savePath, world.Name);
+      filePath += clustersPath;
+      filePath += string.Format(clusterString, x, y);
+      
+      // return null if the cluster has not been saved yet.
+      if (!File.Exists(filePath))
+      {
+        return null;
+      }
+
+      Cluster cluster = new Cluster();
+
+      byte[] cData;
+      using (FileStream fStream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+      {
+        cData = new byte[fStream.Length];
+        fStream.Read(cData, 0, cData.Length);
+      }
+
+      // Decompress compressed data.
+      cData = CompressionHelper.Decompress(cData);
+
+      using (MemoryStream stream = new MemoryStream(cData))
+      {
+        SaveTag tag = 0;
+        byte[] data = null;
+        int length = 0;
+
+        while (tag != SaveTag.End)
+        {
+          // Reads the next data block and saves tag, data and length of data.
+          ReadNextDataBlock(stream, ref tag, ref data, ref length);
+
+          switch (tag)
+          {
+            case SaveTag.ClusterType:
+              cluster.Type = (ClusterType)data[0];
+              break;
+            case SaveTag.ClusterX:
+              cluster.Coordinates.X = BitConverter.ToInt32(data, 0);
+              break;
+            case SaveTag.ClusterY:
+              cluster.Coordinates.Y = BitConverter.ToInt32(data, 0);
+              break;
+            case SaveTag.TileData:
+              cluster.Tiles = new Tile[length];
+
+              // Set up all tiles.
+              for (int i = 0; i < length; ++i)
+              {
+                cluster.Tiles[i] = Tile.Create((TileType)data[i]);
+              }
+              break;
+            case SaveTag.End:
+              // TODO(Peter): Do Something about end of file.
+              break;
+            default:
+              throw new DataException(
+                string.Format("Unrecognized SaveTag found in ({0}, {1})", x, y)
+              );
+          }
+        }
+      }
+
+      cluster.SetTileCoords();
+      cluster.SetHashCode();
+      return cluster;
+    }
+
+    /// <summary>
+    /// Reads a datablock from a stream using the in-house format.
+    /// </summary>
+    /// <param name="stream">Open stream to read from.</param>
+    /// <param name="tag"></param>
+    /// <param name="data"></param>
+    /// <param name="length">Length in bytes of the data will be stored here.</param>
+    private static void ReadNextDataBlock(Stream stream, ref SaveTag tag,
+      ref byte[] data, ref int length)
+    {
+      // Read first byte to find what the next tag is.
+      tag = (SaveTag)stream.ReadByte();
+      byte[] lengthBytes = new byte[sizeof(int)];
+      stream.Read(lengthBytes, 0, sizeof(int));
+      length = BitConverter.ToInt32(lengthBytes, 0);
+      data = new byte[length];
+      stream.Read(data, 0, length);
     }
 
     /// <summary>

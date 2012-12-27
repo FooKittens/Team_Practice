@@ -33,9 +33,10 @@ namespace Teamcollab.Engine.WorldManagement
     {
       Name = name;
       Seed = seed;
-      Initialize();
       CreationTimeTicks = DateTime.UtcNow.Ticks;
       LastPlayedTimeTicks = DateTime.UtcNow.Ticks;
+      Initialize();
+      DataManager.SaveWorld(this);
     }
 
     public void Initialize()

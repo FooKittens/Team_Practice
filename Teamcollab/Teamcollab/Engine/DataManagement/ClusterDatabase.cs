@@ -26,36 +26,36 @@ namespace Teamcollab.Engine.DataManagement
     {
     }
 
-    public virtual Cluster Find(long hashcode)
-    {
-      DataTable table = base.Select(
-        string.Format("SELECT * FROM clusters WHERE hashcode={0}", hashcode)
-      );
+    //public virtual Cluster Find(long hashcode)
+    //{
+    //  DataTable table = base.Select(
+    //    string.Format("SELECT * FROM clusters WHERE hashcode={0}", hashcode)
+    //  );
 
-      if (table.Rows.Count == 0)
-      {
-        return null;
-      }
-      else if (table.Rows.Count > 1)
-      {
-        throw new DataException(
-          "Multiple clusters found with the same hashcode!"
-        );
-      }
+    //  if (table.Rows.Count == 0)
+    //  {
+    //    return null;
+    //  }
+    //  else if (table.Rows.Count > 1)
+    //  {
+    //    throw new DataException(
+    //      "Multiple clusters found with the same hashcode!"
+    //    );
+    //  }
 
-      System.Diagnostics.Debug.WriteLine("Found row:");
-      System.Diagnostics.Debug.WriteLine(table.Rows[0]["hashcode"].ToString());
-      System.Diagnostics.Debug.WriteLine(table.Rows[0]["data"].ToString());
+    //  System.Diagnostics.Debug.WriteLine("Found row:");
+    //  System.Diagnostics.Debug.WriteLine(table.Rows[0]["hashcode"].ToString());
+    //  System.Diagnostics.Debug.WriteLine(table.Rows[0]["data"].ToString());
 
-      ClusterData data;
-      GetClusterDataFromRow(table.Rows[0], out data);
-      return new Cluster(data);
-    }
+    //  ClusterData data;
+    //  GetClusterDataFromRow(table.Rows[0], out data);
+    //  return new Cluster(data);
+    //}
 
-    public virtual Cluster Find(int x, int y)
-    {
-      return Find(Cluster.GetHashFromXY(x, y));
-    }
+    //public virtual Cluster Find(int x, int y)
+    //{
+    //  return Find(Cluster.GetHashFromXY(x, y));
+    //}
 
     public void InsertCluster(Cluster data)
     {

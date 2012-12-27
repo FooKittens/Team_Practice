@@ -32,8 +32,9 @@ namespace Teamcollab.Engine.WorldManagement
   public class Cluster
   {
     #region Properties
+    public Tile[] Tiles { get { return tiles; } set { tiles = value; } }
     public long HashCode { get; private set; }
-    public ClusterType Type { get; private set; }
+    public ClusterType Type { get; set; }
     public bool Active { get; private set; }
     public bool Loaded { get; private set; }
     #endregion
@@ -58,6 +59,10 @@ namespace Teamcollab.Engine.WorldManagement
       tileTextures = ResourceManager.TileTextureBank;
     }
 
+    // Used in loading.
+    public Cluster() { }
+
+
     public Cluster(ClusterType type, int x, int y)
     {
       Type = type;
@@ -65,18 +70,11 @@ namespace Teamcollab.Engine.WorldManagement
       Active = false;
       Coordinates = new Coordinates(x, y);
       HashCode = GetHashCode();
-      staticObjects = new List<Entity>();
+      
     }
 
     public Cluster(ClusterType type, Coordinates coordinates)
       :this(type, coordinates.X, coordinates.Y) { }
-
-    public Cluster(ClusterData data)
-      :this(data.Type, data.Coordinates.X, data.Coordinates.Y)
-    {
-      tiles = data.Tiles;
-      SetTileCoords();
-    }
 
     public void Unload()
     {
@@ -124,11 +122,6 @@ namespace Teamcollab.Engine.WorldManagement
             0f, new Vector2(32, 32), 1f, SpriteEffects.None, 0f
           );
         }
-      }
-
-      foreach (Entity ent in staticObjects)
-      {
-        ent.Draw(spriteBatch);
       }
     }
 
@@ -268,7 +261,7 @@ namespace Teamcollab.Engine.WorldManagement
       return CompressionHelper.Compress(data);
     }
 
-    private void SetTileCoords()
+    public void SetTileCoords()
     {
       for(int y = 0; y < Constants.ClusterHeight; ++y)
       {

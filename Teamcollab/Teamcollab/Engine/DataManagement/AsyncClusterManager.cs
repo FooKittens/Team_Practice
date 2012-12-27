@@ -110,12 +110,7 @@ namespace Teamcollab.Engine.DataManagement
         loadList.RemoveAt(0);
         Cluster cluster;
 
-        /* Lock the database lock to prevent 
-         * the unloader from trying to connect. */
-        lock (databaseLock)
-        {
-          cluster = clusterDb.Find(coords.X, coords.Y);
-        }
+        cluster = DataManager.LoadCluster(world, coords.X, coords.Y);
 
         // If no cluster is found, generate a new one.
         if (cluster == null)
@@ -136,12 +131,8 @@ namespace Teamcollab.Engine.DataManagement
 
         try
         {
-          lock (databaseLock)
-          {
-            //clusterDb.InsertCluster(cluster);
-            DataManager.SaveCluster(world, cluster);
-            DevConsole.WriteLine("Inserted {0} into database", cluster);
-          }
+          DataManager.SaveCluster(world, cluster);
+          DevConsole.WriteLine("Saved {0} into to file.", cluster);
         }
         catch (DataException ex)
         {
