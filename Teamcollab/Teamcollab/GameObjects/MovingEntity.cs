@@ -12,11 +12,11 @@ namespace Teamcollab.GameObjects
     public override void Update(GameTime gameTime)
     {
       UpdateInput();
-      UpdateMovement();
+      UpdateMovement(gameTime);
  	    base.Update(gameTime);
     }
 
     protected abstract void UpdateInput();
-    protected abstract void UpdateMovement();
+    protected abstract void UpdateMovement(GameTime gameTime);
   }
 }
