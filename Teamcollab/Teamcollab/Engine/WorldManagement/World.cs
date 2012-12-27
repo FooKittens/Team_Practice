@@ -11,34 +11,48 @@ namespace Teamcollab.Engine.WorldManagement
   public class World
   {
     public Cluster[] Clusters { get { return clusters; } }
-    public int Seed { get; private set; }
-    public string Name { get; private set; }
-    public long CreationTimeTicks { get; private set; }
+    public int Seed { get; set; }
+    public string Name { get; set; }
+    public long CreationTimeTicks { get; set; }
     public long LastPlayedTimeTicks { get; set; }
     public long CurrentTimeTicks { get; set; }
 
     private Cluster[] clusters;
     private bool isSorted;
     private int insertIndex;
+    private bool initialized;
 
     List<Cluster> loadedClusters;
 
     AsyncClusterManager asyncManager;
 
+    // Used for loading.
+    public World() { }
+
     public World(int seed, string name = "test")
     {
       Name = name;
       Seed = seed;
+      Initialize();
+      CreationTimeTicks = DateTime.UtcNow.Ticks;
+      LastPlayedTimeTicks = DateTime.UtcNow.Ticks;
+    }
+
+    public void Initialize()
+    {
       loadedClusters = new List<Cluster>();
       clusters = new Cluster[1];
       isSorted = true;
       insertIndex = 0;
 
+      TerrainGenerator.Initialize(Seed);
       asyncManager = new AsyncClusterManager(this);
       //asyncManager.ClusterUnloaded += ClusterUnloadedHandler;
       asyncManager.ClusterLoaded += ClusterLoadedHandler;
       //asyncManager.ClusterNotLoaded += ClusterNotLoadedHandler;
       asyncManager.UnloadWaitLimit = 1;
+
+      initialized = true;
     }
 
     private void ClusterLoadedHandler(Cluster cluster)
@@ -64,6 +78,14 @@ namespace Teamcollab.Engine.WorldManagement
 
     public void Update(GameTime gameTime)
     {
+      // TODO(Peter): Handle better?
+      if (!initialized)
+      {
+        throw new NotSupportedException(
+          "World must be initialized prior to updating!"
+        );
+      }
+
       CheckClusterLoading();
 
       while(loadedClusters.Count > 0)

@@ -5,6 +5,7 @@ using Teamcollab.Engine.Helpers;
 using Teamcollab.Resources;
 using Teamcollab.Engine.WorldGeneration;
 using Teamcollab.Engine.DataManagement;
+using System.IO;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -143,6 +144,14 @@ namespace Teamcollab.Engine.WorldManagement
 
     private WorldManager(Game game)
     {
+      try
+      {
+        DataManager.LoadWorld("test");
+      }
+      catch (FileNotFoundException)
+      {
+        // Om nom nom
+      }
       Initialize(WorldManager.CreateWorld(WorldWidth, WorldHeight));
     }
 
