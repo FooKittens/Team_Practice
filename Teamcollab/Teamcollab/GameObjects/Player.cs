@@ -5,6 +5,7 @@ using Teamcollab.Engine.Helpers;
 using Teamcollab.GUI;
 using Teamcollab.Engine.WorldManagement;
 using Microsoft.Xna.Framework.Graphics;
+using Teamcollab.Resources;
 
 namespace Teamcollab.GameObjects
 {
@@ -17,7 +18,7 @@ namespace Teamcollab.GameObjects
     #region Members
     // Movement
     Vector2 targetPosition;
-    const float MovementSpeed = 0.07f;
+    const float MovementSpeed = 0.085f;
 
     // Animation
     Texture2D texture;
@@ -40,7 +41,7 @@ namespace Teamcollab.GameObjects
       NeedsUpdate = true;
 
       #region Animation
-      texture = Resources.ResourceManager.SpriteTextureBank.Query("Ogre");
+      texture = ResourceManager.SpriteTextureBank.Query("MaleHeavy");
       columnWidth = texture.Width / ColumnCount;
       rowHeight = texture.Height / RowCount;
       origin = new Vector2(columnWidth / 2,
@@ -129,7 +130,9 @@ namespace Teamcollab.GameObjects
         columnWidth,
         rowHeight
       );
-      batch.Draw(texture, WorldPosition, source, Color.White, 0, origin, 0.5f, SpriteEffects.None, 0);
+      batch.Draw(texture, WorldPosition, source, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+      batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, source, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+      batch.Draw(ResourceManager.SpriteTextureBank.Query("Sword"), WorldPosition, source, Color.White, 0, origin, 1, SpriteEffects.None, 0);
     }
   }
 }

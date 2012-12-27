@@ -30,7 +30,24 @@ namespace Teamcollab.Resources
 
       SpriteTextureBank = new ResourceCollection<Texture2D>();
       SpriteTextureBank.Add("Pine", content.Load<Texture2D>("Art\\IHASTREE"));
-      SpriteTextureBank.Add("Ogre", content.Load<Texture2D>("Art\\ogre"));
+
+      #region Characters
+      SpriteTextureBank.Add("Ogre", content.Load<Texture2D>("Art\\Characters\\ogre"));
+      SpriteTextureBank.Add("Goblin", content.Load<Texture2D>("Art\\Characters\\goblin"));
+      SpriteTextureBank.Add("Slime", content.Load<Texture2D>("Art\\Characters\\slime"));
+      SpriteTextureBank.Add("Werewolf", content.Load<Texture2D>("Art\\Characters\\werewolf"));
+      SpriteTextureBank.Add("Zombie", content.Load<Texture2D>("Art\\Characters\\zombie"));
+      SpriteTextureBank.Add("MaleUnarmored", content.Load<Texture2D>("Art\\Characters\\male_unarmored"));
+      SpriteTextureBank.Add("MaleLight", content.Load<Texture2D>("Art\\Characters\\male_light"));
+      SpriteTextureBank.Add("MaleHeavy", content.Load<Texture2D>("Art\\Characters\\male_heavy"));
+      #endregion
+
+      #region Items
+      SpriteTextureBank.Add("Sword", content.Load<Texture2D>("Art\\Items\\male_longsword"));
+      SpriteTextureBank.Add("Bow", content.Load<Texture2D>("Art\\Items\\male_longbow"));
+      SpriteTextureBank.Add("Shield", content.Load<Texture2D>("Art\\Items\\male_shield"));
+      SpriteTextureBank.Add("Staff", content.Load<Texture2D>("Art\\Items\\male_staff"));
+      #endregion
       //SpriteTextureBank.Add("Grassland", content.Load<Texture2D>("Art\\grassland_tiles"));
     }
   }
