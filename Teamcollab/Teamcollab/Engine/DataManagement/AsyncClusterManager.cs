@@ -132,7 +132,7 @@ namespace Teamcollab.Engine.DataManagement
         try
         {
           DataManager.SaveCluster(world, cluster);
-          DevConsole.WriteLine("Saved {0} into to file.", cluster);
+          DevConsole.WriteLine("Saved {0} to file.", cluster);
         }
         catch (DataException ex)
         {

@@ -77,26 +77,25 @@ namespace Teamcollab.Engine.DataManagement
         Directory.CreateDirectory(path + clustersPath);
       }
 
-      using (FileStream stream = File.Open(worldPath, FileMode.OpenOrCreate))
+      using (FileStream stream = File.Open(worldPath, FileMode.Create))
       {
         // Theres some data we wont need to change if the file exists.
-        if (!saveExists)
-        {
-          // Save the name.
-          SaveName(stream, world);
 
-          // Save the Creation time.
-          SaveLong(stream, world.CreationTimeTicks, SaveTag.Created);
+        // Save the name.
+        SaveName(stream, world);
 
-          // Save the seed.
-          stream.WriteByte((byte)SaveTag.Seed);
-          byte[] seedBytes = BitConverter.GetBytes(world.Seed);
-          stream.Write(BitConverter.GetBytes(seedBytes.Length), 0, sizeof(int));
-          stream.Write(seedBytes, 0, seedBytes.Length);
-        }
+        // Save the Creation time.
+        SaveLong(stream, world.CreationTimeTicks, SaveTag.Created);
+
+        // Save the seed.
+        stream.WriteByte((byte)SaveTag.Seed);
+        byte[] seedBytes = BitConverter.GetBytes(world.Seed);
+        stream.Write(BitConverter.GetBytes(seedBytes.Length), 0, sizeof(int));
+        stream.Write(seedBytes, 0, seedBytes.Length);
+        
 
         // Save the last played date.
-        SaveLong(stream, world.LastPlayedTimeTicks, SaveTag.LastPlayed);
+        SaveLong(stream, DateTime.UtcNow.Ticks, SaveTag.LastPlayed);
 
         // Save the in-game time.
         SaveLong(stream, world.CurrentTimeTicks, SaveTag.CurrentTime);
@@ -105,11 +104,6 @@ namespace Teamcollab.Engine.DataManagement
         stream.WriteByte((byte)SaveTag.End);
       }
 
-
-    }
-
-    private static void SaveExisting(World world)
-    {
 
     }
 
@@ -149,9 +143,6 @@ namespace Teamcollab.Engine.DataManagement
     /// Method will also save the tag first, then an int with the length
     /// of the comming data and then finally the long itself.
     /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="data"></param>
-    /// <param name="tag"></param>
     private static void SaveLong(FileStream stream, long data, SaveTag tag)
     {
       stream.WriteByte((byte)tag);
@@ -220,6 +211,12 @@ namespace Teamcollab.Engine.DataManagement
         }
       }
 
+      DevConsole.WriteLine(
+        "World {0} loaded! You last visited {1}.",
+        world.Name,
+        DateTime.UtcNow.ToString()
+      );
+      
       world.Initialize();
 
       return world;
@@ -284,6 +281,10 @@ namespace Teamcollab.Engine.DataManagement
       }
     }
 
+    /// <summary>
+    /// Loads a cluster from the clusters directory if it exists.
+    /// </summary>
+    /// <param name="world">Determines what cluster fold to look in.</param>
     public static Cluster LoadCluster(World world, int x, int y)
     {
       string filePath = string.Format(savePath, world.Name);
@@ -299,7 +300,8 @@ namespace Teamcollab.Engine.DataManagement
       Cluster cluster = new Cluster();
 
       byte[] cData;
-      using (FileStream fStream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+      using (FileStream fStream = File.Open(filePath,
+        FileMode.Open, FileAccess.Read))
       {
         cData = new byte[fStream.Length];
         fStream.Read(cData, 0, cData.Length);
@@ -359,9 +361,6 @@ namespace Teamcollab.Engine.DataManagement
     /// Reads a datablock from a stream using the in-house format.
     /// </summary>
     /// <param name="stream">Open stream to read from.</param>
-    /// <param name="tag"></param>
-    /// <param name="data"></param>
-    /// <param name="length">Length in bytes of the data will be stored here.</param>
     private static void ReadNextDataBlock(Stream stream, ref SaveTag tag,
       ref byte[] data, ref int length)
     {
@@ -374,17 +373,5 @@ namespace Teamcollab.Engine.DataManagement
       stream.Read(data, 0, length);
     }
 
-    /// <summary>
-    /// Writes data as a part of an open XmlWriter stream.
-    /// </summary>
-    private static void WriteWorldData(XmlWriter writer, World world)
-    {
-
-    }
-
-    private static void WriteClusterData(XmlWriter writer, Cluster cluster)
-    {
-  
-    }
   }
 }

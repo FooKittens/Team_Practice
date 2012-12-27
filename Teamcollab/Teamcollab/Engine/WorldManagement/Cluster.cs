@@ -118,8 +118,8 @@ namespace Teamcollab.Engine.WorldManagement
               break;
           }
 
-          spriteBatch.Draw(texture, tile.Coordinates, null, Color.White,
-            0f, new Vector2(32, 32), 1f, SpriteEffects.None, 0f
+          spriteBatch.Draw(texture, tile.Coordinates, null,
+            Color.White, 0f, new Vector2(32, 32), 1f, SpriteEffects.None, 0f
           );
         }
       }

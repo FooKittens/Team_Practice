@@ -1,5 +1,6 @@
 ﻿using System;
 using Teamcollab.Engine.Helpers;
+using Microsoft.Xna.Framework;
 
 namespace Teamcollab.Engine.WorldManagement
 {
@@ -24,6 +25,7 @@ namespace Teamcollab.Engine.WorldManagement
     #region Members
     public TileType Type;
     public Coordinates Coordinates;
+    public byte ClipIndex;
     #endregion
 
     public Tile(TileType type)

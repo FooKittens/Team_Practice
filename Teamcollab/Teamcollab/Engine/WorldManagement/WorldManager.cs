@@ -147,8 +147,10 @@ namespace Teamcollab.Engine.WorldManagement
       {
         Initialize(DataManager.LoadWorld("test"));
       }
-
-      Initialize(new World(1337, "test"));
+      else
+      {
+        Initialize(new World(1337, "test"));
+      }
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 using Teamcollab.Engine.Helpers;
 using Teamcollab.Engine.WorldManagement;
 using Teamcollab.GameObjects;
+using System;
 
 namespace Teamcollab.Engine.WorldGeneration
 {
@@ -15,13 +16,13 @@ namespace Teamcollab.Engine.WorldGeneration
     const int GenOctaves = 5;
 
     #region Members
-    static  PerlinGenerator landGen;
+    static PerlinGenerator landGen;
     static int seed;
     #endregion
 
     static TerrainGenerator()
     {
-      
+
     }
 
     public static void Initialize(int seed)
@@ -56,18 +57,11 @@ namespace Teamcollab.Engine.WorldGeneration
           float noise = GenerateTileNoise(noisePos.X, noisePos.Y);
           TileType type = TileFromNoise(noise);
           Tile t = Tile.Create(type);
-          
+
           t.Coordinates = new Coordinates((int)tileWorldPos.X,
             (int)tileWorldPos.Y)
           ;
           cluster.SetTileAt(x, y, t);
-
-          if (noise > 2)
-          {
-            em.AddObject(new StaticEntity(
-              EntityType.Tree, tileWorldPos)
-            );
-          }
         }
       }
 
@@ -82,7 +76,7 @@ namespace Teamcollab.Engine.WorldGeneration
     private static TileType TileFromNoise(float noise)
     {
       TileType type;
-      if (noise >= -0.95f)
+      if (noise >= -1.4f)
       {
         type = TileType.Grass;
       }
@@ -96,8 +90,8 @@ namespace Teamcollab.Engine.WorldGeneration
 
     private static float GenerateTileNoise(float worldX, float worldY)
     {
-      // Div by 128f is a resolution factor for testing.
+      // Div by 32f is a resolution factor for testing.
       return landGen.Perlin2D(worldX / 32f, worldY / 32f);
-    }
+    }      
   }
 }

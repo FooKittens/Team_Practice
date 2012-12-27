@@ -151,9 +151,9 @@ namespace Teamcollab.Engine.WorldGeneration
     private int[] GetThreeRandomPrimes()
     {
       int[] primes = new int[3];
-      primes[0] = GetRandomPrime(14500, 15500);
-      primes[1] = GetRandomPrime(750000, 800000);
-      primes[2] = GetRandomPrime(1300000000, 1350000000);
+      primes[0] = GetRandomPrime(15600, 15800);
+      primes[1] = GetRandomPrime(7880000, 7890000);
+      primes[2] = GetRandomPrime(1376312500, 1376312599);
       return primes;
     }
 
