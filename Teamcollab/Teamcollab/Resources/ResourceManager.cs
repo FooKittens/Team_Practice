@@ -32,12 +32,13 @@ namespace Teamcollab.Resources
       SpriteTextureBank.Add("Pine", content.Load<Texture2D>("Art\\IHASTREE"));
 
       #region Characters
+      // Resource query key needs to match EntityType if used for base animation
       SpriteTextureBank.Add("Ogre", content.Load<Texture2D>("Art\\Characters\\ogre"));
       SpriteTextureBank.Add("Goblin", content.Load<Texture2D>("Art\\Characters\\goblin"));
       SpriteTextureBank.Add("Slime", content.Load<Texture2D>("Art\\Characters\\slime"));
       SpriteTextureBank.Add("Werewolf", content.Load<Texture2D>("Art\\Characters\\werewolf"));
       SpriteTextureBank.Add("Zombie", content.Load<Texture2D>("Art\\Characters\\zombie"));
-      SpriteTextureBank.Add("MaleUnarmored", content.Load<Texture2D>("Art\\Characters\\male_unarmored"));
+      SpriteTextureBank.Add("Player", content.Load<Texture2D>("Art\\Characters\\male_unarmored"));
       SpriteTextureBank.Add("MaleLight", content.Load<Texture2D>("Art\\Characters\\male_light"));
       SpriteTextureBank.Add("MaleHeavy", content.Load<Texture2D>("Art\\Characters\\male_heavy"));
       #endregion

@@ -7,8 +7,13 @@ namespace Teamcollab.GameObjects
   public enum EntityType
   {
     Undefined = 0,
-
+    // Name needs to match resource query key
     Player,
+    Ogre,
+    Goblin,
+    Slime,
+    Zombie,
+    Werewolf,
     Tree,
   }
 }
