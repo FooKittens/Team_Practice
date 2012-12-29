@@ -63,7 +63,6 @@ namespace Teamcollab.Engine.DataManagement
         loadList.Remove(cluster.Coordinates);
       }
 
-
       if (unloadList.Count > UnloadWaitLimit && databaseWorker.IsBusy == false)
       {
         StartBackgroundWorker();

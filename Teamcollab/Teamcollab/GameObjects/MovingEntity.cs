@@ -30,6 +30,7 @@ namespace Teamcollab.GameObjects
     protected int animationTimer = 150;
     protected int DirectionsCount = 8;
     protected Rectangle sourceRectangle;
+    protected float scale;
     #endregion
 
     public MovingEntity(EntityType type, Vector2 worldPosition)
@@ -38,6 +39,7 @@ namespace Teamcollab.GameObjects
       movementSpeed = BaseSpeed;
 
       #region Animation
+      scale = 1f;
       texture = ResourceManager.SpriteTextureBank.Query(type.ToString());
       columnWidth = texture.Width / ColumnCount;
       rowHeight = texture.Height / RowCount;
@@ -113,7 +115,7 @@ namespace Teamcollab.GameObjects
 
     public override void Draw(Engine.Helpers.IsoBatch batch)
     {
-      batch.Draw(texture, WorldPosition, sourceRectangle, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+      batch.Draw(texture, WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
     }
   }
 }

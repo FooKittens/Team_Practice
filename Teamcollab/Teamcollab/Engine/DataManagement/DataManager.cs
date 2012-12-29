@@ -57,18 +57,10 @@ namespace Teamcollab.Engine.DataManagement
       );
 
       string worldPath = path + worldDatPath;
-      bool saveExists = false;
 
-      if (Directory.Exists(path))
+      if (Directory.Exists(path) == false)
       {
-        if (File.Exists(worldPath))
-        {
-          saveExists = true;
-        }
-      }
-      else
-      {
-        if (!Directory.Exists("Saves"))
+        if (Directory.Exists("Saves") == false)
         {
           Directory.CreateDirectory("Saves");
         }

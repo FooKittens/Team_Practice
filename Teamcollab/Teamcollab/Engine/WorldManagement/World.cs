@@ -118,21 +118,6 @@ namespace Teamcollab.Engine.WorldManagement
       insertIndex = clusters.Length - 1;
     }
 
-    // TEST METHOD
-    private bool TestClusterRange(Cluster cluster)
-    {
-      Vector2 camCluster = WorldManager.TransformScreenToCluster(Camera2D.Position);
-      camCluster = WorldManager.TransformInvIsometric(camCluster);
-
-      if (Convert.ToInt32(Math.Abs(cluster.Coordinates.X - camCluster.X)) > 2 ||
-          Convert.ToInt32(Math.Abs(cluster.Coordinates.Y - camCluster.Y)) > 2)
-      {
-        return false;
-      }
-
-      return true;
-    }
-
     private void CheckClusterLoading()
     {
       int removedCount = 0;
@@ -140,7 +125,9 @@ namespace Teamcollab.Engine.WorldManagement
       {
         if (clusters[i] != null && IsInView(clusters[i]) == false)
         {
-          DevConsole.WriteLine(string.Format("Putting {0} on the remove queue.", clusters[i].ToString()));
+          DevConsole.WriteLine(string.Format(
+            "Putting {0} on the remove queue.", clusters[i].ToString())
+          );
           asyncManager.UnloadCluster(clusters[i]);
           clusters[i] = null;
           removedCount++;

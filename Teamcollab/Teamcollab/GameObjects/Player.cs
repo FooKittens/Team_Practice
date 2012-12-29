@@ -26,7 +26,8 @@ namespace Teamcollab.GameObjects
       : base(EntityType.Player, worldPosition)
     {
       NeedsUpdate = true;
-      armed = false;
+      armed = true;
+      base.scale = 0.65f;
     }
 
     public override void Update(GameTime gameTime)
@@ -62,8 +63,8 @@ namespace Teamcollab.GameObjects
       base.Draw(batch);
       if (armed)
       {
-        batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, sourceRectangle, Color.White, 0, origin, 1, SpriteEffects.None, 0);
-        batch.Draw(ResourceManager.SpriteTextureBank.Query("Sword"), WorldPosition, sourceRectangle, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+        batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
+        batch.Draw(ResourceManager.SpriteTextureBank.Query("Sword"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
       }
     }
   }

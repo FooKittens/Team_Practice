@@ -201,7 +201,7 @@ namespace Teamcollab.GameStates
       testShader.Parameters["Projection"].SetValue(Camera2D.Projection);
 
       spriteBatch.Begin(SpriteSortMode.Deferred,
-        null, SamplerState.PointClamp, null, null, testShader
+        null, null, null, null, testShader
       );
       worldManager.Draw(spriteBatch);
 
