@@ -104,7 +104,6 @@ namespace Midgard.GUI
       Vector2 camTile = WorldManager.TransformScreenToWorld(camPos);
       camTile = WorldManager.TransformInvIsometric(camTile);
 
-
       camPos = WorldManager.TransformScreenToCluster(camPos);
       
       camPos = WorldManager.TransformInvIsometric(camPos);
@@ -114,7 +113,7 @@ namespace Midgard.GUI
       );
 
       ImmediateDrawer.GetInstance(null).DrawString(
-        "Cluster: " + camPos.ToString() +  "\nTile: " + camTile.ToString(),
+        "Cluster: " + camPos.ToString() + "\nTile: " + camTile.ToString(),
         Vector2.Zero
       );
     }
