@@ -244,7 +244,7 @@ namespace Midgard.Engine.DataManagement
         // Save Cluster X-Coordinate
         memStream.WriteByte((byte)SaveTag.ClusterX);
         memStream.Write(BitConverter.GetBytes(sizeof(int)), 0, sizeof(int));
-        memStream.Write(BitConverter.GetBytes(cluster.Coordinates.x), 0, sizeof(int));
+        memStream.Write(BitConverter.GetBytes(cluster.Coordinates.X), 0, sizeof(int));
 
         // Save Cluster Y-Coordinate
         memStream.WriteByte((byte)SaveTag.ClusterY);

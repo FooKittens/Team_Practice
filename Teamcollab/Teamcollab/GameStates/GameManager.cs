@@ -194,6 +194,11 @@ namespace Midgard.GameStates
       deltaScroll = Math.Sign(InputManager.MouseWheelChange()) * 2.5f;
       Camera2D.SetTargetScale(Camera2D.Scale + deltaScroll);
 
+      if (InputManager.KeyDown(Keys.R))
+      {
+        Camera2D.SetTargetScale(1f);
+      }
+
       EntityManager.GetInstance().Update(gameTime);
     }
 

@@ -63,9 +63,9 @@ namespace Midgard.GUI
     /// Sets the target zoom factor
     /// </summary>
     /// <param name="scale">Target zoom factor</param>
-    static public void SetTargetScale(float scale)
+    static public void SetTargetScale(float target)
     {
-      targetScale = scale;
+      targetScale = target;
     }
 
     /// <summary>
@@ -133,7 +133,8 @@ namespace Midgard.GUI
       {
         float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
         float acc = diff * 320; // TODO (Martin): 320? Random working value...
-        Scale = (acc * (float)Math.Pow(time, 2)) / 2 + Scale;
+        Scale = (acc * (float)Math.Pow(time, 2) +
+          (acc * (float)Math.Pow(time, 2)) / 2 + Scale);
       }
 
       Origin = halfScreenSize / Scale;
