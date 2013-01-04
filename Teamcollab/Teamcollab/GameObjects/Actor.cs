@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Midgard.Engine.Helpers;
+using Midgard.Engine.Animation;
 
 namespace Midgard.GameObjects
 {
@@ -33,7 +34,12 @@ namespace Midgard.GameObjects
     // Movement
     protected Vector2 targetPosition;
     protected float movementSpeed;
+    protected bool isMoving;
 
+    // Animation
+    AnimationCollection animCollection;
+    protected AnimationDirection animationDirection;
+    protected AnimationType currentAnimType;
     #endregion
 
     public Actor(EntityType type, Vector2 worldPosition)
@@ -80,10 +86,23 @@ namespace Midgard.GameObjects
       Vector2 diff = targetPosition - worldPosition;
       if (diff.LengthSquared() < (movementSpeed * movementSpeed))
       {
+        isMoving = true;
+
         worldPosition = targetPosition;
       }
       else
       {
+        // Animation
+        isMoving = true;
+        float direction = (float)Math.Atan2(diff.Y, diff.X);
+        float percentualDir = direction / MathHelper.TwoPi + 0.5f;
+        int generalDirection = Convert.ToInt32(
+          percentualDir *= Constants.AnimationDirectionCount
+        );
+        animationDirection = (AnimationDirection)((generalDirection + 1) %
+          Constants.AnimationDirectionCount
+        );
+
         // Movement
         diff.Normalize();
         diff *= movementSpeed;

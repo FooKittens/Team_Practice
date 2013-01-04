@@ -85,13 +85,11 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataSerialization\SettingsData.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
-    <Compile Include="Engine\Animation\Animation.cs" />
-    <Compile Include="Engine\Animation\AnimationCollection.cs" />
     <Compile Include="Engine\DataManagement\AsyncClusterManager.cs" />
     <Compile Include="Engine\DataManagement\CompressionHelper.cs" />
     <Compile Include="Engine\DataManagement\DataManager.cs" />
     <Compile Include="Engine\DevConsole.cs" />
-    <Compile Include="Engine\Helpers\Point2D.cs" />
+    <Compile Include="Engine\Helpers\Coordinates.cs" />
     <Compile Include="Engine\Helpers\ImmediateDrawer.cs" />
     <Compile Include="Engine\Helpers\InputManager.cs" />
     <Compile Include="Engine\Helpers\IsoBatch.cs" />
@@ -102,14 +100,11 @@
     <Compile Include="Engine\WorldManagement\WorldManager.cs" />
     <Compile Include="Engine\WorldManagement\Cluster.cs" />
     <Compile Include="Engine\WorldManagement\Tile.cs" />
-    <Compile Include="GameObjects\Actor.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />
     <Compile Include="GameObjects\EntityType.cs" />
-    <Compile Include="GameObjects\NPC\Enemy.cs" />
-    <Compile Include="GameObjects\NPC\MonsterSpawner.cs" />
+    <Compile Include="GameObjects\MovingEntity.cs" />
     <Compile Include="GameObjects\Player.cs" />
-    <Compile Include="GameObjects\Spawner.cs" />
     <Compile Include="GameObjects\StaticEntity.cs" />
     <Compile Include="GameStates\GameManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
@@ -170,9 +165,7 @@
     <Folder Include="Engine\Items\" />
     <Folder Include="Managers\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

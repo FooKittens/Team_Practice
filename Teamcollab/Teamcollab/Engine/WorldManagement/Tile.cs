@@ -24,7 +24,7 @@ namespace Midgard.Engine.WorldManagement
   {
     #region Members
     public TileType Type;
-    public Coordinates Coordinates;
+    public Point2D Coordinates;
     public byte ClipIndex;
     #endregion
 

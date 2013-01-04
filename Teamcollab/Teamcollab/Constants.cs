@@ -9,6 +9,8 @@ namespace Midgard
   {
     public const string SettingsPath = "Settings.Xml";
 
+    public const int AnimationDirectionCount = 8;
+
     #region World Constants
     public const int TileWidth = 64;
     public const int TileHeight = 32;

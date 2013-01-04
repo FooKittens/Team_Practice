@@ -58,7 +58,7 @@ namespace Midgard.Engine.WorldGeneration
           TileType type = TileFromNoise(noise);
           Tile t = Tile.Create(type);
 
-          t.Coordinates = new Coordinates((int)tileWorldPos.X,
+          t.Coordinates = new Point2D((int)tileWorldPos.X,
             (int)tileWorldPos.Y)
           ;
           cluster.SetTileAt(x, y, t);
@@ -68,7 +68,7 @@ namespace Midgard.Engine.WorldGeneration
       return cluster;
     }
 
-    public static Cluster CreateCluster(Coordinates coords)
+    public static Cluster CreateCluster(Point2D coords)
     {
       return CreateCluster(coords.X, coords.Y);
     }

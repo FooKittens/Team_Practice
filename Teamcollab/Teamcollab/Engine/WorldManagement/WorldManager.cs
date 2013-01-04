@@ -293,7 +293,7 @@ namespace Midgard.Engine.WorldManagement
     /// Insert a cluster at the given coordinates in cluster space.
     /// </summary>
     /// <param name="clusterCoordinates"></param>
-    private static void AddCluster(World world, Coordinates clusterCoordinates)
+    private static void AddCluster(World world, Point2D clusterCoordinates)
     {
       Cluster cluster = new Cluster(ClusterType.Evergreen, clusterCoordinates);
 

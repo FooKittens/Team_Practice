@@ -7,6 +7,7 @@ using Midgard.Engine.WorldManagement;
 using Midgard.GUI;
 using Midgard.GameObjects;
 using Midgard.GameObjects.NPC;
+using Midgard.Engine.Animation;
 
 namespace Midgard.GameStates
 {
@@ -45,8 +46,10 @@ namespace Midgard.GameStates
       testShader = game.Content.Load<Effect>("BasicShader");
 
       // DEBUG TEMPLATE GENERATION
+      EnemyData dat = new EnemyData();
+      dat.Animations = new[] { new AnimationData() };
       DataSerialization.DataSerializer.SerializeXml<EnemyData>(
-        new EnemyData(),
+        dat,
         "enemyTemplate.Xml",
         System.IO.FileMode.Create
       );
@@ -98,7 +101,7 @@ namespace Midgard.GameStates
 
     private void MoveCameraOneTile(Direction dir)
     {
-      Coordinates change = Coordinates.Zero;
+      Point2D change = Point2D.Zero;
       if (((int)dir & 1) == 1)
       {
         change.Y -= 1;

@@ -19,7 +19,7 @@ namespace Midgard.Engine.DataManagement
 
     public delegate void ClusterLoadedHandler(Cluster cluster);
     public delegate void ClusterUnloadedHandler(Cluster cluster);
-    public delegate void ClusterNotInDatabaseHandler(Coordinates coords);
+    public delegate void ClusterNotInDatabaseHandler(Point2D coords);
 
     //public event ClusterUnloadedHandler ClusterUnloaded;
     public event ClusterLoadedHandler ClusterLoaded;
@@ -29,7 +29,7 @@ namespace Midgard.Engine.DataManagement
     
     #region Members
     List<Cluster> unloadList;
-    List<Coordinates> loadList;    
+    List<Point2D> loadList;    
     BackgroundWorker databaseWorker;
 
     // This reference should not change.
@@ -41,7 +41,7 @@ namespace Midgard.Engine.DataManagement
     {
       this.world = world;
       unloadList = new List<Cluster>();
-      loadList = new List<Coordinates>();
+      loadList = new List<Point2D>();
       databaseWorker = new BackgroundWorker();
 
       databaseWorker.DoWork += AsyncLoader;
@@ -58,7 +58,7 @@ namespace Midgard.Engine.DataManagement
 
       unloadList.Add(cluster);
       if (loadList.Exists(
-        delegate(Coordinates c) { return c == cluster.Coordinates; }))
+        delegate(Point2D c) { return c == cluster.Coordinates; }))
       {
         loadList.Remove(cluster.Coordinates);
       }
@@ -69,10 +69,10 @@ namespace Midgard.Engine.DataManagement
       }
     }
 
-    public void LoadCluster(Coordinates coordinates)
+    public void LoadCluster(Point2D coordinates)
     {
 
-      if (loadList.Exists(delegate(Coordinates c)
+      if (loadList.Exists(delegate(Point2D c)
       {
         return c == coordinates;
       }))
@@ -103,7 +103,7 @@ namespace Midgard.Engine.DataManagement
     {
       while (loadList.Count > 0)
       {
-        Coordinates coords = loadList[0];
+        Point2D coords = loadList[0];
         loadList.RemoveAt(0);
         Cluster cluster;
 

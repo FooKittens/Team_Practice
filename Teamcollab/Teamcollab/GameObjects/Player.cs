@@ -6,6 +6,7 @@ using Midgard.GUI;
 using Midgard.Engine.WorldManagement;
 using Microsoft.Xna.Framework.Graphics;
 using Midgard.Resources;
+using Midgard.Engine.Animation;
 
 namespace Midgard.GameObjects
 {
@@ -17,6 +18,7 @@ namespace Midgard.GameObjects
 
     #region Members
     bool armed;
+    
     #endregion
 
     public Player(Vector2 worldPosition)
@@ -24,9 +26,14 @@ namespace Midgard.GameObjects
     {
       // TODO(Peter): Move, fix, burn
       Speed = 0.65f;
-
+      
       NeedsUpdate = true;
       armed = true;
+    }
+
+    private void Initialize()
+    {
+      
     }
 
     public override void Update(float deltaTime)
@@ -58,8 +65,7 @@ namespace Midgard.GameObjects
     }
 
     public override void Draw(IsoBatch batch)
-    {
-      base.Draw(batch);
+    {      
       if (armed)
       {
         //batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);

@@ -72,7 +72,7 @@ namespace Midgard.Engine.WorldManagement
       }
     }
 
-    private void ClusterNotLoadedHandler(Coordinates coords)
+    private void ClusterNotLoadedHandler(Point2D coords)
     {
       loadedClusters.Add(TerrainGenerator.CreateCluster(coords));
     }
@@ -152,9 +152,9 @@ namespace Midgard.Engine.WorldManagement
         for (int x = camX - 1; x <= camX + 1; x++)
         {
           if (GetCluster(x, y) == null && IsLoaded(x, y) == false &&
-            IsInView(new Coordinates(x, y)))
+            IsInView(new Point2D(x, y)))
           {
-            asyncManager.LoadCluster(new Coordinates(x, y));
+            asyncManager.LoadCluster(new Point2D(x, y));
           }
         }
       }
@@ -189,7 +189,7 @@ namespace Midgard.Engine.WorldManagement
     /// Determines if a given cluster is in view.
     /// </summary>
     /// <param name="clusterCoordinates">The coordinates of the cluster.</param>
-    private bool IsInView(Coordinates clusterCoordinates)
+    private bool IsInView(Point2D clusterCoordinates)
     {
       // Creates cluster edges with clockwise winding.
       Vector2[] vertices = new[] {

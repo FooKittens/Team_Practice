@@ -22,7 +22,7 @@ namespace Midgard.Engine.WorldManagement
   {
     public ClusterType Type;
     public Tile[] Tiles;
-    public Coordinates Coordinates;
+    public Point2D Coordinates;
   }
 
   /// <summary>
@@ -41,7 +41,7 @@ namespace Midgard.Engine.WorldManagement
 
     #region Members
     private Tile[] tiles;
-    public Coordinates Coordinates;
+    public Point2D Coordinates;
     List<Entity> staticObjects;
     #endregion
 
@@ -68,12 +68,12 @@ namespace Midgard.Engine.WorldManagement
       Type = type;
       tiles = new Tile[Constants.ClusterWidth * Constants.ClusterHeight];
       Active = false;
-      Coordinates = new Coordinates(x, y);
+      Coordinates = new Point2D(x, y);
       HashCode = GetHashCode();
       
     }
 
-    public Cluster(ClusterType type, Coordinates coordinates)
+    public Cluster(ClusterType type, Point2D coordinates)
       :this(type, coordinates.X, coordinates.Y) { }
 
     public void Unload()
@@ -129,7 +129,7 @@ namespace Midgard.Engine.WorldManagement
     /// Retrieves the bounding rectangle for a cluster in pixels.
     /// </summary>
     /// <param name="cluster">Cluster to get bounds from.</param>
-    public static Rectangle GetClusterBounds(Coordinates clusterCoordinates)
+    public static Rectangle GetClusterBounds(Point2D clusterCoordinates)
     {
       // Creates cluster edges with clockwise winding.
       Vector2[] vertices = new[] {
@@ -170,7 +170,7 @@ namespace Midgard.Engine.WorldManagement
       tiles[y * Constants.ClusterWidth + x] = newTile;
     }
 
-    public void SetTileAt(Coordinates coord, Tile newTile)
+    public void SetTileAt(Point2D coord, Tile newTile)
     {
       SetTileAt(coord.X, coord.Y, newTile);
     }
@@ -193,7 +193,7 @@ namespace Midgard.Engine.WorldManagement
     /// Retrieves the tile at the input coordinates relative
     /// to the cluster.
     /// </summary>
-    public Tile GetTileAt(Coordinates coord)
+    public Tile GetTileAt(Point2D coord)
     {
       return GetTileAt(coord.X, coord.Y);
     }
@@ -279,7 +279,7 @@ namespace Midgard.Engine.WorldManagement
 
           tPos = WorldManager.TransformByCluster(tPos, Coordinates);
 
-          GetTileAt(x, y).Coordinates = new Coordinates(
+          GetTileAt(x, y).Coordinates = new Point2D(
             (int)tPos.X,
             (int)tPos.Y
           );

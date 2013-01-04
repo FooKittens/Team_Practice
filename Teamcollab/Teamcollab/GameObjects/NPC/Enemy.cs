@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Midgard.Engine.Animation;
+using Microsoft.Xna.Framework;
 
 namespace Midgard.GameObjects.NPC
 {
   // TODO(Peter): Move elsewhere
+  [Serializable]
   public struct EnemyData
   {
     public EntityType Type;
@@ -18,6 +21,8 @@ namespace Midgard.GameObjects.NPC
     public int BaseVitality;
     public int BaseWisdom;
     public int BaseAttack;
+
+    public AnimationData[] Animations;
   }
 
   abstract class Enemy : Actor
@@ -37,7 +42,5 @@ namespace Midgard.GameObjects.NPC
       base.Vitality = data.BaseVitality;
       base.Wisdom = data.BaseWisdom;
     }
-
-    
   }
 }

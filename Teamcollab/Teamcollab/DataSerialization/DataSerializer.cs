@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 
 namespace Midgard.DataSerialization
 {
@@ -27,7 +28,13 @@ namespace Midgard.DataSerialization
       XmlSerializerNamespaces nm = new XmlSerializerNamespaces();
       nm.Add("", "");
 
-      XmlSerializer serializer = new XmlSerializer(typeof(T));
+      /* Adds an extra type to make XmlSerializer aware
+       * of the correct assembly. :(
+       * TODO(Peter): Find solution.. */
+      XmlSerializer serializer = new XmlSerializer(
+        typeof(T),
+        new [] { typeof(Vector2) }
+      );
       using (FileStream stream = new FileStream(path, fileMode))
       {
         serializer.Serialize(stream, data, nm);

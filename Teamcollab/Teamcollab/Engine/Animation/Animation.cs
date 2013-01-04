@@ -11,8 +11,6 @@ namespace Midgard.Engine.Animation
 {
   public enum AnimationDirection
   {
-    Undefined = 0,
-
     North,
     NorthEast,
     East,
@@ -25,7 +23,7 @@ namespace Midgard.Engine.Animation
 
   public enum AnimationType
   {
-    Unidentified = 0,
+    Undefined = 0,
 
     Idle,
     Walking,
@@ -37,13 +35,14 @@ namespace Midgard.Engine.Animation
     Dying,
   }
 
-  struct AnimationStruct
+  [Serializable]
+  public struct AnimationData
   {
     public AnimationType Identifier;
     public AnimationDirection Direction;
     public string ResourceKey;
-    public Coordinates FrameSize;
-    public Coordinates Offset;
+    public Point2D FrameSize;
+    public Point2D Offset;
     public int FrameCount;
     public int TimeInMilliSeconds;
   }
@@ -59,18 +58,18 @@ namespace Midgard.Engine.Animation
 
     #region Members
     string resourceKey;
-    Coordinates frameSize;
-    Coordinates offset;
+    Point2D frameSize;
+    Point2D offset;
     int frameCount;
     int timeInMilliSeconds;
 
     int timePerFrameInMs;
-    Coordinates currentFrame;
+    Point2D currentFrame;
     #endregion
 
     public Animation(string resourceKey, AnimationType identifier,
-      AnimationDirection direction, Coordinates frameSize,
-      int frameCount, Coordinates offset, int timeInMilliSeconds)
+      AnimationDirection direction, Point2D frameSize,
+      int frameCount, Point2D offset, int timeInMilliSeconds)
     {
       Identifier = identifier;
       Direction = direction;
