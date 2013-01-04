@@ -1,18 +1,33 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Midgard.Resources;
-using Midgard.Engine.Helpers;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Midgard.GameObjects
 {
-  abstract class MovingEntity : Entity
+  abstract class Actor : Entity
   {
     #region Properties
-    protected abstract float BaseSpeed { get; }
+    public float Speed { get; }
+    public int Strength { get; protected set; }
+    public int Dexterity { get; protected set; }
+    public int Intelligence { get; protected set; }
+    public int Vitality { get; protected set; }
+    public int Wisdom { get; protected set; }
+    public int Attack { get; protected set; }
+
     #endregion
 
     #region Members
+    int baseHealth;
+    int baseMana;
+    int baseStrength;
+    int baseDexterity;
+    int baseIntelligence;
+    int baseVitality;
+    int baseWisdom;
+    int baseAttack;
+
     // Movement
     protected Vector2 targetPosition;
     protected float movementSpeed;
@@ -34,25 +49,29 @@ namespace Midgard.GameObjects
     protected float scale;
     #endregion
 
-    public MovingEntity(EntityType type, Vector2 worldPosition)
-      : base(type, worldPosition)
+    public Actor(EntityType type)
+      : base(type)
     {
-      movementSpeed = BaseSpeed;
 
-      #region Animation
-      scale = 1f;
-      texture = ResourceManager.SpriteTextureBank.Query(type.ToString());
-      columnWidth = texture.Width / ColumnCount;
-      rowHeight = texture.Height / RowCount;
-      origin = new Vector2(columnWidth / 2,
-        rowHeight / 2 + Constants.TileHeight // Make sure the sprite is right
-      );
-      isMoving = false;
-      #endregion
     }
 
-    public MovingEntity(EntityType type)
-      : this(type, Vector2.Zero) { }
+    // TODO(Peter): Apply modifiers
+    #region StatsAndRolls
+
+    public int Health
+    {
+      get { return baseHealth; }
+    }
+    public int Mana
+    {
+      get { return baseMana; }
+    }
+    public int Damage
+    {
+      get { return baseAttack; }
+    }
+
+    #endregion
 
     /// <summary>
     /// Updates the entity
@@ -63,7 +82,7 @@ namespace Midgard.GameObjects
       UpdateInput();
       UpdateMovement(gameTime);
       UpdateAnimation(gameTime);
- 	    base.Update(gameTime);
+      base.Update(gameTime);
     }
 
     protected abstract void UpdateInput();

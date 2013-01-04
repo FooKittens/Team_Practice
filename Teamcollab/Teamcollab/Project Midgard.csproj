@@ -100,6 +100,7 @@
     <Compile Include="Engine\WorldManagement\WorldManager.cs" />
     <Compile Include="Engine\WorldManagement\Cluster.cs" />
     <Compile Include="Engine\WorldManagement\Tile.cs" />
+    <Compile Include="GameObjects\Actor.cs" />
     <Compile Include="GameObjects\Enemy.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />

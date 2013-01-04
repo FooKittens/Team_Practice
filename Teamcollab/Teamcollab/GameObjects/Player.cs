@@ -9,7 +9,7 @@ using Midgard.Resources;
 
 namespace Midgard.GameObjects
 {
-  class Player : MovingEntity
+  class Player : Actor
   {
     #region Properties
     protected override float BaseSpeed

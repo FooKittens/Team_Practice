@@ -5,7 +5,14 @@ using System.Text;
 
 namespace Midgard.GameObjects
 {
-  class Enemy : MovingEntity
+  class Spawner : Entity
   {
+    #region Properties
+
+    #endregion
+
+    #region Members
+
+    #endregion
   }
 }

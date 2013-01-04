@@ -42,6 +42,12 @@ namespace Midgard.GameStates
       EntityManager.GetInstance().AddObject(new Player(Vector2.Zero));
 
       testShader = game.Content.Load<Effect>("BasicShader");
+      // DEBUG TEMPLATE GENERATION
+      DataSerialization.DataSerializer.SerializeXml<EnemyData>(
+        new EnemyData(),
+        "enemyTemplate.Xml",
+        System.IO.FileMode.Create
+      );
     }
 
     protected void Initialize()
