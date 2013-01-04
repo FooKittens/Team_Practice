@@ -142,6 +142,7 @@ namespace Midgard.GameStates
       }
 
       #region Camera
+      // Manual pan
       Direction currentDirection = (Direction)0;
 
       if (InputManager.KeyDown(Keys.W))
@@ -177,6 +178,7 @@ namespace Midgard.GameStates
 
       previousDirection = currentDirection;
 
+      // Pan by player pos
       if (InputManager.KeyNewDown(Keys.C))
       {
         lockCamToPlayer = !lockCamToPlayer;
@@ -190,19 +192,30 @@ namespace Midgard.GameStates
           ).WorldPosition
         );
       }
-      #endregion
 
+      // Scroll zoom
       float deltaScroll = InputManager.MouseWheelChange();
 
-      deltaScroll = Math.Sign(InputManager.MouseWheelChange()) * 2.5f;
-      Camera2D.SetTargetScale(Camera2D.Scale + deltaScroll);
+      deltaScroll = Math.Sign(InputManager.MouseWheelChange());
+      if (deltaScroll != 0)
+      {
+        Camera2D.SetTargetScale(Camera2D.Scale * (deltaScroll > 0 ? 2 : 0.5f));
+      }
 
-      if (InputManager.KeyDown(Keys.R))
+      // Reset zoom
+      if (InputManager.KeyNewDown(Keys.Z))
       {
         Camera2D.SetTargetScale(1f);
       }
 
-      EntityManager.GetInstance().Update(deltaTime);
+      // Double size zoom
+      if (InputManager.KeyNewDown(Keys.X))
+      {
+        Camera2D.SetTargetScale(2f);
+      }
+      #endregion
+
+      EntityManager.GetInstance().Update(gameTime);
     }
 
     public void Draw()
