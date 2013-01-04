@@ -84,6 +84,8 @@ namespace Midgard.Engine.Animation
       this.timeInMilliSeconds = timeInMilliSeconds;
 
       Source = new Rectangle(offset.X, offset.Y, frameSize.X, frameSize.Y);
+
+
     }
 
     public void Update(float deltaTime)

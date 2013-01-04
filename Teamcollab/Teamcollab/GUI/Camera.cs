@@ -92,10 +92,11 @@ namespace Midgard.GUI
     /// <summary>
     /// Needs to be called for the camera to update
     /// </summary>
-    static public void Update(float delta)
+    static public void Update(float deltaTime)
     {
-      AutoPan(delta);
-      AutoZoom(delta);
+      deltaTime /= 1000; // Convert to seconds
+      AutoPan(deltaTime);
+      AutoZoom(deltaTime);
       UpdateMatrices();
 
       float sqtwo = (float)Math.Sqrt(2f);
@@ -121,7 +122,7 @@ namespace Midgard.GUI
     /// <summary>
     /// Scales the camera towards the target scale
     /// </summary>
-    static private void AutoZoom(float deltaTime)
+    static private void AutoZoom(float deltaTimeInSeconds)
     {
       float diff = targetScale - Scale;
       if (Math.Abs(diff) < 0.001f)
@@ -131,8 +132,8 @@ namespace Midgard.GUI
       else
       {
         float acc = diff * 320; // TODO (Martin): 320? Random working value...
-        Scale = (acc * (float)Math.Pow(deltaTime, 2) +
-          (acc * (float)Math.Pow(deltaTime, 2)) / 2 + Scale);
+        Scale = (acc * (float)Math.Pow(deltaTimeInSeconds, 2) +
+          (acc * (float)Math.Pow(deltaTimeInSeconds, 2)) / 2 + Scale);
       }
 
       Origin = halfScreenSize / Scale;
@@ -141,7 +142,7 @@ namespace Midgard.GUI
     /// <summary>
     /// Moves the camera towards the target position
     /// </summary>
-    static private void AutoPan(float deltaTime)
+    static private void AutoPan(float deltaTimeInSeconds)
     {
       Vector2 diff = targetPosition - position;
       if (diff.LengthSquared() < 1)
@@ -151,8 +152,8 @@ namespace Midgard.GUI
       else
       {
         Vector2 acc = diff * 320; // TODO (Martin): 320? Random working value...
-        position = (acc * (float)Math.Pow(deltaTime, 2) +
-          (acc * (float)Math.Pow(deltaTime, 2)) / 2 + position);
+        position = (acc * (float)Math.Pow(deltaTimeInSeconds, 2) +
+          (acc * (float)Math.Pow(deltaTimeInSeconds, 2)) / 2 + position);
       }
     }
 
