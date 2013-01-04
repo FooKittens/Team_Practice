@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using System.Xml;
 
 namespace Midgard.DataSerialization
 {
@@ -56,7 +57,9 @@ namespace Midgard.DataSerialization
         typeof(T),
         new[] { typeof(Vector2) }
       );
+
       T result;
+
       using (FileStream stream = new FileStream(filePath, FileMode.Open))
       {
         result = (T)serializer.Deserialize(stream);

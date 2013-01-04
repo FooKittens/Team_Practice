@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<ActorData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Undefined</Type>
+  <BaseHealth>0</BaseHealth>
+  <BaseMana>0</BaseMana>
+  <BaseStrength>0</BaseStrength>
+  <BaseDexterity>0</BaseDexterity>
+  <BaseIntelligence>0</BaseIntelligence>
+  <BaseVitality>0</BaseVitality>
+  <BaseWisdom>0</BaseWisdom>
+  <BaseAttack>0</BaseAttack>
+  <Animations>
+    <AnimationData>
+      <Identifier>Undefined</Identifier>
+      <Direction>NorthWest</Direction>
+      <FrameSize>
+        <X>0</X>
+        <Y>0</Y>
+      </FrameSize>
+      <Offset>
+        <X>0</X>
+        <Y>0</Y>
+      </Offset>
+      <FrameCount>0</FrameCount>
+      <TimeInMilliSeconds>0</TimeInMilliSeconds>
+    </AnimationData>
+  </Animations>
+</ActorData>

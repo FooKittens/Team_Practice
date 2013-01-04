@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Midgard.GameObjects;
+using Midgard.DataSerialization;
 
 namespace Midgard.Resources
 {
@@ -13,6 +15,8 @@ namespace Midgard.Resources
     public static ResourceCollection<Texture2D> TileTextureBank { get; private set; }
     public static ResourceCollection<Texture2D> SpriteTextureBank { get; private set; }
 
+    public static ResourceCollection<ActorData> ActorDataBank { get; private set; }
+    
     /// <summary>
     /// Random number generator 
     /// </summary>
@@ -58,6 +62,13 @@ namespace Midgard.Resources
       SpriteTextureBank.Add("Staff", content.Load<Texture2D>("Art\\Items\\male_staff"));
       #endregion
       //SpriteTextureBank.Add("Grassland", content.Load<Texture2D>("Art\\grassland_tiles"));
+
+      #region ActorData
+      ActorDataBank = new ResourceCollection<ActorData>();
+      ActorDataBank.Add("Ogre", DataSerializer.DeSerializeXml<ActorData>("ogreData.Xml"));
+      ActorDataBank.Add("Player", DataSerializer.DeSerializeXml<ActorData>("playerData.Xml"));
+      #endregion
+
     }
   }
 }

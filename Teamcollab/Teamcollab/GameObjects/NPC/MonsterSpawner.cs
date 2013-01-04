@@ -50,7 +50,7 @@ namespace Midgard.GameObjects.NPC
           currentSpawnTime <= 0)
       {
         currentSpawnTime = SpawnTimeIntervalMs;
-        //SpawnMonster();
+        SpawnMonster();
       }
     }
 
@@ -79,11 +79,17 @@ namespace Midgard.GameObjects.NPC
       switch (t)
       {
         case EntityType.Ogre:
-          aData = DataSerializer.DeSerializeXml<ActorData>("ogreData.Xml");
+          aData = ResourceManager.ActorDataBank.Query("Ogre").Value;
           break;
       }
 
-      Enemy e = new Enemy(aData, worldPosition);
+      // Temporary test values for spawn offset.
+      Vector2 offsetVec = new Vector2(
+        ResourceManager.Random.Next(-7, 7),
+        ResourceManager.Random.Next(-7, 7)
+      );
+
+      Enemy e = new Enemy(aData, worldPosition + offsetVec);
       myEnemies.Add(e);
       EntityManager.GetInstance().AddObject(e);
     }

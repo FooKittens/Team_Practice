@@ -8,6 +8,7 @@ using Midgard.GUI;
 using Midgard.GameObjects;
 using Midgard.GameObjects.NPC;
 using Midgard.Engine.Animation;
+using Midgard.Resources;
 
 namespace Midgard.GameStates
 {
@@ -58,7 +59,7 @@ namespace Midgard.GameStates
       );
 
 
-      ActorData pData = DataSerialization.DataSerializer.DeSerializeXml<ActorData>("playerData.Xml");
+      ActorData pData = ResourceManager.ActorDataBank.Query("Player");
       EntityManager em = EntityManager.GetInstance();
       em.AddObject(new Player(pData, Vector2.Zero));
 
