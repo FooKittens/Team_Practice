@@ -7,33 +7,15 @@ using Microsoft.Xna.Framework;
 
 namespace Midgard.GameObjects.NPC
 {
-  // TODO(Peter): Move elsewhere
-  [Serializable]
-  public struct EnemyData
-  {
-    public EntityType Type;
-
-    public int BaseHealth;
-    public int BaseMana;
-    public int BaseStrength;
-    public int BaseDexterity;
-    public int BaseIntelligence;
-    public int BaseVitality;
-    public int BaseWisdom;
-    public int BaseAttack;
-
-    public AnimationData[] Animations;
-  }
-
   abstract class Enemy : Actor
   {
-    public Enemy(EnemyData initializer)
+    public Enemy(ActorData initializer)
     :base(initializer.Type) 
     { 
 
     }
 
-    private void Initialize(EnemyData data)
+    private void Initialize(ActorData data)
     {
       base.EntityType = data.Type;
       base.Strength = data.BaseStrength;

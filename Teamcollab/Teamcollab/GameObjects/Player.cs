@@ -65,7 +65,8 @@ namespace Midgard.GameObjects
     }
 
     public override void Draw(IsoBatch batch)
-    {      
+    {
+      base.Draw(batch);
       if (armed)
       {
         //batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);

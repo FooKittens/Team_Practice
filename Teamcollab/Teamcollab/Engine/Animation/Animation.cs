@@ -64,8 +64,8 @@ namespace Midgard.Engine.Animation
 
     // Frame variables
     string resourceKey;
-    Coordinates offset;
-    Coordinates frameSize;
+    Point2D offset;
+    Point2D frameSize;
     int frameCount;
     int currentFrame;
     Rectangle source;

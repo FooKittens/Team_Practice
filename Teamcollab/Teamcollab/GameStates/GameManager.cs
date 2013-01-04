@@ -46,9 +46,9 @@ namespace Midgard.GameStates
       testShader = game.Content.Load<Effect>("BasicShader");
 
       // DEBUG TEMPLATE GENERATION
-      EnemyData dat = new EnemyData();
+      ActorData dat = new ActorData();
       dat.Animations = new[] { new AnimationData() };
-      DataSerialization.DataSerializer.SerializeXml<EnemyData>(
+      DataSerialization.DataSerializer.SerializeXml<ActorData>(
         dat,
         "enemyTemplate.Xml",
         System.IO.FileMode.Create

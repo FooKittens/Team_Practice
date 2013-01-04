@@ -5,9 +5,28 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Midgard.Engine.Helpers;
 using Midgard.Engine.Animation;
+using Midgard.GameObjects.NPC;
 
 namespace Midgard.GameObjects
 {
+  // TODO(Peter): Move elsewhere
+  [Serializable]
+  public struct ActorData
+  {
+    public EntityType Type;
+
+    public int BaseHealth;
+    public int BaseMana;
+    public int BaseStrength;
+    public int BaseDexterity;
+    public int BaseIntelligence;
+    public int BaseVitality;
+    public int BaseWisdom;
+    public int BaseAttack;
+
+    public AnimationData[] Animations;
+  }
+
   abstract class Actor : Entity
   {
     #region Properties
@@ -42,14 +61,28 @@ namespace Midgard.GameObjects
     protected AnimationType currentAnimType;
     #endregion
 
-    public Actor(EntityType type, Vector2 worldPosition)
-      :base(type, worldPosition)
+    public Actor(ActorData init, Vector2 worldPosition)
+      :base(init.Type, worldPosition)
     {
-
+      animCollection = new AnimationCollection();
+      foreach (AnimationData a in init.Animations)
+      {
+        animCollection.Add(
+          new Animation(
+            a.ResourceKey,
+            a.Identifier,
+            a.Direction,
+            a.FrameSize,
+            a.FrameCount,
+            a.Offset,
+            a.TimeInMilliSeconds  
+          )
+        );
+      }
     }
 
-    public Actor(EntityType type)
-      : this(type, Vector2.Zero) {}
+    public Actor(ActorData init)
+      : this(init.Type, Vector2.Zero) {}
 
     // TODO(Peter): Apply modifiers
     #region StatsAndRolls
@@ -84,7 +117,7 @@ namespace Midgard.GameObjects
     protected virtual void UpdateMovement(float deltaTime)
     {
       Vector2 diff = targetPosition - worldPosition;
-      if (diff.LengthSquared() < (movementSpeed * movementSpeed))
+      if (diff.LengthSquared() <= (movementSpeed * movementSpeed))
       {
         isMoving = false;
 
@@ -112,7 +145,8 @@ namespace Midgard.GameObjects
 
     public override void Draw(IsoBatch batch)
     {
-      
+      Animation anim = animCollection.GetAnimation(animationDirection, currentAnimType);
+      batch.Draw(anim.TextureResource, worldPosition, anim.Source, Color.White);
     }
   }
 }
