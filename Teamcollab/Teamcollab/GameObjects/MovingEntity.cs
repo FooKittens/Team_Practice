@@ -63,8 +63,14 @@ namespace Midgard.GameObjects
  	    base.Update(gameTime);
     }
 
+    /// <summary>
+    /// Abstract method for input handling
+    /// </summary>
     protected abstract void UpdateInput();
 
+    /// <summary>
+    /// Moves the entity toward it's target position
+    /// </summary>
     protected virtual void UpdateMovement(GameTime gameTime)
     {
       Vector2 diff = targetPosition - worldPosition;
@@ -90,8 +96,12 @@ namespace Midgard.GameObjects
       }
     }
 
+    /// <summary>
+    /// Updates the entity animation
+    /// </summary>
     protected virtual void UpdateAnimation(GameTime gameTime)
     {
+      // TODO(Martin): Rewrite for new animation system
       if (isMoving)
       {
         animationTimer -= gameTime.ElapsedGameTime.Milliseconds;
@@ -118,6 +128,10 @@ namespace Midgard.GameObjects
       );
     }
 
+    /// <summary>
+    /// Draws the entity
+    /// </summary>
+    /// <param name="batch">IsoBatch for drawing</param>
     public override void Draw(IsoBatch batch)
     {
       batch.Draw(texture, WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);

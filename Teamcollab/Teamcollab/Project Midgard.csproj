@@ -85,6 +85,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataSerialization\SettingsData.cs" />
     <Compile Include="DataSerialization\DataSerializer.cs" />
+    <Compile Include="Engine\Animation\Animation.cs" />
     <Compile Include="Engine\DataManagement\AsyncClusterManager.cs" />
     <Compile Include="Engine\DataManagement\CompressionHelper.cs" />
     <Compile Include="Engine\DataManagement\DataManager.cs" />
