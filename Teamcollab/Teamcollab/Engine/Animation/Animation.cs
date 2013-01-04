@@ -52,44 +52,80 @@ namespace Midgard.Engine.Animation
     #region Properties
     public AnimationType Identifier { get; protected set; }
     public AnimationDirection Direction { get; protected set; }
-    public Rectangle Source { get; protected set; }
-    public Resource<Texture2D> Texture { get; protected set; }
+    public Rectangle Source { get { return source; } }
+    public Resource<Texture2D> TextureResource { get; protected set; }
     #endregion
 
     #region Members
-    string resourceKey;
-    Point2D frameSize;
-    Point2D offset;
-    int frameCount;
+    // Timing variables
     int timeInMilliSeconds;
-
     int timePerFrameInMs;
-    Point2D currentFrame;
+    float countdownTimer;
+
+    // Frame variables
+    string resourceKey;
+    Coordinates offset;
+    Coordinates frameSize;
+    int frameCount;
+    int currentFrame;
+    Rectangle source;
     #endregion
 
     public Animation(string resourceKey, AnimationType identifier,
       AnimationDirection direction, Point2D frameSize,
       int frameCount, Point2D offset, int timeInMilliSeconds)
     {
+      // Sets identifiers
       Identifier = identifier;
       Direction = direction;
 
+      // Sets texture
       this.resourceKey = resourceKey;
-      Texture = ResourceManager.SpriteTextureBank.Query(resourceKey);
+      TextureResource = ResourceManager.SpriteTextureBank.Query(resourceKey);
+      Texture2D texture = TextureResource.Value;
 
+      // Sets source
       this.frameSize = frameSize;
-      this.frameCount = frameCount;
       this.offset = offset;
+      source = new Rectangle(offset.X, offset.Y, frameSize.X, frameSize.Y);
+
+      // Sets timing variables
       this.timeInMilliSeconds = timeInMilliSeconds;
+      timePerFrameInMs = timeInMilliSeconds / frameCount;
+      countdownTimer = timePerFrameInMs;
 
-      Source = new Rectangle(offset.X, offset.Y, frameSize.X, frameSize.Y);
-
-
+      // Sets frame variables
+      currentFrame = 0;
+      this.frameCount = frameCount;
     }
 
+    /// <summary>
+    /// Updates the animation (U surprised?)
+    /// </summary>
+    /// <param name="deltaTime">Milliseconds since last frame</param>
     public void Update(float deltaTime)
     {
-
+      countdownTimer -= deltaTime;
+      // Changes frame
+      while (countdownTimer < 0)
+      {
+        ++currentFrame;
+        countdownTimer += timePerFrameInMs;
+        source.X += frameSize.X;
+        // Jumps to next line in texture
+        if (source.X > TextureResource.Value.Width)
+        {
+          source.X = 0;
+          source.Y += frameSize.Y;
+        }
+        // Restarts animation
+        if (currentFrame > frameCount)
+        {
+          currentFrame = 0;
+          source.X = offset.X;
+          source.Y = offset.Y;
+        }
+      }
     }
   }
 }
