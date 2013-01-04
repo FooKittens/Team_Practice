@@ -11,6 +11,7 @@ namespace Midgard.Engine.Animation
 {
   public enum AnimationDirection
   {
+    NorthWest,
     North,
     NorthEast,
     East,
@@ -18,7 +19,6 @@ namespace Midgard.Engine.Animation
     South,
     SouthWest,
     West,
-    NorthWest
   }
 
   public enum AnimationType
@@ -119,7 +119,7 @@ namespace Midgard.Engine.Animation
           source.Y += frameSize.Y;
         }
         // Restarts animation
-        if (currentFrame > frameCount)
+        if (currentFrame >= frameCount)
         {
           currentFrame = 0;
           source.X = offset.X;

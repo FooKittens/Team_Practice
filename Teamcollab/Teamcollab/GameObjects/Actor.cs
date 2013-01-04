@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Midgard.Engine.Helpers;
 using Midgard.Engine.Animation;
 using Midgard.GameObjects.NPC;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Midgard.GameObjects
 {
@@ -57,6 +58,7 @@ namespace Midgard.GameObjects
 
     // Animation
     AnimationCollection animCollection;
+    Animation currentAnimation;
     protected AnimationDirection animationDirection;
     protected AnimationType currentAnimType;
     #endregion
@@ -65,6 +67,8 @@ namespace Midgard.GameObjects
       :base(init.Type, worldPosition)
     {
       animCollection = new AnimationCollection();
+      movementSpeed = 0.135f;
+
       foreach (AnimationData a in init.Animations)
       {
         animCollection.Add(
@@ -82,7 +86,7 @@ namespace Midgard.GameObjects
     }
 
     public Actor(ActorData init)
-      : this(init.Type, Vector2.Zero) {}
+      : this(init, Vector2.Zero) {}
 
     // TODO(Peter): Apply modifiers
     #region StatsAndRolls
@@ -109,6 +113,8 @@ namespace Midgard.GameObjects
     {
       UpdateInput();
       UpdateMovement(deltaTime);
+      currentAnimation = animCollection.GetAnimation(animationDirection, currentAnimType);
+      currentAnimation.Update(deltaTime);
       base.Update(deltaTime);
     }
 
@@ -119,20 +125,21 @@ namespace Midgard.GameObjects
       Vector2 diff = targetPosition - worldPosition;
       if (diff.LengthSquared() <= (movementSpeed * movementSpeed))
       {
-        isMoving = false;
+        currentAnimType = AnimationType.Running;
 
         worldPosition = targetPosition;
       }
       else
       {
         // Animation
-        isMoving = true;
+        currentAnimType = AnimationType.Running;
+
         float direction = (float)Math.Atan2(diff.Y, diff.X);
         float percentualDir = direction / MathHelper.TwoPi + 0.5f;
         int generalDirection = Convert.ToInt32(
           percentualDir *= Constants.AnimationDirectionCount
         );
-        animationDirection = (AnimationDirection)((generalDirection + 1) %
+        animationDirection = (AnimationDirection)((generalDirection) %
           Constants.AnimationDirectionCount
         );
 
@@ -145,8 +152,16 @@ namespace Midgard.GameObjects
 
     public override void Draw(IsoBatch batch)
     {
-      Animation anim = animCollection.GetAnimation(animationDirection, currentAnimType);
-      batch.Draw(anim.TextureResource, worldPosition, anim.Source, Color.White);
+      batch.Draw(currentAnimation.TextureResource,
+        worldPosition,
+        currentAnimation.Source,
+        Color.White,
+        0f,
+        new Vector2(128),
+        1f,
+        SpriteEffects.None,
+        1f
+      );
     }
   }
 }

@@ -21,8 +21,8 @@ namespace Midgard.GameObjects
     
     #endregion
 
-    public Player(Vector2 worldPosition)
-      : base(EntityType.Player, worldPosition)
+    public Player(ActorData initializer, Vector2 worldPosition)
+      : base(initializer, worldPosition)
     {
       // TODO(Peter): Move, fix, burn
       Speed = 0.65f;

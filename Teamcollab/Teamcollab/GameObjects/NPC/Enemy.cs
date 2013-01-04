@@ -10,7 +10,7 @@ namespace Midgard.GameObjects.NPC
   abstract class Enemy : Actor
   {
     public Enemy(ActorData initializer)
-    :base(initializer.Type) 
+    :base(initializer) 
     { 
 
     }

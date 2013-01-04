@@ -41,8 +41,6 @@ namespace Midgard.GameStates
       // Initialize the gamestate.
       Game = game; 
       Initialize();
-      EntityManager.GetInstance().AddObject(new Player(Vector2.Zero));
-
       testShader = game.Content.Load<Effect>("BasicShader");
 
       // DEBUG TEMPLATE GENERATION
@@ -53,6 +51,11 @@ namespace Midgard.GameStates
         "enemyTemplate.Xml",
         System.IO.FileMode.Create
       );
+
+
+      ActorData pData = DataSerialization.DataSerializer.DeSerializeXml<ActorData>("playerData.Xml");
+      EntityManager.GetInstance().AddObject(new Player(pData, Vector2.Zero));
+
     }
 
     protected void Initialize()

@@ -26,7 +26,7 @@ namespace Midgard.DataSerialization
     {
       // Creates a global namespace to serialize to.
       XmlSerializerNamespaces nm = new XmlSerializerNamespaces();
-      nm.Add("", "");
+      //nm.Add("", "");
 
       /* Adds an extra type to make XmlSerializer aware
        * of the correct assembly. :(
@@ -49,7 +49,13 @@ namespace Midgard.DataSerialization
     /// <returns></returns>
     public static T DeSerializeXml<T>(string filePath)
     {
-      XmlSerializer serializer = new XmlSerializer(typeof(T));
+      /* Adds an extra type to make XmlSerializer aware
+       * of the correct assembly. :(
+       * TODO(Peter): Find solution.. */
+      XmlSerializer serializer = new XmlSerializer(
+        typeof(T),
+        new[] { typeof(Vector2) }
+      );
       T result;
       using (FileStream stream = new FileStream(filePath, FileMode.Open))
       {
