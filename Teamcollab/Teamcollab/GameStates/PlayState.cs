@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Teamcollab.Engine.Helpers;
+using Midgard.Engine.Helpers;
 
-namespace Teamcollab.GameStates
+namespace Midgard.GameStates
 {
   /// <summary>
   /// Handles the in-game logic

@@ -1,13 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.GUI;
-using Teamcollab.Engine.WorldManagement;
+using Midgard.Engine.Helpers;
+using Midgard.GUI;
+using Midgard.Engine.WorldManagement;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Resources;
+using Midgard.Resources;
 
-namespace Teamcollab.GameObjects
+namespace Midgard.GameObjects
 {
   class Player : MovingEntity
   {

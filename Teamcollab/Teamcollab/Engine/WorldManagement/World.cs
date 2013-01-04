@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Teamcollab.Engine.DataManagement;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Engine.WorldGeneration;
-using Teamcollab.GUI;
+using Midgard.Engine.DataManagement;
+using Midgard.Engine.Helpers;
+using Midgard.Engine.WorldGeneration;
+using Midgard.GUI;
 
-namespace Teamcollab.Engine.WorldManagement
+namespace Midgard.Engine.WorldManagement
 {
   public class World
   {

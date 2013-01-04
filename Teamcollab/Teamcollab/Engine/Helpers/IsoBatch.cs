@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine.WorldManagement;
+using Midgard.Engine.WorldManagement;
 using System;
 
-namespace Teamcollab.Engine.Helpers
+namespace Midgard.Engine.Helpers
 {
   public class IsoBatch : SpriteBatch
   {

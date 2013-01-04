@@ -2,13 +2,13 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Teamcollab.DataSerialization;
-using Teamcollab.Engine;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.GameStates;
-using Teamcollab.Resources;
+using Midgard.DataSerialization;
+using Midgard.Engine;
+using Midgard.Engine.Helpers;
+using Midgard.GameStates;
+using Midgard.Resources;
 
-namespace Teamcollab
+namespace Midgard
 {
 	public class Main : Microsoft.Xna.Framework.Game
 	{

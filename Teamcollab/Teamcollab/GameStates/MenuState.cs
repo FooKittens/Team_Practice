@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Resources;
+using Midgard.Engine.Helpers;
+using Midgard.Resources;
 
-namespace Teamcollab.GameStates
+namespace Midgard.GameStates
 {
   sealed class MenuState : GameState
   {

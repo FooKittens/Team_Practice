@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine.DataManagement;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.GameObjects;
-using Teamcollab.Resources;
+using Midgard.Engine.DataManagement;
+using Midgard.Engine.Helpers;
+using Midgard.GameObjects;
+using Midgard.Resources;
 
-namespace Teamcollab.Engine.WorldManagement
+namespace Midgard.Engine.WorldManagement
 {
 
   public enum ClusterType : byte

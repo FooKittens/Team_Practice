@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using Teamcollab.Engine.WorldManagement;
+using Midgard.Engine.WorldManagement;
 using System.IO;
 using System.Data;
 
-namespace Teamcollab.Engine.DataManagement
+namespace Midgard.Engine.DataManagement
 {
   static class DataManager
   {

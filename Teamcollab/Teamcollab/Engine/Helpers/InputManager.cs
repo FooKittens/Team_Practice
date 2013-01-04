@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Teamcollab.Engine.Helpers
+namespace Midgard.Engine.Helpers
 {
   /// <summary>
   /// Handles input.

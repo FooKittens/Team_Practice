@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Resources;
+using Midgard.Engine.Helpers;
+using Midgard.Resources;
 
-namespace Teamcollab.GameObjects
+namespace Midgard.GameObjects
 {
   class StaticEntity : Entity
   {

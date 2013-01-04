@@ -1,8 +1,8 @@
 ﻿using System;
-using Teamcollab.Engine.Helpers;
+using Midgard.Engine.Helpers;
 using Microsoft.Xna.Framework;
 
-namespace Teamcollab.Engine.WorldManagement
+namespace Midgard.Engine.WorldManagement
 {
   /// <summary>
   /// Holds all tile types

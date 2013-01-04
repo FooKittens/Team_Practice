@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Teamcollab.DataSerialization;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Engine.WorldManagement;
-using Teamcollab.GUI;
+using Midgard.DataSerialization;
+using Midgard.Engine.Helpers;
+using Midgard.Engine.WorldManagement;
+using Midgard.GUI;
 
-namespace Teamcollab.Engine
+namespace Midgard.Engine
 {
   static class DevConsole
   {

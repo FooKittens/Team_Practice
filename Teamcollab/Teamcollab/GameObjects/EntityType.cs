@@ -1,5 +1,5 @@
 ﻿
-namespace Teamcollab.GameObjects
+namespace Midgard.GameObjects
 {
   /// <summary>
   /// Holds all entity types

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 
-namespace Teamcollab.DataSerialization
+namespace Midgard.DataSerialization
 {
   public static class DataSerializer
   {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Teamcollab.GameStates
+namespace Midgard.GameStates
 {
   /// <summary>
   /// All variations of GameStates must be added.

@@ -2,12 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Engine.WorldManagement;
-using Teamcollab.GUI;
-using Teamcollab.GameObjects;
+using Midgard.Engine.Helpers;
+using Midgard.Engine.WorldManagement;
+using Midgard.GUI;
+using Midgard.GameObjects;
 
-namespace Teamcollab.GameStates
+namespace Midgard.GameStates
 {
   class GameManager
   {

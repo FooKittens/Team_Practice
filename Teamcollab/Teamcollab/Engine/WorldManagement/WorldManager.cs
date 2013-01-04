@@ -1,13 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Resources;
-using Teamcollab.Engine.WorldGeneration;
-using Teamcollab.Engine.DataManagement;
+using Midgard.Engine.Helpers;
+using Midgard.Resources;
+using Midgard.Engine.WorldGeneration;
+using Midgard.Engine.DataManagement;
 using System.IO;
 
-namespace Teamcollab.Engine.WorldManagement
+namespace Midgard.Engine.WorldManagement
 {
   public sealed class WorldManager
   {

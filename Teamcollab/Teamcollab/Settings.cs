@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using Teamcollab.DataSerialization;
+using Midgard.DataSerialization;
 
-namespace Teamcollab
+namespace Midgard
 {
   /// <summary>
   /// Settings class for accessing application settings globally.

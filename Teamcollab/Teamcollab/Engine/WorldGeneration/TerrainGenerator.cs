@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Engine.WorldManagement;
-using Teamcollab.GameObjects;
+using Midgard.Engine.Helpers;
+using Midgard.Engine.WorldManagement;
+using Midgard.GameObjects;
 using System;
 
-namespace Teamcollab.Engine.WorldGeneration
+namespace Midgard.Engine.WorldGeneration
 {
   class TerrainGenerator
   {

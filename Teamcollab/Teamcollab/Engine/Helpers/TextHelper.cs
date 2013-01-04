@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Teamcollab.Engine.Helpers
+namespace Midgard.Engine.Helpers
 {
   static class TextHelper
   {

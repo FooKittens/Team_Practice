@@ -1,6 +1,6 @@
 using System;
 
-namespace Teamcollab
+namespace Midgard
 {
 #if WINDOWS || XBOX
   static class Program

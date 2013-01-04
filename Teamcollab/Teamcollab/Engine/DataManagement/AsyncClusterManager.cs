@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Threading;
-using Teamcollab.Engine.Helpers;
-using Teamcollab.Engine.WorldGeneration;
-using Teamcollab.Engine.WorldManagement;
+using Midgard.Engine.Helpers;
+using Midgard.Engine.WorldGeneration;
+using Midgard.Engine.WorldManagement;
 
-namespace Teamcollab.Engine.DataManagement
+namespace Midgard.Engine.DataManagement
 {
   class AsyncClusterManager
   {

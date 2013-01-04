@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-namespace Teamcollab.Engine.Helpers
+namespace Midgard.Engine.Helpers
 {
   /// <summary>
   /// Two integers x,y representing coordinates

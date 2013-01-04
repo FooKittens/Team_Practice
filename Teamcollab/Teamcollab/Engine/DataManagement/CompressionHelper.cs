@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 
-namespace Teamcollab.Engine.DataManagement
+namespace Midgard.Engine.DataManagement
 {
   static class CompressionHelper
   {

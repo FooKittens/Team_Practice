@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Teamcollab.Engine.WorldGeneration
+namespace Midgard.Engine.WorldGeneration
 {
   class PerlinGenerator
   {

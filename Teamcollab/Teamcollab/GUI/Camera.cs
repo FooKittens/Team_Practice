@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using Teamcollab.Engine.WorldManagement;
-using Teamcollab.Engine.Helpers;
+using Midgard.Engine.WorldManagement;
+using Midgard.Engine.Helpers;
 
-namespace Teamcollab.GUI
+namespace Midgard.GUI
 {
   /// <summary>
   /// A automatically moving camera, holding a Transform Matrix used for drawing.

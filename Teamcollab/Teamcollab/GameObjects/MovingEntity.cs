@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Teamcollab.Resources;
+using Midgard.Resources;
+using Midgard.Engine.Helpers;
 using System;
 
-namespace Teamcollab.GameObjects
+namespace Midgard.GameObjects
 {
   abstract class MovingEntity : Entity
   {
@@ -50,6 +51,10 @@ namespace Teamcollab.GameObjects
       #endregion
     }
 
+    /// <summary>
+    /// Updates the entity
+    /// </summary>
+    /// <param name="gameTime"></param>
     public override void Update(GameTime gameTime)
     {
       UpdateInput();
@@ -113,7 +118,7 @@ namespace Teamcollab.GameObjects
       );
     }
 
-    public override void Draw(Engine.Helpers.IsoBatch batch)
+    public override void Draw(IsoBatch batch)
     {
       batch.Draw(texture, WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
     }

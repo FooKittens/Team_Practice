@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Teamcollab.Engine.Helpers;
+using Midgard.Engine.Helpers;
 
-namespace Teamcollab.GameObjects
+namespace Midgard.GameObjects
 {
   public sealed class EntityManager
   {

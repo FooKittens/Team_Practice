@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Input;
 
-namespace Teamcollab.DataSerialization
+namespace Midgard.DataSerialization
 {
   [Serializable]
   public struct SettingsData

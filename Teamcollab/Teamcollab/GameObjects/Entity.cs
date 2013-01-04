@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Teamcollab.Engine.Helpers;
+using Midgard.Engine.Helpers;
 
-namespace Teamcollab.GameObjects
+namespace Midgard.GameObjects
 {
   struct EntityData
   {

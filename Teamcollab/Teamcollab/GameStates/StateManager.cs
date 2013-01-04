@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace Teamcollab.GameStates
+namespace Midgard.GameStates
 {
   sealed class StateManager
   {
