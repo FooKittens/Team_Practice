@@ -102,12 +102,13 @@
     <Compile Include="Engine\WorldManagement\Cluster.cs" />
     <Compile Include="Engine\WorldManagement\Tile.cs" />
     <Compile Include="GameObjects\Actor.cs" />
-    <Compile Include="GameObjects\Enemy.cs" />
     <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\EntityManager.cs" />
     <Compile Include="GameObjects\EntityType.cs" />
-    <Compile Include="GameObjects\MovingEntity.cs" />
+    <Compile Include="GameObjects\NPC\Enemy.cs" />
+    <Compile Include="GameObjects\NPC\MonsterSpawner.cs" />
     <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GameObjects\Spawner.cs" />
     <Compile Include="GameObjects\StaticEntity.cs" />
     <Compile Include="GameStates\GameManager.cs" />
     <Compile Include="GameStates\GameState.cs" />

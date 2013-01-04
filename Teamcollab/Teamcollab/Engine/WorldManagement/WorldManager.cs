@@ -227,9 +227,9 @@ namespace Midgard.Engine.WorldManagement
       currentWorld = world;
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(float deltaTime)
     {
-      currentWorld.Update(gameTime);
+      currentWorld.Update(deltaTime);
     }
 
     public void Draw(IsoBatch spriteBatch)

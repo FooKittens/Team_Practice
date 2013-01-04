@@ -86,7 +86,7 @@ namespace Midgard.Engine.Animation
       Source = new Rectangle(offset.X, offset.Y, frameSize.X, frameSize.Y);
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(float deltaTime)
     {
 
     }

@@ -33,7 +33,7 @@ namespace Midgard.GameObjects
       addQueue = new Queue<Entity>();
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(float deltaTime)
     {
       EmptyAddQueue();
 
@@ -41,7 +41,7 @@ namespace Midgard.GameObjects
       {
         if (entity.NeedsUpdate)
         {
-          entity.Update(gameTime);
+          entity.Update(deltaTime);
         }
       }
     }

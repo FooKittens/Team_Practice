@@ -30,11 +30,13 @@ namespace Midgard.GameObjects
       this.EntityType = type;
     }
 
+    public Entity(EntityType type)
+      : this(type, Vector2.Zero) { }
+
     /// <summary>
     /// Used by the entity to update itself
     /// </summary>
-    /// <param name="gameTime"></param>
-    public virtual void Update(GameTime gameTime)
+    public virtual void Update(float deltaTime)
     {
       UpdateState();
     }

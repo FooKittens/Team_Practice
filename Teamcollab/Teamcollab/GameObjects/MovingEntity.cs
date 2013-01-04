@@ -57,13 +57,11 @@ namespace Midgard.GameObjects
     /// <summary>
     /// Updates the entity
     /// </summary>
-    /// <param name="gameTime"></param>
-    public override void Update(GameTime gameTime)
+    public override void Update(float deltaTime)
     {
       UpdateInput();
-      UpdateMovement(gameTime);
-      UpdateAnimation(gameTime);
- 	    base.Update(gameTime);
+      UpdateMovement(deltaTime);
+      base.Update(deltaTime);
     }
 
     /// <summary>

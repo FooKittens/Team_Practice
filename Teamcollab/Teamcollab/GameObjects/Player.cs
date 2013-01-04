@@ -12,10 +12,7 @@ namespace Midgard.GameObjects
   class Player : Actor
   {
     #region Properties
-    protected override float BaseSpeed
-    {
-      get { return 0.085f; }
-    }
+
     #endregion
 
     #region Members
@@ -25,14 +22,16 @@ namespace Midgard.GameObjects
     public Player(Vector2 worldPosition)
       : base(EntityType.Player, worldPosition)
     {
+      // TODO(Peter): Move, fix, burn
+      Speed = 0.65f;
+
       NeedsUpdate = true;
       armed = true;
-      base.scale = 0.65f;
     }
 
-    public override void Update(GameTime gameTime)
+    public override void Update(float deltaTime)
     {
-      base.Update(gameTime);
+      base.Update(deltaTime);
     }
 
     protected override void UpdateInput()
@@ -44,9 +43,9 @@ namespace Midgard.GameObjects
       }
     }
 
-    protected override void UpdateMovement(GameTime gameTime)
+    protected override void UpdateMovement(float deltaTime)
     {
-      base.UpdateMovement(gameTime);
+      base.UpdateMovement(deltaTime);
     }
 
     protected override void UpdateState()
@@ -63,8 +62,8 @@ namespace Midgard.GameObjects
       base.Draw(batch);
       if (armed)
       {
-        batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
-        batch.Draw(ResourceManager.SpriteTextureBank.Query("Sword"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
+        //batch.Draw(ResourceManager.SpriteTextureBank.Query("Shield"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
+        //batch.Draw(ResourceManager.SpriteTextureBank.Query("Sword"), WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
       }
     }
   }

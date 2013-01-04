@@ -77,7 +77,7 @@ namespace Midgard.Engine.WorldManagement
       loadedClusters.Add(TerrainGenerator.CreateCluster(coords));
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(float deltaTime)
     {
       // TODO(Peter): Handle better?
       if (!initialized)

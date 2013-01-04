@@ -26,8 +26,8 @@ namespace Midgard.Engine
     static string currentWrittenLine;
     static bool previouslyVisible;
     static Color color;
-    static TimeSpan caretTimer;
-    static TimeSpan backSpaceTimer;
+    static float caretTimer;
+    static float backSpaceTimer;
     static bool showCaret;
     static int inputLineY;
     static int startRowOffset;
@@ -35,8 +35,8 @@ namespace Midgard.Engine
 
     #region Constants
     const int ConsoleMaxLines = 20;
-    static readonly TimeSpan CaretTickTime = TimeSpan.FromMilliseconds(125);
-    static readonly TimeSpan BackSpaceTick = TimeSpan.FromMilliseconds(75);
+    const float CaretTickTime = 125;
+    const float BackSpaceTick = 75;
 
     // Some color combination more or less easy on the eyes.
     static readonly Color DefaultTextColor = new Color(255, 205, 139);
@@ -62,7 +62,7 @@ namespace Midgard.Engine
       startRowOffset = 0;
     }
 
-    public static void Update(GameTime gameTime)
+    public static void Update(float deltaTime)
     {
       if (previouslyVisible)
       {
@@ -79,17 +79,16 @@ namespace Midgard.Engine
 
 
       // Update backspace timer
-      backSpaceTimer -= gameTime.ElapsedGameTime;
+      backSpaceTimer -= deltaTime;
 
       // Avoid overflows and other nasty things.
-      backSpaceTimer = backSpaceTimer < TimeSpan.Zero ?
-        TimeSpan.Zero : backSpaceTimer;
+      backSpaceTimer = backSpaceTimer < 0 ? 0 : backSpaceTimer;
 
       // Update caret timer for a blinking effect.
-      caretTimer += gameTime.ElapsedGameTime;
+      caretTimer += deltaTime;
       if (caretTimer > CaretTickTime)
       {
-        caretTimer = TimeSpan.Zero;
+        caretTimer = 0;
         showCaret = !showCaret;
       }
     }
@@ -335,7 +334,7 @@ namespace Midgard.Engine
 
       // Backspace held down
       if (InputManager.KeyDown(Keys.Back) &&
-        backSpaceTimer <= TimeSpan.Zero)
+        backSpaceTimer <= 0)
       {
         backSpaceTimer = BackSpaceTick;
         if (currentWrittenLine.Length > 0)

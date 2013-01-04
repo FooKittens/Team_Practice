@@ -56,7 +56,7 @@ namespace Midgard
         graphics.ApplyChanges();
       }
 
-      DevConsole.Update(gameTime);
+      DevConsole.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds);
 			base.Update(gameTime);
 		}
 

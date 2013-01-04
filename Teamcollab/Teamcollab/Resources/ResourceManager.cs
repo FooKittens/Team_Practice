@@ -13,6 +13,10 @@ namespace Midgard.Resources
     public static ResourceCollection<Texture2D> TileTextureBank { get; private set; }
     public static ResourceCollection<Texture2D> SpriteTextureBank { get; private set; }
 
+    /// <summary>
+    /// Random number generator 
+    /// </summary>
+    public static Random Random { get; private set; } 
     #endregion
 
     #region Members
@@ -22,6 +26,8 @@ namespace Midgard.Resources
     public static void Initialize(ContentManager content)
     {
       ResourceManager.content = content;
+      Random = new Random(Environment.TickCount);
+
       TileTextureBank = new ResourceCollection<Texture2D>();
 
       TileTextureBank.Add("Grass", content.Load<Texture2D>("Art\\grassIso"));

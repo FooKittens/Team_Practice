@@ -6,6 +6,7 @@ using Midgard.Engine.Helpers;
 using Midgard.Engine.WorldManagement;
 using Midgard.GUI;
 using Midgard.GameObjects;
+using Midgard.GameObjects.NPC;
 
 namespace Midgard.GameStates
 {
@@ -42,6 +43,7 @@ namespace Midgard.GameStates
       EntityManager.GetInstance().AddObject(new Player(Vector2.Zero));
 
       testShader = game.Content.Load<Effect>("BasicShader");
+
       // DEBUG TEMPLATE GENERATION
       DataSerialization.DataSerializer.SerializeXml<EnemyData>(
         new EnemyData(),
@@ -125,13 +127,14 @@ namespace Midgard.GameStates
 
     public void Update(GameTime gameTime)
     {
-      Camera2D.Update(gameTime);
-      worldManager.Update(gameTime);
+      float deltaTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalMilliseconds);
+
+      Camera2D.Update(deltaTime);
+      worldManager.Update(deltaTime);
 
       if (Settings.DayNightCycleOn)
       {
-        t = (float)gameTime.TotalGameTime.TotalSeconds;
-        inten = (float)Math.Sin(t) / 2 + 0.75f;
+        inten = (float)Math.Sin(deltaTime) / 2 + 0.75f;
       }
       else
       {
@@ -199,7 +202,7 @@ namespace Midgard.GameStates
         Camera2D.SetTargetScale(1f);
       }
 
-      EntityManager.GetInstance().Update(gameTime);
+      EntityManager.GetInstance().Update(deltaTime);
     }
 
     public void Draw()

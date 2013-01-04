@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Midgard.Engine.Helpers;
 
 namespace Midgard.GameObjects
 {
   abstract class Actor : Entity
   {
     #region Properties
-    public float Speed { get; }
+    public float Speed { get; protected set; }
     public int Strength { get; protected set; }
     public int Dexterity { get; protected set; }
     public int Intelligence { get; protected set; }
@@ -32,28 +34,16 @@ namespace Midgard.GameObjects
     protected Vector2 targetPosition;
     protected float movementSpeed;
 
-    // Animation
-    protected Texture2D texture;
-    protected Vector2 origin;
-    protected bool isMoving;
-    protected const int ColumnCount = 8;
-    protected const int RowCount = 8;
-    protected int currentColumn;
-    protected int currentRow;
-    protected int columnWidth;
-    protected int rowHeight;
-    protected int millisecondsPerFrame = 150;
-    protected int animationTimer = 150;
-    protected int DirectionsCount = 8;
-    protected Rectangle sourceRectangle;
-    protected float scale;
     #endregion
 
-    public Actor(EntityType type)
-      : base(type)
+    public Actor(EntityType type, Vector2 worldPosition)
+      :base(type, worldPosition)
     {
 
     }
+
+    public Actor(EntityType type)
+      : this(type, Vector2.Zero) {}
 
     // TODO(Peter): Apply modifiers
     #region StatsAndRolls
@@ -76,35 +66,24 @@ namespace Midgard.GameObjects
     /// <summary>
     /// Updates the entity
     /// </summary>
-    /// <param name="gameTime"></param>
-    public override void Update(GameTime gameTime)
+    public override void Update(float deltaTime)
     {
       UpdateInput();
-      UpdateMovement(gameTime);
-      UpdateAnimation(gameTime);
-      base.Update(gameTime);
+      UpdateMovement(deltaTime);
+      base.Update(deltaTime);
     }
 
     protected abstract void UpdateInput();
 
-    protected virtual void UpdateMovement(GameTime gameTime)
+    protected virtual void UpdateMovement(float deltaTime)
     {
       Vector2 diff = targetPosition - worldPosition;
-      if (diff.Length() < movementSpeed)
+      if (diff.LengthSquared() < (movementSpeed * movementSpeed))
       {
-        isMoving = false;
-
         worldPosition = targetPosition;
       }
       else
       {
-        // Animation
-        isMoving = true;
-        float direction = (float)Math.Atan2(diff.Y, diff.X);
-        float percentualDir = direction / MathHelper.TwoPi + 0.5f;
-        int generalDirection = Convert.ToInt32(percentualDir *= DirectionsCount);
-        currentRow = (generalDirection + 1) % DirectionsCount;
-
         // Movement
         diff.Normalize();
         diff *= movementSpeed;
@@ -112,37 +91,9 @@ namespace Midgard.GameObjects
       }
     }
 
-    protected virtual void UpdateAnimation(GameTime gameTime)
-    {
-      if (isMoving)
-      {
-        animationTimer -= gameTime.ElapsedGameTime.Milliseconds;
-        if (animationTimer < 0)
-        {
-          animationTimer += millisecondsPerFrame;
-          currentColumn += 1;
-          if (currentColumn == 4)
-          {
-            currentColumn = 0;
-          }
-        }
-      }
-      else
-      {
-        currentColumn = 0;
-      }
-
-      sourceRectangle = new Rectangle(
-        currentColumn * columnWidth,
-        currentRow * rowHeight,
-        columnWidth,
-        rowHeight
-      );
-    }
-
     public override void Draw(IsoBatch batch)
     {
-      batch.Draw(texture, WorldPosition, sourceRectangle, Color.White, 0, origin, scale, SpriteEffects.None, 0);
+      
     }
   }
 }
