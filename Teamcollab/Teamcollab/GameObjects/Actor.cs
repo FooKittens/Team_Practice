@@ -84,7 +84,8 @@ namespace Midgard.GameObjects
             a.FrameSize,
             a.FrameCount,
             a.Offset,
-            a.TimeInMilliSeconds
+            a.TimeInMilliSeconds,
+            a.Origin
           )
         );
       }
