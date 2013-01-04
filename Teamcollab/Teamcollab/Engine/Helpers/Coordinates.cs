@@ -17,8 +17,8 @@ namespace Midgard.Engine.Helpers
     private static readonly Coordinates zero = new Coordinates(0, 0); 
     #endregion
 
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
     public Coordinates(int x, int y)
     {

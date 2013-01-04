@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Midgard.GameObjects
 {
-  class Enemy : MovingEntity
+  class Enemy
   {
   }
 }
