@@ -88,7 +88,7 @@ namespace Midgard.GUI
       position = WorldManager.TransformWorldToScreen(position);
       targetPosition = position;
     }
-
+    
     /// <summary>
     /// Needs to be called for the camera to update
     /// </summary>

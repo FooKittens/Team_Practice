@@ -215,7 +215,7 @@ namespace Midgard.GameStates
       }
       #endregion
 
-      EntityManager.GetInstance().Update(gameTime);
+      EntityManager.GetInstance().Update(deltaTime);
     }
 
     public void Draw()
