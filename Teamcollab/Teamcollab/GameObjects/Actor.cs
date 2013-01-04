@@ -86,7 +86,7 @@ namespace Midgard.GameObjects
       Vector2 diff = targetPosition - worldPosition;
       if (diff.LengthSquared() < (movementSpeed * movementSpeed))
       {
-        isMoving = true;
+        isMoving = false;
 
         worldPosition = targetPosition;
       }
