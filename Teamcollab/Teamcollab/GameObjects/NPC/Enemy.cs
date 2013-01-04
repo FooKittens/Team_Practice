@@ -7,22 +7,34 @@ using Microsoft.Xna.Framework;
 
 namespace Midgard.GameObjects.NPC
 {
-  abstract class Enemy : Actor
+  class Enemy : Actor
   {
+    public Enemy(ActorData initializer, Vector2 worldposition)
+      : base(initializer, worldposition)
+    {
+      movementSpeed = 0.02f;
+      NeedsUpdate = true;
+    }
     public Enemy(ActorData initializer)
-    :base(initializer) 
-    { 
+      : this(initializer, Vector2.Zero) { }
 
+    protected override void UpdateInput()
+    {
+      
     }
 
-    private void Initialize(ActorData data)
+    public override void Update(float deltaTime)
     {
-      base.EntityType = data.Type;
-      base.Strength = data.BaseStrength;
-      base.Dexterity = data.BaseDexterity;
-      base.Intelligence = data.BaseIntelligence;
-      base.Vitality = data.BaseVitality;
-      base.Wisdom = data.BaseWisdom;
+      Entity e = EntityManager.GetInstance().GetFirstOccurencyOfType(EntityType.Player);
+
+      targetPosition = e.WorldPosition;
+
+      base.Update(deltaTime);
+    }
+
+    public override object GetData()
+    {
+      throw new NotImplementedException();
     }
   }
 }

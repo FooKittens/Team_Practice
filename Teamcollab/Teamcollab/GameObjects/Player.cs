@@ -31,11 +31,6 @@ namespace Midgard.GameObjects
       armed = true;
     }
 
-    private void Initialize()
-    {
-      
-    }
-
     public override void Update(float deltaTime)
     {
       base.Update(deltaTime);
@@ -53,10 +48,6 @@ namespace Midgard.GameObjects
     protected override void UpdateMovement(float deltaTime)
     {
       base.UpdateMovement(deltaTime);
-    }
-
-    protected override void UpdateState()
-    {
     }
 
     public override object GetData()

@@ -37,6 +37,8 @@ namespace Midgard.Resources
       SpriteTextureBank = new ResourceCollection<Texture2D>();
       SpriteTextureBank.Add("Pine", content.Load<Texture2D>("Art\\IHASTREE"));
 
+      SpriteTextureBank.Add("Ball", content.Load<Texture2D>("Art\\isoball"));
+
       #region Characters
       // Resource query key needs to match EntityType if used for base animation
       SpriteTextureBank.Add("Ogre", content.Load<Texture2D>("Art\\Characters\\ogre"));

@@ -43,6 +43,11 @@ namespace Midgard.GameStates
       Initialize();
       testShader = game.Content.Load<Effect>("BasicShader");
 
+      CreateDebugTests();
+    }
+
+    private void CreateDebugTests()
+    {
       // DEBUG TEMPLATE GENERATION
       ActorData dat = new ActorData();
       dat.Animations = new[] { new AnimationData() };
@@ -54,8 +59,14 @@ namespace Midgard.GameStates
 
 
       ActorData pData = DataSerialization.DataSerializer.DeSerializeXml<ActorData>("playerData.Xml");
-      EntityManager.GetInstance().AddObject(new Player(pData, Vector2.Zero));
+      EntityManager em = EntityManager.GetInstance();
+      em.AddObject(new Player(pData, Vector2.Zero));
 
+      MonsterSpawner ms = new MonsterSpawner(EntityType.MonsterSpawner, Vector2.Zero);
+      ms.MaxActiveCount = 3;
+      ms.SpawnTimeIntervalMs = 5000;
+      ms.AddSpawnable(EntityType.Ogre);
+      em.AddObject(ms);
     }
 
     protected void Initialize()

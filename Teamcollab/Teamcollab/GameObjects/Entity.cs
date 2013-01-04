@@ -38,12 +38,10 @@ namespace Midgard.GameObjects
     /// </summary>
     public virtual void Update(float deltaTime)
     {
-      UpdateState();
+      
     }
 
     public abstract void Draw(IsoBatch batch);
-
-    protected abstract void UpdateState();
 
     /// <summary>
     /// Destroys the entity and sets IsDead to true

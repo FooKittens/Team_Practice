@@ -69,7 +69,12 @@ namespace Midgard.GameObjects
       animCollection = new AnimationCollection();
       movementSpeed = 0.135f;
 
-      foreach (AnimationData a in init.Animations)
+      Initialize(init);
+    }
+
+    protected virtual void Initialize(ActorData data)
+    {
+      foreach (AnimationData a in data.Animations)
       {
         animCollection.Add(
           new Animation(
@@ -79,10 +84,17 @@ namespace Midgard.GameObjects
             a.FrameSize,
             a.FrameCount,
             a.Offset,
-            a.TimeInMilliSeconds  
+            a.TimeInMilliSeconds
           )
         );
       }
+
+      EntityType = data.Type;
+      Strength = data.BaseStrength;
+      Dexterity = data.BaseDexterity;
+      Intelligence = data.BaseIntelligence;
+      Vitality = data.BaseVitality;
+      Wisdom = data.BaseWisdom;
     }
 
     public Actor(ActorData init)
@@ -157,7 +169,7 @@ namespace Midgard.GameObjects
         currentAnimation.Source,
         Color.White,
         0f,
-        new Vector2(128),
+        new Vector2(currentAnimation.Source.Width / 2, currentAnimation.Source.Height - 64),
         1f,
         SpriteEffects.None,
         1f

@@ -109,7 +109,6 @@
     <Compile Include="GameObjects\NPC\Enemy.cs" />
     <Compile Include="GameObjects\NPC\MonsterSpawner.cs" />
     <Compile Include="GameObjects\Player.cs" />
-    <Compile Include="GameObjects\Spawner.cs" />
     <Compile Include="GameObjects\StaticEntity.cs" />
     <Compile Include="GameStates\GameManager.cs" />
     <Compile Include="GameStates\GameState.cs" />

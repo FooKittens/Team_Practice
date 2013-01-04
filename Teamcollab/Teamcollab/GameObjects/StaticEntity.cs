@@ -45,11 +45,6 @@ namespace Midgard.GameObjects
       return res;
     }
 
-    protected override void UpdateState()
-    {
-      throw new NotImplementedException();
-    }
-
     public override object GetData()
     {
       throw new NotImplementedException();
