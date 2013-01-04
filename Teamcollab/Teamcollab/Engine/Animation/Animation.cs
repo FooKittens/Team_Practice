@@ -58,16 +58,17 @@ namespace Midgard.Engine.Animation
     #endregion
 
     #region Members
-    string resourceKey;
-    Coordinates framesInTexture;
-    Coordinates frameSize;
-    Coordinates offset;
-    int frameCount;
+    // Timing variables
     int timeInMilliSeconds;
-
     int timePerFrameInMs;
-    int currentFrame;
     float countdownTimer;
+
+    // Frame variables
+    string resourceKey;
+    Coordinates offset;
+    Coordinates frameSize;
+    int frameCount;
+    int currentFrame;
     Rectangle source;
     #endregion
 
@@ -97,10 +98,6 @@ namespace Midgard.Engine.Animation
       // Sets frame variables
       currentFrame = 0;
       this.frameCount = frameCount;
-      framesInTexture = new Coordinates(
-        texture.Width / frameSize.X,
-        texture.Height / frameSize.Y
-      );
     }
 
     /// <summary>
