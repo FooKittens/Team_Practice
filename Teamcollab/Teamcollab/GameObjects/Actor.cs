@@ -170,7 +170,7 @@ namespace Midgard.GameObjects
         currentAnimation.Source,
         Color.White,
         0f,
-        new Vector2(currentAnimation.Source.Width / 2, currentAnimation.Source.Height - 64),
+        currentAnimation.Origin,
         1f,
         SpriteEffects.None,
         1f

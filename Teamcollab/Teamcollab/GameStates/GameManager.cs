@@ -205,7 +205,7 @@ namespace Midgard.GameStates
       if (lockCamToPlayer)
       {
         Camera2D.SetPosition(
-          EntityManager.GetInstance().GetFirstOccurencyOfType(
+          EntityManager.GetInstance().GetFirstOccurenceOfType(
             EntityType.Player
           ).WorldPosition
         );

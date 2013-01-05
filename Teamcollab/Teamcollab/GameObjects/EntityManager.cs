@@ -76,10 +76,10 @@ namespace Midgard.GameObjects
     }
 
     /// <summary>
-    /// Returns null if no occurency was found
+    /// Returns null if no occurence was found
     /// </summary>
     /// <param name="type">EntityType to check for</param>
-    public Entity GetFirstOccurencyOfType(EntityType type)
+    public Entity GetFirstOccurenceOfType(EntityType type)
     {
       for (int i = 0; i < entities.Count; ++i)
       {
