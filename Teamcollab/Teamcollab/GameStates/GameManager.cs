@@ -63,10 +63,11 @@ namespace Midgard.GameStates
       EntityManager em = EntityManager.GetInstance();
       em.AddObject(new Player(pData, Vector2.Zero));
 
-      MonsterSpawner ms = new MonsterSpawner(EntityType.MonsterSpawner, Vector2.Zero);
-      ms.MaxActiveCount = 3;
-      ms.SpawnTimeIntervalMs = 5000;
+      MonsterSpawner ms = new MonsterSpawner(EntityType.MonsterSpawner, new Vector2(4));
+      ms.MaxActiveCount = 5;
+      ms.SpawnTimeIntervalMs = 2500;
       ms.AddSpawnable(EntityType.Ogre);
+      ms.AddSpawnable(EntityType.Player);
       em.AddObject(ms);
     }
 

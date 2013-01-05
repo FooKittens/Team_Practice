@@ -79,7 +79,10 @@ namespace Midgard.GameObjects.NPC
       switch (t)
       {
         case EntityType.Ogre:
-          aData = ResourceManager.ActorDataBank.Query("Ogre").Value;
+          aData = ResourceManager.ActorDataBank.Query("Ogre");
+          break;
+        case EntityType.Player:
+          aData = ResourceManager.ActorDataBank.Query("Player");
           break;
       }
 
