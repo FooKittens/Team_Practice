@@ -43,6 +43,7 @@ namespace Midgard.Engine.Animation
     public string ResourceKey;
     public Point2D FrameSize;
     public Point2D Offset;
+    public Point2D Origin;
     public int FrameCount;
     public int TimeInMilliSeconds;
   }
@@ -54,6 +55,7 @@ namespace Midgard.Engine.Animation
     public AnimationDirection Direction { get; protected set; }
     public Rectangle Source { get { return source; } }
     public Resource<Texture2D> TextureResource { get; protected set; }
+    public Point2D Origin { get; protected set; }
     #endregion
 
     #region Members
@@ -72,8 +74,8 @@ namespace Midgard.Engine.Animation
     #endregion
 
     public Animation(string resourceKey, AnimationType identifier,
-      AnimationDirection direction, Point2D frameSize,
-      int frameCount, Point2D offset, int timeInMilliSeconds)
+      AnimationDirection direction, Point2D frameSize, int frameCount,
+      Point2D offset, int timeInMilliSeconds, Point2D origin)
     {
       // Sets identifiers
       Identifier = identifier;
@@ -83,6 +85,7 @@ namespace Midgard.Engine.Animation
       this.resourceKey = resourceKey;
       TextureResource = ResourceManager.SpriteTextureBank.Query(resourceKey);
       Texture2D texture = TextureResource.Value;
+      Origin = origin;
 
       // Sets source
       this.frameSize = frameSize;

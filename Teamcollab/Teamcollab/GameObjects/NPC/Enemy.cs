@@ -25,7 +25,7 @@ namespace Midgard.GameObjects.NPC
 
     public override void Update(float deltaTime)
     {
-      Entity e = EntityManager.GetInstance().GetFirstOccurencyOfType(EntityType.Player);
+      Entity e = EntityManager.GetInstance().GetFirstOccurenceOfType(EntityType.Player);
 
       targetPosition = e.WorldPosition;
 

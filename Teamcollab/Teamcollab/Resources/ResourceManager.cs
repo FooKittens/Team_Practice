@@ -65,8 +65,8 @@ namespace Midgard.Resources
 
       #region ActorData
       ActorDataBank = new ResourceCollection<ActorData>();
-      ActorDataBank.Add("Ogre", DataSerializer.DeSerializeXml<ActorData>("ogreData.Xml"));
-      ActorDataBank.Add("Player", DataSerializer.DeSerializeXml<ActorData>("playerData.Xml"));
+      ActorDataBank.Add("Ogre", DataSerializer.DeSerializeXml<ActorData>(@"Content/ActorData/ogreData.Xml"));
+      ActorDataBank.Add("Player", DataSerializer.DeSerializeXml<ActorData>(@"Content/ActorData/playerData.Xml"));
       #endregion
 
     }

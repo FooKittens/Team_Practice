@@ -22,6 +22,10 @@
         <X>0</X>
         <Y>512</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
@@ -37,6 +41,10 @@
         <X>0</X>
         <Y>768</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
@@ -52,6 +60,10 @@
         <X>0</X>
         <Y>1024</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
@@ -67,6 +79,10 @@
         <X>0</X>
         <Y>1280</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
@@ -82,6 +98,10 @@
         <X>0</X>
         <Y>1536</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
@@ -97,6 +117,10 @@
         <X>0</X>
         <Y>1792</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
@@ -112,6 +136,10 @@
         <X>0</X>
         <Y>0</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
@@ -127,6 +155,10 @@
         <X>0</X>
         <Y>256</Y>
       </Offset>
+      <Origin>
+        <X>128</X>
+        <Y>171</Y>
+      </Origin>
       <FrameCount>4</FrameCount>
       <TimeInMilliSeconds>400</TimeInMilliSeconds>
     </AnimationData>
